@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home_menu_item"
+            android:checked="true"
+            android:icon="@drawable/ic_android"
+            android:title="@string/home" />
+
+        <item
+            android:id="@+id/my_trip_menu_item"
+            android:icon="@drawable/ic_android"
+            android:title="@string/my_plan_list" />
+        <item
+
+            android:id="@+id/plan_list_menu_item"
+            android:icon="@drawable/ic_android"
+            android:title="@string/plan_list" />
+
+        <item
+            android:id="@+id/plan_info_menu_item"
+            android:icon="@drawable/ic_android"
+            android:title="@string/plan_info" />
+
+        <item
+            android:id="@+id/digital_footprint_menu_item"
+            android:icon="@drawable/ic_android"
+            android:title="@string/digital_footprint" />
+
+        <item
+            android:id="@+id/share_menu_item"
+            android:icon="@drawable/ic_android"
+            android:title="@string/share" />
+    </group>
+</menu>

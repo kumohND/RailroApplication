@@ -1,0 +1,77 @@
+package kr.ac.kumoh.railroApplication.fragments;
+
+import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+import butterknife.ButterKnife;
+import kr.ac.kumoh.railroApplication.MainActivity;
+import kr.ac.kumoh.railroApplication.R;
+
+
+public abstract class BaseFragment extends Fragment {
+    Toolbar mToolbar;
+
+    public MainActivity getDrawerActivity(){
+        return ((MainActivity) super.getActivity());
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(getLayout(), container, false);
+
+        ButterKnife.inject(this, view);
+        return view;
+    }
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setToolbar(view);
+    }
+
+    protected void setToolbar(View view) {
+        if(!hasCustomToolbar()) return;
+        mToolbar = ButterKnife.findById(view,getToolbarId());
+        mToolbar.setTitle(getTitle());
+        mToolbar.setNavigationIcon(R.drawable.ic_menu);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDrawerActivity().openDrawer();
+            }
+        });
+        if (getTitle() == R.string.plan_list){
+            mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    // Handle the menu item
+                    return true;
+                }
+            });
+            mToolbar.inflateMenu(R.menu.menu_main);
+        }
+
+    }
+
+    protected @IdRes int getToolbarId(){
+        return R.id.toolbar;
+    }
+
+    public boolean hasCustomToolbar(){
+        return false;
+    }
+
+    protected @StringRes int getTitle(){
+        return R.string.not_title_set;
+    }
+
+    protected abstract  @LayoutRes int getLayout();
+}

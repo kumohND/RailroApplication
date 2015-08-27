@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">railroApplication</string>
+    <string name="sample_data">"Some data %1$d"</string>
+    <string name="home">내일로 홈</string>
+    <string name="my_plan_list">내 여행 목록</string>
+    <string name="plan_list">여행 계획 작성</string>
+    <string name="plan_info">여행 정보</string>
+    <string name="digital_footprint">여행 스탬프</string>
+    <string name="share">공유</string>
+    <string name="navigation_drawer_open" translatable="false" />
+    <string name="navigation_drawer_close" translatable="false" />
+    <string name="sample_email">sample.user@email.com</string>
+    <string name="not_implemented_yet">Not implemented yet</string>
+    <string name="contact_desc">contact photo</string>
+    <string name="desc_list_item_left_icon">desc_list_item_icon</string>
+    <string name="image_desc">image_desc</string>
+    <string name="some_folder">Some folder</string>
+    <string name="sample_name">User Name</string>
+    <string name="pop_title">Pop</string>
+    <string name="indie_title">Indie</string>
+    <string name="rock_title">Rock</string>
+    <string name="r8b_title"><![CDATA[R&B]]></string>
+    <string name="not_title_set">No title set</string>
+
+    <string-array name="category_array">
+        <item>이동(기차)</item>
+        <item>이동(버스)</item>
+        <item>숙박</item>
+        <item>식사</item>
+        <item>여행지</item>
+    </string-array>
+</resources>
