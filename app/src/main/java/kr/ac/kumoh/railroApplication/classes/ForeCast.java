@@ -35,8 +35,8 @@ public class ForeCast extends Thread {
     ContentValues mContent;
 
     ForecastInfo mFore_Data;
-    String lon ="35";
-    String lat ="139";
+    String lon ;
+    String lat ;
     int tYear;
     int tMonth;
     int tDay;
@@ -46,7 +46,7 @@ public class ForeCast extends Thread {
     {
         range_Day = 1;
         Calendar check = Calendar.getInstance();
-        for(range_Day = 1; range_Day <15; range_Day++) {
+        for(range_Day = 1; range_Day <= 15; range_Day++) {
             check.add(Calendar.DATE , range_Day);
             String tYear = String.valueOf(check.YEAR);
             String tMonth = String.valueOf(check.MONTH+1);
