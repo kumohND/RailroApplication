@@ -180,7 +180,7 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
         if (mBluetoothAdapter == null) {
             Toast.makeText(mContext, "Bluetooth not Working", Toast.LENGTH_SHORT);
             // Device does not support Bluetooth
-//TODO: hhhhhh
+
         }
         adapter = new ImageAdapter(mContext);
         g.setAdapter(adapter);
