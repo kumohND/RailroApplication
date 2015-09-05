@@ -9,12 +9,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,12 +24,25 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.classes.BeaconMacAddressInfo;
-import kr.ac.kumoh.railroApplication.util.AnimUtils;
 
-public class DigitalFootprintFragment extends BaseFragment implements View.OnClickListener{
+/**
+ * Created by Woocha on 2015-09-02.
+ */
+// 기기있는곳으로 ㄱㄱ -> 검색중이라는 다이얼로그, -> 검색 완료 -> 그림 바뀜
+// 기기의 device mac 아이디 조회, 존재하면 다음 단계로 진행, 문제가 되는 것은 범위
+public class BeaconReadFragment extends BaseFragment implements View.OnClickListener {
+
+    @Override
+    protected int getLayout() {
+        return 0;
+    }
+
+    public static BeaconReadFragment newInstance() {
+        BeaconReadFragment fragment = new BeaconReadFragment();
+        return fragment;
+    }
 
     private static final int REQUEST_ENABLE_BT = 2;
     private ArrayList<String> mArrayAdapter;
@@ -47,7 +57,7 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
     BeaconMacAddressInfo red;
     BeaconMacAddressInfo yellow;
     BeaconMacAddressInfo green;
-    ImageAdapter adapter;
+
     GridView g;
 
 
@@ -65,28 +75,9 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
 
     } //꺼져있을경우 확인 창 나타냄
 
-    void AddtoBeaconStationData()
-    {
-        bData = new ArrayList<BeaconMacAddressInfo>();
-        red = new BeaconMacAddressInfo(seoul,"Seoul Station",R.drawable.un_seoul,R.drawable.seoul);
-        yellow = new BeaconMacAddressInfo(jeonju,"Jeonju Station",R.drawable.un_jeonju,R.drawable.jeonju);
-        green = new BeaconMacAddressInfo(donghae,"Donghae Station",R.drawable.un_donghae,R.drawable.donghae);
-        bData.add(red);
-        bData.add(yellow);
-        bData.add(green);
-    }
+
     // Register the BroadcastReceiver
-    @InjectView(R.id.simpleList)
-    RecyclerView mRecyclerView;
 
-    @InjectView(R.id.appbar)
-    AppBarLayout mAppBarLayout;
-
-    @InjectView(R.id.share_menu_item)
-    FloatingActionButton mFab;
-
-    @InjectView(R.id.toolbar)
-    Toolbar mToolbar;
 
     @Override
     public void onClick(View v) {
@@ -147,103 +138,52 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
                 break;
         }
     }
-    public static DigitalFootprintFragment newInstance() {
-        return new DigitalFootprintFragment();
-    }
 
+
+
+    void AddtoBeaconStationData()
+    {
+        bData = new ArrayList<BeaconMacAddressInfo>();
+        red = new BeaconMacAddressInfo(seoul,"Seoul Station",R.drawable.un_seoul,R.drawable.seoul);
+        yellow = new BeaconMacAddressInfo(jeonju,"Jeonju Station",R.drawable.un_jeonju,R.drawable.jeonju);
+        green = new BeaconMacAddressInfo(donghae,"Donghae Station",R.drawable.un_donghae,R.drawable.donghae);
+        bData.add(red);
+        bData.add(yellow);
+        bData.add(green);
+    }
+    ImageAdapter adapter;
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setList();
-        moveFab();
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = (View)inflater.inflate(R.layout.beacon_list, container, false);
+        AddtoBeaconStationData();
+        mArrayAdapter = new ArrayList<String>();
+        mContext = v.getContext();
+        g = (GridView)v.findViewById(R.id.station_grid_list);
+
+
+        scan_blue = (Button)v.findViewById(R.id.scan_ble);
+        scan_blue.setOnClickListener(this);
+        test = (TextView)v.findViewById(R.id.check_ble);
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(mContext, "Bluetooth not Working", Toast.LENGTH_SHORT);
+            // Device does not support Bluetooth
+
+        }
+        adapter = new ImageAdapter(mContext);
+        g.setAdapter(adapter);
+        g.setOnItemClickListener(mMessageClicked);
+        return v;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-//        AddtoBeaconStationData();
-//        View v = (View)inflater.inflate(R.layout.beacone_list, container, false);
-//        AddtoBeaconStationData();
-//        mArrayAdapter = new ArrayList<String>();
-//        mContext = v.getContext();
-//        g = (GridView)v.findViewById(R.id.station_grid_list);
-//
-//
-//        scan_blue = (Button)v.findViewById(R.id.scan_ble);
-//        scan_blue.setOnClickListener(this);
-//        test = (TextView)v.findViewById(R.id.check_ble);
-//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//        if (mBluetoothAdapter == null) {
-//            Toast.makeText(mContext, "Bluetooth not Working", Toast.LENGTH_SHORT);
-//            // Device does not support Bluetooth
-//
-//        }
-//        adapter = new ImageAdapter(mContext);
-//        g.setAdapter(adapter);
-//        g.setOnItemClickListener(mMessageClicked);
-//        return v;
-    }
-
-    private void moveFab(){
-        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-                float deltaY = mFab.getHeight()*1.5f;
-                if(i <0)animFab(deltaY);
-                else animFab(-deltaY);
-            }
-        });
-    }
-
-
-
-    private void animFab(final float deltaY){
-        ViewCompat.animate(mFab)
-                .translationYBy(deltaY)
-                .setInterpolator(AnimUtils.FAST_OUT_SLOW_IN_INTERPOLATOR)
-                .withLayer()
-                .start();
-    }
-
-    private void setList() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(layoutManager);
-
-       // TripListRVArrayAdapter arrayAdapter = new TripListRVArrayAdapter(getData());
-      //  mRecyclerView.setAdapter(arrayAdapter);
-    }
-
-
-    @Override
-    protected int getTitle() {
-        return R.string.digital_footprint;
-    }
-
-    @Override
-    protected int getToolbarId() {
-        return R.id.toolbar;
-    }
-
-    @Override
-    public boolean hasCustomToolbar() {
-        return true;
-    }
-
-    @Override
-    protected int getLayout() {
-        return R.layout.fragment_digital_footprint;
-    }
-
-
-    public String[] getData() {
-        return getActivity().getResources().getStringArray(R.array.countries);
-    }
     private final AdapterView.OnItemClickListener mMessageClicked = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         }
     };
+
+
     public class ImageAdapter extends BaseAdapter {
 
         Context mContext;
@@ -288,4 +228,8 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
             return image;
         }
     }
+
+
+
 }
+
