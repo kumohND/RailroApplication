@@ -1,17 +1,25 @@
 package kr.ac.kumoh.railroApplication.classes;
 
-/**
- * Created by Woocha on 2015-09-02.
- */
 import android.content.ContentValues;
 import android.os.StrictMode;
+import android.text.Html;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,8 +29,8 @@ import java.util.Calendar;
  * Created by Woocha on 2015-08-26.
  */
 public class ForeCast extends Thread {
-    ArrayList<ForecastInfo> mCast;
-
+//    ArrayList<ForecastInfo> mCast;
+//    ArrayList<ForeXmlData> mWeatherCast;
     ArrayList<String> mCastList;
     ContentValues mContent;
 
@@ -65,7 +73,7 @@ public class ForeCast extends Thread {
 
         mContent = new ContentValues();
         LonAndLatObtain(searchCity);
-        //mWeatherCast = new ArrayList<ForeXmlData>();
+//        mWeatherCast = new ArrayList<ForeXmlData>();
         String lat1 = "35";
         String lon1 = "138";
 
@@ -132,7 +140,8 @@ public class ForeCast extends Thread {
                     }
                 }
                 parserEvent = parser.next();
-            }
+            }//asdasd
+            //TODO : 12312321
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (XmlPullParserException e) {
@@ -167,7 +176,7 @@ public class ForeCast extends Thread {
     }
 
     public ForeCast(int tYear, int tMonth, int tDay) {
-        mCast = new ArrayList<ForecastInfo>();
+//        mCast = new ArrayList<ForecastInfo>();
         this.tYear = tYear;
         this.tMonth = tMonth + 1;
         this.tDay = tDay;
