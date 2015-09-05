@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
+import kr.ac.kumoh.railroApplication.fragments.BeaconReadFragment;
 import kr.ac.kumoh.railroApplication.fragments.DigitalFootprintFragment;
 import kr.ac.kumoh.railroApplication.fragments.MyTripListFragment;
 import kr.ac.kumoh.railroApplication.fragments.HomeFragment;
@@ -155,7 +156,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.digital_footprint_menu_item:
-                setNewRootFragment(DigitalFootprintFragment.newInstance());
+//                setNewRootFragment(DigitalFootprintFragment.newInstance());
+                setNewRootFragment(BeaconReadFragment.newInstance());
                 break;
 
             case R.id.share_menu_item:

@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/RailroApplication.iml" filepath="$PROJECT_DIR$/RailroApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/railroApplication.iml" filepath="$PROJECT_DIR$/railroApplication.iml" />
     </modules>
   </component>
 </project>
+
