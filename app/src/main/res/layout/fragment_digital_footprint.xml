@@ -1,33 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/simpleList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        />
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            android:minHeight="?attr/actionBarSize"
             style="@style/Widget.MyApp.ActionBar"
-            app:layout_scrollFlags="scroll|enterAlways"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways" />
+
+
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="600dp"
+            android:orientation="vertical">
+
+
+            <GridView
+                android:id="@+id/station_grid_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:horizontalSpacing="10dp"
+                android:numColumns="auto_fit"
+                android:stretchMode="columnWidth" />
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
     <!-- One note: all views using the scroll flag must be declared before views
    that do not use the flag. This ensures that all views exit from the top,
    leaving the fixed elements behind.-->
@@ -39,34 +57,7 @@
         android:src="@drawable/ic_add_white"
         app:borderWidth="0dp"
         app:layout_anchor="@id/coordinator_layout"
-        app:layout_anchorGravity="bottom|right|end"
-        />
-
-    <TextView
-        android:id="@+id/check_ble"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text = "test"/>
-
-    <GridView
-        android:layout_weight="0.8"
-        android:layout_gravity = "center"
-        android:stretchMode = "columnWidth"
-        android:numColumns="auto_fit"
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="10dp"
-        android:id = "@+id/station_grid_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        />
+        app:layout_anchorGravity="bottom|right|end" />
 
 
-    <Button
-        android:layout_weight="0.2"
-        android:text = "scanbluetooth"
-        android:id="@+id/scan_ble"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
 </android.support.design.widget.CoordinatorLayout>

@@ -52,4 +52,10 @@
         <item name="colorControlNormal">#212121</item>
         <item name="colorControlActivated">#727272</item>
     </style>
+
+    <style name="MyProgressDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>
