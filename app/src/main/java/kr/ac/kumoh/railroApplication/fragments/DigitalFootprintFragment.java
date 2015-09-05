@@ -134,7 +134,7 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
             mProgress.addContentView(new ProgressBar(getActivity()), new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             mProgress.show();
 
-            //TODO : 우찬 시간 내에 못찾으면 실패 Dialog 띄우기
+            //TODO : 우찬 시간 내에 못찾으면 실패 Dialog 띄우기!!
 
             final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
