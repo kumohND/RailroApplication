@@ -42,4 +42,31 @@
         app:layout_anchorGravity="bottom|right|end"
         />
 
+    <TextView
+        android:id="@+id/check_ble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "test"/>
+
+    <GridView
+        android:layout_weight="0.8"
+        android:layout_gravity = "center"
+        android:stretchMode = "columnWidth"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:id = "@+id/station_grid_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        />
+
+
+    <Button
+        android:layout_weight="0.2"
+        android:text = "scanbluetooth"
+        android:id="@+id/scan_ble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 </android.support.design.widget.CoordinatorLayout>
