@@ -140,7 +140,7 @@ public class ForeCast extends Thread {
                     }
                 }
                 parserEvent = parser.next();
-            }
+            }//asdasd
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (XmlPullParserException e) {
