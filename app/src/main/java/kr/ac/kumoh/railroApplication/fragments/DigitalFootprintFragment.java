@@ -63,7 +63,7 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
         }
 
 
-    } //꺼져있을경우 확인 창 나타냄
+    } //爰쇱졇�덉쓣寃쎌슦 �뺤씤 李��섑���
 
     void AddtoBeaconStationData()
     {
@@ -97,17 +97,17 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
 
                 if(! mBluetoothAdapter.isDiscovering()) {
                     mBluetoothAdapter.startDiscovery();
-                    // 프로그래스바가 뜨면 좋을거 같군.
+                    // �꾨줈洹몃옒�ㅻ컮媛��⑤㈃ 醫뗭쓣嫄�媛숆뎔.
                 }
-                // 검색하는거 같은디
+                // 寃�깋�섎뒗嫄�媛숈���
                 // Create a BroadcastReceiver for ACTION_FOUND
                 final ProgressDialog mProgressDialog;
                 mProgressDialog = new ProgressDialog(mContext);
 
-// 위에서 테두리를 둥글게 했지만 다이얼로그 자체가 네모라 사각형 여백이 보입니다. 아래 코드로 다이얼로그 배경을 투명처리합니다.
+// �꾩뿉���뚮몢由щ� �κ�寃��덉�留��ㅼ씠�쇰줈洹��먯껜媛��ㅻえ���ш컖���щ갚��蹂댁엯�덈떎. �꾨옒 肄붾뱶濡��ㅼ씠�쇰줈洹�諛곌꼍���щ챸泥섎━�⑸땲��
                 mProgressDialog .getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-                mProgressDialog.show(); // 보여주기
+                mProgressDialog.show(); // 蹂댁뿬二쇨린
 
                 final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -128,7 +128,7 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
                             {
                                 for(int i = 0; i < bData.size(); i++) {
                                     if (device.getAddress().equals(bData.get(i).getMac_Address())) {
-                                        mProgressDialog.dismiss(); // 없애기
+                                        mProgressDialog.dismiss(); // �놁븷湲�
                                         test.setText(bData.get(i).getSetStation());
                                         bData.get(i).FlagOn();
                                         adapter.notifyDataSetChanged();
@@ -142,7 +142,7 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
                 };
 
                 IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-                getActivity().registerReceiver(mReceiver, filter); // Don’t forget to unregister during onDestroy
+                getActivity().registerReceiver(mReceiver, filter); // Don�셳 forget to unregister during onDestroy
 
                 break;
         }
