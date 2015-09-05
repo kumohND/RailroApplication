@@ -97,14 +97,16 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
 
                 if(! mBluetoothAdapter.isDiscovering()) {
                     mBluetoothAdapter.startDiscovery();
-                    // �꾨줈洹몃옒�ㅻ컮媛��⑤㈃ 醫뗭쓣嫄�媛숆뎔.
+
                 }
                 // 寃�깋�섎뒗嫄�媛숈���
                 // Create a BroadcastReceiver for ACTION_FOUND
-                final ProgressDialog mProgressDialog;
-                mProgressDialog = new ProgressDialog(mContext);
+//                final ProgressDialog mProgressDialog;
+//                mProgressDialog = new ProgressDialog(mContext);
 
-// �꾩뿉���뚮몢由щ� �κ�寃��덉�留��ㅼ씠�쇰줈洹��먯껜媛��ㅻえ���ш컖���щ갚��蹂댁엯�덈떎. �꾨옒 肄붾뱶濡��ㅼ씠�쇰줈洹�諛곌꼍���щ챸泥섎━�⑸땲��
+                final kr.ac.kumoh.railroApplication.classes.ProgressDialog mProgressDialog = new kr.ac.kumoh.railroApplication.classes.ProgressDialog(mContext);
+// 위에서 테두리를 둥글게 했지만 다이얼로그 자체가 네모라 사각형 여백이 보입니다. 아래 코드로 다이얼로그 배경을 투명처리합니다.
+
                 mProgressDialog .getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
                 mProgressDialog.show(); // 蹂댁뿬二쇨린
@@ -163,24 +165,27 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
         super.onViewCreated(view, savedInstanceState);
 //        AddtoBeaconStationData();
 //        View v = (View)inflater.inflate(R.layout.beacone_list, container, false);
-//        AddtoBeaconStationData();
-//        mArrayAdapter = new ArrayList<String>();
-//        mContext = v.getContext();
-//        g = (GridView)v.findViewById(R.id.station_grid_list);
+
+
+        View v = view;
+        g = (GridView)v.findViewById(R.id.station_grid_list);
+         mArrayAdapter = new ArrayList<String>();
+        mContext = v.getContext();
+        AddtoBeaconStationData();
 //
 //
-//        scan_blue = (Button)v.findViewById(R.id.scan_ble);
-//        scan_blue.setOnClickListener(this);
-//        test = (TextView)v.findViewById(R.id.check_ble);
-//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//        if (mBluetoothAdapter == null) {
-//            Toast.makeText(mContext, "Bluetooth not Working", Toast.LENGTH_SHORT);
-//            // Device does not support Bluetooth
-//
-//        }
-//        adapter = new ImageAdapter(mContext);
-//        g.setAdapter(adapter);
-//        g.setOnItemClickListener(mMessageClicked);
+        scan_blue = (Button)v.findViewById(R.id.scan_ble);
+        scan_blue.setOnClickListener(this);
+        test = (TextView)v.findViewById(R.id.check_ble);
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(mContext, "Bluetooth not Working", Toast.LENGTH_SHORT);
+            // Device does not support Bluetooth
+
+        }
+        adapter = new ImageAdapter(mContext);
+        g.setAdapter(adapter);
+        g.setOnItemClickListener(mMessageClicked);
 //        return v;
     }
 
