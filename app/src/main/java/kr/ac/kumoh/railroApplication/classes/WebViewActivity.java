@@ -24,11 +24,6 @@ public class WebViewActivity extends Activity {
         Intent i = getIntent();
         Bundle bundle = i.getExtras();
 
-//        mStartInform = new LocationInform();
-//        mEndInform = new LocationInform();
-
-//        mStartInform = bundle.getParcelable("start");
-//        mEndInform = bundle.getParcelable("end");
 
         String url = bundle.getString("url");
         WebView webView = (WebView) findViewById(R.id.rootwebView);
