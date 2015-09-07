@@ -13,13 +13,6 @@ import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.classes.TripInfoListItem;
 
 public class TripInfoListRVArrayAdapter extends RecyclerView.Adapter<TripInfoListRVArrayAdapter.ViewHolder> {
-
-
-   /* private String[] mData;
-    public TripListRVArrayAdapter(String[] data){
-        mData = data;
-    }*/
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         //   CardView cv;
         TextView mTripName;
@@ -31,14 +24,6 @@ public class TripInfoListRVArrayAdapter extends RecyclerView.Adapter<TripInfoLis
         ImageView mStarImg3;
         ImageView mStarImg4;
         ImageView mStarImg5;
-
-
-        //public TextView mTextView;
-        /*
-        public ViewHolder(View itemView) {
-            super(itemView);
-            mTextView = (TextView) itemView;
-        }*/
 
 
         public ViewHolder(View itemView) {
@@ -55,28 +40,7 @@ public class TripInfoListRVArrayAdapter extends RecyclerView.Adapter<TripInfoLis
             mStarImg4 = (ImageView) itemView.findViewById(R.id.star_2);
             mStarImg5 = (ImageView) itemView.findViewById(R.id.star_1);
 
-/*
-            switch (mStar) {
-                case 1:
-                    mStarImg = (ImageView) itemView.findViewById(R.id.star_5);
-                    mStarImg.setImageResource(R.drawable.ic_android);
-                case 2:
-                    mStarImg = (ImageView) itemView.findViewById(R.id.star_4);
-                    mStarImg.setImageResource(R.drawable.ic_android);
-                case 3:
-                    mStarImg = (ImageView) itemView.findViewById(R.id.star_3);
-                    mStarImg.setImageResource(R.drawable.ic_android);
-                case 4:
-                    mStarImg = (ImageView) itemView.findViewById(R.id.star_2);
-                    mStarImg.setImageResource(R.drawable.ic_android);
-                case 5:
-                    break;
-            }
-*/
 
-            // mStarImg = (ImageView) itemView.findViewById(R.id.star_5);
-
-            //mStarImg.setBackground(R.drawable.ic_phone);
         }
     }
 
@@ -94,9 +58,6 @@ public class TripInfoListRVArrayAdapter extends RecyclerView.Adapter<TripInfoLis
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
-        //    View view = LayoutInflater
-        //           .from(viewGroup.getContext())
-        //           .inflate(android.R.layout.simple_list_item_1,viewGroup,false);
 
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.listitem_tripinfo, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);

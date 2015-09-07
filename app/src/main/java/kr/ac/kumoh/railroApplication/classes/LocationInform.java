@@ -16,6 +16,7 @@ public class LocationInform implements Parcelable {
 
     public LocationInform(Parcel source) {
         // TODO Auto-generated constructor stub
+        //TODO 어쩌고 저쩌고
 //		this.location = source.readString();
 //		this.latlng.lat = source.readDouble();
 //		this.latlng.lng = source.readDouble();
