@@ -155,7 +155,7 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
                             for (int i = 0; i < bData.size(); i++) {
                                 if (device.getAddress().equals(bData.get(i).getMac_Address())) {
                                     mProgress.cancel();
-                                    test.setText(bData.get(i).getSetStation());
+                                    //test.setText(bData.get(i).getSetStation());
                                     bData.get(i).FlagOn();
                                     adapter.notifyDataSetChanged();
                                     return;
