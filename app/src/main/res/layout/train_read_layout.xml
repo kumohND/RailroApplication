@@ -5,8 +5,9 @@
     android:orientation="vertical">
 
     <EditText
+        android:hint = "역 입력"
         android:id="@+id/search_station"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <ListView
