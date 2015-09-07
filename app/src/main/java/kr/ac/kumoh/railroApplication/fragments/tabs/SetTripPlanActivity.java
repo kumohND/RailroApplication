@@ -14,8 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,8 +29,12 @@ import java.util.StringTokenizer;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
-import kr.ac.kumoh.railroApplication.classes.ReadTrainInfoSet;
+import kr.ac.kumoh.railroApplication.classes.LatLng;
+import kr.ac.kumoh.railroApplication.classes.LocationChangeLonLat;
+import kr.ac.kumoh.railroApplication.classes.LocationInform;
+import kr.ac.kumoh.railroApplication.classes.ReadTrainInfoSetActivity;
 import kr.ac.kumoh.railroApplication.classes.StationInfo;
+import kr.ac.kumoh.railroApplication.classes.WebViewActivity;
 
 /**
  * Created by sj on 2015-07-30.
@@ -50,40 +54,51 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
     private ArrayList<String> station;
 
+    LocationChangeLonLat mLocationData;
     //Context mContext;
     LinearLayout moveTrain;
     LinearLayout moveBus;
     LinearLayout toMeal;
     LinearLayout sleep;
 
+    Button doSomething;
     Button sTimeFix;
     Button eTimeFix;
-    TextView startTime;
-    TextView endTime;
-    TextView startStation;
-    TextView endStation;
-    TextView doSomething;
-    TextView movingTime;
-    TextView movingTime2;
-    TextView startLocation;
-    TextView endLocation;
 
-    TextView whereSleep;
-    TextView wheretoEat;
+    Button sLocation;
+    Button eLocation;
+    Button wSleep;
+    Button wEat;
 
+    Button movingTime;
+    Button movingTime2;
     Button sStation;
     Button eStation;
-
     Button plan_Success;
-    Button plan_Cancel;
-
+    LocationInform mStartInform;
+    LocationInform mEndInform;
     StationInfo data_startStation;
     StationInfo data_endStation;
 
     int flag_StartStation = 0;
     int flag_EndStation = 0;
 
+    String default_sTime = "출발 시간:";
+    String default_eTime = "도착 시간:";
 
+    String default_sStation = "출발역:";
+    String default_eStation = "도착역:";
+
+    String default_toDo = "할 일:";
+    String default_moveValue = "이동 시간:";
+
+    String TokenForLocation(String val)
+    {
+        StringTokenizer token = new StringTokenizer(val,":");
+        token.nextToken();
+        String value = token.nextToken();
+        return value;
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,50 +106,53 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         ButterKnife.inject(this);
         setupToolbar();
 
-        //  TextInputLayout lNameLayout = (TextInputLayout)findViewById(R.id.lNameLayout);
-        // lNameLayout.setErrorEnabled(true);
-     /*   Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.category_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);*/
+        moveTrain = (LinearLayout)findViewById(R.id.MoveToTrain);
+        moveBus = (LinearLayout)findViewById(R.id.MoveTobus);
+        toMeal = (LinearLayout)findViewById(R.id.ToMeal);
+        sleep = (LinearLayout)findViewById(R.id.Sleep);
 
-        moveTrain = (LinearLayout) findViewById(R.id.MoveToTrain);
-        moveBus = (LinearLayout) findViewById(R.id.MoveTobus);
-        toMeal = (LinearLayout) findViewById(R.id.ToMeal);
-        sleep = (LinearLayout) findViewById(R.id.Sleep);
+        sTimeFix = (Button)findViewById(R.id.fix_start_Time);
+        eTimeFix = (Button)findViewById(R.id.fix_end_Time);
+        doSomething = (Button)findViewById(R.id.tv_DoSomething);
 
-        sTimeFix = (Button) findViewById(R.id.fix_start_Time);
-        eTimeFix = (Button) findViewById(R.id.fix_end_Time);
-        startTime = (TextView) findViewById(R.id.schedule_start_time);
-        endTime = (TextView) findViewById(R.id.schedule_end_time);
-        doSomething = (TextView) findViewById(R.id.tv_DoSomething);
 
-        startStation = (TextView) findViewById(R.id.tv_start_station);
-        endStation = (TextView) findViewById(R.id.tv_end_station);
 
-        startLocation = (TextView) findViewById(R.id.tv_start_location);
-        endLocation = (TextView) findViewById(R.id.tv_end_location);
+        movingTime = (Button)findViewById(R.id.btn_moving_time);
+        movingTime2 = (Button)findViewById(R.id.btn_moving_time2);
 
-        whereSleep = (TextView) findViewById(R.id.tv_Sleep_Location);
-        wheretoEat = (TextView) findViewById(R.id.tv_toMeal_Location);
+        sStation = (Button)findViewById(R.id.set_start_station);
+        eStation = (Button)findViewById(R.id.set_end_station);
 
-        movingTime = (TextView) findViewById(R.id.tv_moving_time);
-        movingTime2 = (TextView) findViewById(R.id.tv_moving_time2);
+        plan_Success = (Button)findViewById(R.id.btn_success_plan);
 
-        sStation = (Button) findViewById(R.id.set_start_station);
-        eStation = (Button) findViewById(R.id.set_end_station);
-
-        plan_Success = (Button) findViewById(R.id.btn_success_plan);
-        plan_Cancel = (Button) findViewById(R.id.btn_cancel_plan);
+        sLocation = (Button)findViewById(R.id.set_start_location);
+        eLocation = (Button)findViewById(R.id.set_end_location);
+        wSleep = (Button)findViewById(R.id.btn_Sleep_location);
+        wEat = (Button)findViewById(R.id.btn_toMeal_location);
 
         sStation.setOnClickListener(this);
         eStation.setOnClickListener(this);
         plan_Success.setOnClickListener(this);
-        plan_Cancel.setOnClickListener(this);
-
+//        plan_Cancel.setOnClickListener(this);
+        doSomething.setOnClickListener(this);
         sTimeFix.setOnClickListener(this);
+        wEat.setOnClickListener(this);
+        wSleep.setOnClickListener(this);
+        eLocation.setOnClickListener(this);
+        sLocation.setOnClickListener(this);
+        movingTime.setOnClickListener(this);
+        movingTime2.setOnClickListener(this);
 
 
+        sStation.setAlpha(200);
+        eStation.setAlpha(200);
+        plan_Success.setAlpha(200);
+        doSomething.setAlpha(200);
+        sTimeFix.setAlpha(200);
+        wEat.setAlpha(200);
+        wSleep.setAlpha(200);
+        eLocation.setAlpha(200);
+        sLocation.setAlpha(200);
         //mContext = getContext();
 
 
@@ -165,7 +183,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        Intent intent;
+        Intent intent ;
         switch (v.getId()) {
             case R.id.fix_start_Time: // STARTtIME만 설정
                 TimePickerDialog dialog = new TimePickerDialog(this, listener, 00, 00, false);
@@ -176,13 +194,13 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 dialog2.show();
                 break;
             case R.id.set_start_station: // 시작하는 기차역 조회
-                intent = new Intent(this, ReadTrainInfoSet.class);
+                intent = new Intent(this, ReadTrainInfoSetActivity.class);
                 startActivityForResult(intent, 1);
                 flag_StartStation = 1;
                 break;
 
             case R.id.set_end_station: // 끝나는 기차역 조회
-                intent = new Intent(this, ReadTrainInfoSet.class);
+                intent = new Intent(this, ReadTrainInfoSetActivity.class);
                 startActivityForResult(intent, 2);
                 flag_EndStation = 1;
                 break;
@@ -190,10 +208,82 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             case R.id.btn_success_plan: // 저장 버튼 누를시 실행
                 onPlanOkay();
                 break;
+            case R.id.btn_moving_time:
+                    intent = InputData(1);
+                    if(intent == null){
+                        Toast.makeText(this,"주소 오류",Toast.LENGTH_SHORT);
+                        break;
+                    }
+                    startActivity(intent);
 
+                break;
+            case R.id.btn_moving_time2:
+                intent = InputData(2);
+                if(intent == null){
+                    Toast.makeText(this,"주소 오류",Toast.LENGTH_SHORT);
+                    break;
+                }
+                startActivity(intent);
+
+                break;
         }
     }
 
+    public Intent InputData(int index)
+    {
+
+        mLocationData = new LocationChangeLonLat();
+        if(index == 1 ) {
+            mLocationData.initControl(TokenForLocation(String.valueOf(sStation.getText())),
+                    TokenForLocation(String.valueOf(eStation.getText())),this );
+        }else{
+            mLocationData.initControl(TokenForLocation(String.valueOf(sLocation.getText())),
+                    TokenForLocation(String.valueOf(sLocation.getText())),this );
+        }
+        mStartInform = mLocationData.getStartLocationLonLat();
+        mEndInform =  mLocationData.getEndLocationLonLat();
+
+        if(mStartInform != null && mEndInform != null) {
+
+            Intent i = new Intent(this, WebViewActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("start", mStartInform);
+            bundle.putParcelable("end", mEndInform);
+            bundle.putString("url", getUrl(mStartInform.latlng, mEndInform.latlng));
+            i.putExtras(bundle);
+            return i;
+        }
+        return null;
+    }
+    public String cutTail(double number, int n){//소수점  n자리 밑으로 자르기
+        String cuttedNumber = Double.toString(number);
+        int idxPoint = cuttedNumber.indexOf(".");
+        cuttedNumber = cuttedNumber.substring(0, idxPoint + n);
+
+        return cuttedNumber;
+    }
+    public String getUrl(LatLng start, LatLng end){
+        StringBuilder urlString = new StringBuilder();
+
+        urlString.append("https://www.google.com:443/maps/dir/");
+
+        int n = 6;
+
+        //from
+        //urlString.append("&saddr=");
+        urlString.append(cutTail(start.getLat(), n));
+        urlString.append(",");
+        urlString.append(cutTail(start.getLng(), n));
+
+        //to
+        urlString.append("/");
+        urlString.append(cutTail(end.getLat(), n));
+        urlString.append(",");
+        urlString.append(cutTail(end.getLng(), n));
+
+
+        return urlString.toString();
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -204,65 +294,51 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     BufferedWriter buf;
 
     private void onPlanOkay() {
-        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext"; // 저장 할 곳
+        String path = "/data/data/kr.ac.kumoh.railrotravel/files/datasheet.ext"; // 저장 할 곳
         File file;
         file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
         }
         file = new File(path + File.separator + "201508065" + ".txt"); // 여기서 텍스트 이름만 수정하면 될듯
-        try {
+        try{
 
             int check = selected;
-            // BufferedWriter buw = new BufferedWriter(new FileReader(file,true));
-//            plan_startTime = Integer.getInteger((String)startTime.getText());
-//            plan_endTime = Integer.getInteger((String)endTime.getText());
-
 
             buf = new BufferedWriter(new FileWriter(file));
 
-            buf.write(check);
-            buf.newLine();
+            buf.write(String.valueOf(check));  buf.newLine();
             // 구분 번호
-            buf.write((String) startTime.getText());
-            buf.newLine();
-            buf.write((String) endTime.getText());
-            buf.newLine();
+            buf.write((String)sTimeFix.getText()); buf.newLine();
+            buf.write((String)eTimeFix.getText());   buf.newLine();
             // Time Save //
-            buf.write((String) doSomething.getText());
-            buf.newLine();
+            buf.write((String)doSomething.getText()); buf.newLine();
             // Do Something //
             // ------------------ 공통 부분은 여기에 저장 ----------------- //
-            if (check == 0) // train
+            if(check == 0) // train
             {
-                buf.write((String) startStation.getText());
-                buf.newLine();
-                buf.write(data_startStation.getStationCode());
-                buf.newLine();
-                buf.write((String) endStation.getText());
-                buf.newLine();
-                buf.write(data_endStation.getStationCode());
-                buf.newLine();
-                buf.write((String) movingTime.getText());
-                buf.newLine();
-            } else if (check == 1) // bus
+                buf.write((String) sStation.getText()); buf.newLine();
+                buf.write(data_startStation.getStationCode()); buf.newLine();
+                buf.write((String) eStation.getText()); buf.newLine();
+                buf.write(data_endStation.getStationCode()); buf.newLine();
+                buf.write((String) movingTime.getText());  buf.newLine();
+            }else if(check ==1) // bus
             {
-                buf.write((String) startLocation.getText());
-                buf.newLine();
-                buf.write((String) endLocation.getText());
-                ;
-                buf.newLine();
+                buf.write((String) sLocation.getText()); buf.newLine();
+                buf.write((String) eLocation.getText()); ; buf.newLine();
                 buf.write((String) movingTime2.getText());
-            } else if (check == 2) { // sleep
-                buf.write((String) whereSleep.getText());
-            } else { //toMeal
-                buf.write((String) wheretoEat.getText());
+            }else if(check ==2){ // sleep
+                buf.write((String) wSleep.getText());
+            }else{ //toMeal
+                buf.write((String) wEat.getText());
             }
+
 
 
             buf.close();
 
-        } catch (IOException e) {
+        }catch(IOException e)
+        {
 
         }
     }
@@ -271,7 +347,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     int readCheck = -1; // 껏다 켯을때, spin위치 체크
 
     private void onReadDetail() {
-        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+        String path = "/data/data/kr.ac.kumoh.railrotravel/files/datasheet.ext";
         File file;
         file = new File(path);
         ArrayList<String> mData;
@@ -279,53 +355,55 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             file.mkdirs();
         }
         file = new File(path + File.separator + "201508065" + ".txt");
-        try {
+        try{
 
             int check;
 
             buw = new BufferedReader(new FileReader(file));
             String rawData = "";
             String temp;
-            while ((temp = buw.readLine()) != null) {
+            while((temp = buw.readLine()) != null)
+            {
                 rawData += (temp + "\r\n");
             }
 
             buw.close();
-            if (rawData.equals("")) return;
+            if(rawData.equals("")) return ;
 
             mData = InitDataStringTokenizer(rawData); // text 데이터 -> ArrayList로 만들어 반환
 
             readCheck = Integer.valueOf(mData.get(0));
             check = Integer.valueOf(mData.get(0));
             // 구분 번호 //
-            startTime.setText(mData.get(1));
-            endTime.setText(mData.get(2));
+            sTimeFix.setText(default_sTime + mData.get(1));
+            eTimeFix.setText(default_eTime + mData.get(2));
 
             // Time Save //
-            doSomething.setText(mData.get(3));
+            doSomething.setText(default_toDo + mData.get(3));
 
             // Do Something //
 
 
             // 보여줄 데이터 셋
-            if (check == 0) // train
+            if(check == 0) // train
             {
-                data_startStation = new StationInfo(mData.get(4), mData.get(5));
-                startStation.setText(mData.get(4));
-                data_endStation = new StationInfo(mData.get(6), mData.get(7));
-                endStation.setText(mData.get(6));
-                movingTime.setText(mData.get(7));
-            } else if (check == 1) // bus
+                data_startStation = new StationInfo(mData.get(4),mData.get(5));
+                sStation.setText(default_sStation + mData.get(4));
+                data_endStation = new StationInfo(mData.get(6),mData.get(7));
+                eStation.setText(default_eStation + mData.get(6));
+                movingTime.setText(mData.get(7) + default_moveValue );
+            }else if(check ==1) // bus
             {
-                startLocation.setText(mData.get(4));
-                endLocation.setText(mData.get(5));
-                movingTime.setText(mData.get(6));
-            } else if (check == 2) { // sleep
-                whereSleep.setText(mData.get(4));
-            } else { //toMeal
-                wheretoEat.setText(mData.get(4));
+                sLocation.setText(mData.get(4));
+                eLocation.setText(mData.get(5));
+                movingTime.setText(mData.get(6) + default_moveValue);
+            }else if(check ==2){ // sleep
+                wSleep.setText(mData.get(4));
+            }else{ //toMeal
+                wEat.setText(mData.get(4));
             }
-        } catch (IOException e) {
+        }catch(IOException e)
+        {
 
         }
     }
@@ -347,8 +425,9 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
     // 기차역 조회
     private void onTestReadAndSet(int check) {
+        //mCast = new ForeCast();
         String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
-        try {
+        try{
             File file;
             file = new File(path);
             if (!file.exists()) {
@@ -359,25 +438,41 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             named_buffer = buw.readLine();
             named_buffer += "\r\n" + buw.readLine();
-        } catch (IOException e) {
+        }catch(IOException e)
+        {
 
         }
 
-        if (check == 1) //startStation
+        if(check == 1) //startStation
         {
+
+            flag_StartStation = 0 ;
             data_startStation = StringToToken(named_buffer);
-            startStation.setText(data_startStation.getStationName());
-            flag_StartStation = 0;
-        } else if (check == 2) // endStation
+            if(data_startStation == null){
+                sStation.setText(default_sStation + "서울역");
+                return ;
+            }
+            sStation.setText(default_sStation + data_startStation.getStationName());
+        }else if(check == 2) // endStation
         {
-            data_endStation = StringToToken(named_buffer);
-            endStation.setText(data_endStation.getStationName());
             flag_EndStation = 0;
+            data_endStation = StringToToken(named_buffer);
+            if(data_endStation == null){
+                eStation.setText(default_eStation + "부산역");
+                return ;
+            }
+            eStation.setText(default_eStation + data_endStation.getStationName());
         }
     }
 
 
+
     StationInfo StringToToken(String rawString) {
+        if(rawString.contains("nothing")){
+
+
+           return null;
+        }
         StringTokenizer mToken = new StringTokenizer(rawString, "\r\n");
         StationInfo temp;
 
@@ -391,7 +486,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     private TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            startTime.setText(hourOfDay + minute);
+            //startTime.setText(hourOfDay + minute);
         }
     };
 
@@ -407,6 +502,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         {
             onTestReadAndSet(2);
         }
+
 
     }
 

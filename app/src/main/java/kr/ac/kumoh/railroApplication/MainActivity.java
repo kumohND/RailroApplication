@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.digital_footprint_menu_item:
+//                setNewRootFragment(DigitalFootprintFragment.newInstance());
                 setNewRootFragment(DigitalFootprintFragment.newInstance());
                 break;
 

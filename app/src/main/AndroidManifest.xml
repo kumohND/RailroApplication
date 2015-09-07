@@ -3,6 +3,17 @@
     package="kr.ac.kumoh.railroApplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_CALENDAR"/>
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name= "android.permission.ACCESS_COARSE_LOCATION"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,7 +29,8 @@
             </intent-filter>
         </activity>
         <activity android:name="kr.ac.kumoh.railroApplication.fragments.tabs.SetTripPlanActivity"></activity>
-        <activity android:name="kr.ac.kumoh.railroApplication.classes.ReadTrainInfoSet"></activity>
+        <activity android:name=".classes.ReadTrainInfoSetActivity"></activity>
+        <activity android:name=".classes.WebViewActivity"/>
     </application>
 
 </manifest>
