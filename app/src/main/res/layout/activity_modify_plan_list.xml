@@ -66,6 +66,7 @@
 
             <Button
                 android:drawableLeft="@drawable/ic_android"
+                android:drawableRight="@drawable/ic_android"
                 android:gravity="left|center_vertical"
                 android:text="출발역:서울역"
                 android:id="@+id/set_start_station"
@@ -75,6 +76,7 @@
 
             <Button
                 android:drawableLeft="@drawable/ic_android"
+                android:drawableRight="@drawable/ic_android"
                 android:gravity="left|center_vertical"
                 android:text="도착역:부산역"
                 android:id="@+id/set_end_station"
@@ -96,6 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <Button
+                android:drawableRight="@drawable/ic_android"
                 android:drawableLeft="@drawable/ic_android"
                 android:gravity="left|center_vertical"
                 android:text="출발지:서울역"
@@ -106,6 +109,7 @@
 
             <Button
                 android:drawableLeft="@drawable/ic_android"
+                android:drawableRight="@drawable/ic_android"
                 android:gravity="left|center_vertical"
                 android:text="도착지:부산역"
                 android:id="@+id/set_end_location"

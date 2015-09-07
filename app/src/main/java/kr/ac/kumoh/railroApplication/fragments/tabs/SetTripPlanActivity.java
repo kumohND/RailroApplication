@@ -1,6 +1,7 @@
 package kr.ac.kumoh.railroApplication.fragments.tabs;
 
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,11 +30,14 @@ import java.util.StringTokenizer;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
+import kr.ac.kumoh.railroApplication.classes.ForeCast;
 import kr.ac.kumoh.railroApplication.classes.LatLng;
 import kr.ac.kumoh.railroApplication.classes.LocationChangeLonLat;
 import kr.ac.kumoh.railroApplication.classes.LocationInform;
 import kr.ac.kumoh.railroApplication.classes.ReadTrainInfoSetActivity;
 import kr.ac.kumoh.railroApplication.classes.StationInfo;
+import kr.ac.kumoh.railroApplication.classes.WeatherCondition;
+import kr.ac.kumoh.railroApplication.classes.WeatherInfo;
 import kr.ac.kumoh.railroApplication.classes.WebViewActivity;
 
 /**
@@ -56,18 +60,11 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
     LocationChangeLonLat mLocationData;
     //Context mContext;
-    LinearLayout moveTrain;
-    LinearLayout moveBus;
-    LinearLayout toMeal;
-    LinearLayout sleep;
+    LinearLayout moveTrain;  LinearLayout moveBus;
+    LinearLayout toMeal; LinearLayout sleep;
 
-    Button doSomething;
-    Button sTimeFix;
-    Button eTimeFix;
-
-    Button sLocation;
-    Button eLocation;
-    Button wSleep;
+    Button doSomething; Button sTimeFix; Button eTimeFix;
+    Button sLocation; Button eLocation; Button wSleep;
     Button wEat;
 
     Button movingTime;
@@ -83,15 +80,13 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     int flag_StartStation = 0;
     int flag_EndStation = 0;
 
-    String default_sTime = "출발 시간:";
-    String default_eTime = "도착 시간:";
+    String default_sTime = "출발 시간:"; String default_eTime = "도착 시간:"; String default_sStation = "출발역:"; String default_eStation = "도착역:";
+    String default_toDo = "할 일:"; String default_moveValue = "이동 시간:";
 
-    String default_sStation = "출발역:";
-    String default_eStation = "도착역:";
 
-    String default_toDo = "할 일:";
-    String default_moveValue = "이동 시간:";
-
+    WeatherInfo mStartWeather;
+    WeatherInfo mEndWeather;
+    String year; String month; String day;
     String TokenForLocation(String val)
     {
         StringTokenizer token = new StringTokenizer(val,":");
@@ -228,7 +223,56 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 break;
         }
     }
+    ContentValues start_Weather;
+    ContentValues end_Weather;
+    public void CheckWeather()
+    {
+        mLocationData = new LocationChangeLonLat();
+        mLocationData.initControl(TokenForLocation(String.valueOf(sStation.getText())),
+                TokenForLocation(String.valueOf(eStation.getText())),this );
+        mLocationData.initControl(TokenForLocation(String.valueOf(sLocation.getText())),
+                TokenForLocation(String.valueOf(sLocation.getText())),this );
 
+        mStartInform = mLocationData.getStartLocationLonLat();
+        mEndInform =  mLocationData.getEndLocationLonLat();
+
+        if(mStartInform != null && mEndInform != null) {
+            ForeCast mWeather = new ForeCast(mStartInform,mEndInform);
+            start_Weather = mWeather.getStart_Weatehr();
+            end_Weather = mWeather.getEnd_Weather();
+
+            Input_Weather();
+        }else {
+            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
+        }
+
+    }
+
+    public void Input_Weather()
+    {
+
+                mStartWeather = new WeatherInfo(
+                        String.valueOf(start_Weather.get("weather_Name")),  String.valueOf(start_Weather.get("weather_Number")), String.valueOf(start_Weather.get("weather_Much")),
+                        String.valueOf(start_Weather.get("weather_Type")),  String.valueOf(start_Weather.get("wind_Direction")),  String.valueOf(start_Weather.get("wind_SortNumber")),
+                        String.valueOf(start_Weather.get("wind_SortCode")),  String.valueOf(start_Weather.get("wind_Speed")),  String.valueOf(start_Weather.get("wind_Name")),
+                        String.valueOf(start_Weather.get("temp_Min")),  String.valueOf(start_Weather.get("temp_Max")),  String.valueOf(start_Weather.get("humidity")),
+                        String.valueOf(start_Weather.get("Clouds_Value")),  String.valueOf(start_Weather.get("Clouds_Sort")), String.valueOf(start_Weather.get("Clouds_Per"))
+                );
+
+
+                mEndWeather = new WeatherInfo(
+                        String.valueOf(end_Weather.get("weather_Name")),  String.valueOf(end_Weather.get("weather_Number")), String.valueOf(end_Weather.get("weather_Much")),
+                        String.valueOf(end_Weather.get("weather_Type")),  String.valueOf(end_Weather.get("wind_Direction")),  String.valueOf(end_Weather.get("wind_SortNumber")),
+                        String.valueOf(end_Weather.get("wind_SortCode")),  String.valueOf(end_Weather.get("wind_Speed")),  String.valueOf(end_Weather.get("wind_Name")),
+                        String.valueOf(end_Weather.get("temp_Min")),  String.valueOf(end_Weather.get("temp_Max")),  String.valueOf(end_Weather.get("humidity")),
+                        String.valueOf(end_Weather.get("Clouds_Value")),  String.valueOf(end_Weather.get("Clouds_Sort")), String.valueOf(end_Weather.get("Clouds_Per"))
+                );
+
+    }
+    public void Calculator_Weather()
+    {
+
+    }
     public Intent InputData(int index)
     {
 
@@ -244,7 +288,6 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         mEndInform =  mLocationData.getEndLocationLonLat();
 
         if(mStartInform != null && mEndInform != null) {
-
             Intent i = new Intent(this, WebViewActivity.class);
             Bundle bundle = new Bundle();
             bundle.putParcelable("start", mStartInform);

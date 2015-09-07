@@ -32,7 +32,7 @@ public class ForeCast extends Thread {
 //    ArrayList<ForecastInfo> mCast;
 //    ArrayList<ForeXmlData> mWeatherCast;
     ArrayList<String> mCastList;
-    ContentValues mContent;
+//    ContentValues mContent;
 
     ForecastInfo mFore_Data;
     String lon ;
@@ -42,6 +42,17 @@ public class ForeCast extends Thread {
     int tDay;
     int weather = -1;
     int range_Day = 0;
+    LocationInform mStartLocation;
+    LocationInform mEndLocation;
+
+    public ContentValues getStart_Weatehr()
+    {
+        return start_Weatehr;
+    }
+    public ContentValues getEnd_Weather()
+    {
+        return end_Weather;
+    }
     public boolean CheckWeatherRange(String year,String month,String day)
     {
         range_Day = 1;
@@ -58,29 +69,39 @@ public class ForeCast extends Thread {
 
         return false;
     }
-
-    public void LonAndLatObtain(String SearchCity)
+    ContentValues start_Weatehr;
+    ContentValues end_Weather;
+    public void getForeCast()
     {
 
+       start_Weatehr = GetOpenWeather("","","",String.valueOf(this.mStartLocation.latlng.getLng()),String.valueOf(this.mStartLocation.latlng.getLat()));
+       end_Weather = GetOpenWeather("","","",String.valueOf(this.mEndLocation.latlng.getLng()),String.valueOf(this.mEndLocation.latlng.getLat()));
+    }
+
+
+
+    public ForeCast(LocationInform mStartLocation, LocationInform mEndLocation)
+    {
+        this.mStartLocation = mStartLocation;
+        this.mEndLocation = mEndLocation;
     }
     String t_date1;
     String t_date2;
 
 
-    public ContentValues GetOpenWeather(String year,String month,String day,String searchCity)
+    public ContentValues GetOpenWeather(String year,String month,String day,String lon,String lat)
     {
-        if(!CheckWeatherRange(year,month,day)) return null;
+        //if(!CheckWeatherRange(year,month,day)) return null;
 
-        mContent = new ContentValues();
-        LonAndLatObtain(searchCity);
+        ContentValues mContent = new ContentValues();
 //        mWeatherCast = new ArrayList<ForeXmlData>();
         String lat1 = "35";
         String lon1 = "138";
 
         try{
             URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?" +
-                    "&lat="+lat1+
-                    "&lon="+lon1+
+                    "&lat="+lat+
+                    "&lon="+lon+
                     "&mode=xml" +
                     "&units=metric"+
                     "&cnt=" + 10
@@ -116,7 +137,7 @@ public class ForeCast extends Thread {
                             mContent.put("weather_Type",parser.getAttributeValue(null,"type"));
                             break;
                         case "windDirection": // 바람 방향
-                            mContent.put("wind_Drection",parser.getAttributeValue(null,"name"));
+                            mContent.put("wind_Direction",parser.getAttributeValue(null,"name"));
                             mContent.put("wind_SortNumber",parser.getAttributeValue(null,"deg"));
                             mContent.put("wind_SortCode",parser.getAttributeValue(null,"code"));
                             break;
@@ -192,8 +213,7 @@ public class ForeCast extends Thread {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-
-        GetOpenWeather("2015","08","27","seoul");
+        getForeCast();
     }
 
 
