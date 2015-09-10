@@ -19,6 +19,24 @@ public class WeatherInfo {
     String clouds_Value;
     String clouds_Sort;
     String clouds_Per;
+    int picture_Category;
+    int picture_ID;
+
+    public int getPicture_ID() {
+        return picture_ID;
+    }
+
+    public void setPicture_ID(int picture_ID) {
+        this.picture_ID = picture_ID;
+    }
+
+    public int getPicture_Category() {
+        return picture_Category;
+    }
+
+    public void setPicture_Category(int picture_Category) {
+        this.picture_Category = picture_Category;
+    }
 
     public WeatherInfo(String weather_Name, String weather_Number, String weather_Much,
                        String weather_Type, String wind_Direction, String wind_SortNumber,

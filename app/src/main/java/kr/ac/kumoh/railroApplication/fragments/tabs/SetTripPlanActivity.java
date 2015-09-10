@@ -36,7 +36,7 @@ import kr.ac.kumoh.railroApplication.classes.LocationChangeLonLat;
 import kr.ac.kumoh.railroApplication.classes.LocationInform;
 import kr.ac.kumoh.railroApplication.classes.ReadTrainInfoSetActivity;
 import kr.ac.kumoh.railroApplication.classes.StationInfo;
-import kr.ac.kumoh.railroApplication.classes.WeatherCondition;
+import kr.ac.kumoh.railroApplication.classes.WeatherConditionList;
 import kr.ac.kumoh.railroApplication.classes.WeatherInfo;
 import kr.ac.kumoh.railroApplication.classes.WebViewActivity;
 
@@ -44,6 +44,11 @@ import kr.ac.kumoh.railroApplication.classes.WebViewActivity;
  * Created by sj on 2015-07-30.
  */
 public class SetTripPlanActivity extends ActionBarActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener {
+    final int CLEAR_SKY = 1; final int FEW_CLOUDS = 2; final int SCATTERED_CLOUDS = 3;
+    final int BROKEN_CLOUDS = 4; final int SHOWER_RAIN = 5; final int RAIN = 6;
+    final int THUNDERSTORM = 7; final int SNOW = 8; final int MIST = 9;
+
+
 
     @InjectView(R.id.appbar)
     AppBarLayout mAppBarLayout;
@@ -72,6 +77,14 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     Button sStation;
     Button eStation;
     Button plan_Success;
+    Button start_Train_Weather;
+    Button end_Train_Weather;
+    Button start_Region_Weather;
+    Button end_Region_Weather;
+    Button meal_Weather;
+    Button sleep_Weather;
+
+
     LocationInform mStartInform;
     LocationInform mEndInform;
     StationInfo data_startStation;
@@ -84,8 +97,15 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     String default_toDo = "할 일:"; String default_moveValue = "이동 시간:";
 
 
-    WeatherInfo mStartWeather;
-    WeatherInfo mEndWeather;
+    WeatherInfo mStartTrainWeather;
+    WeatherInfo mEndTrainWeather;
+    WeatherInfo mStartRegionWeather;
+    WeatherInfo mEndRegionWeather;
+    WeatherInfo mMealWeather;
+    WeatherInfo mSleepWeather;
+
+    ContentValues start_Weather;
+    ContentValues end_Weather;
     String year; String month; String day;
     String TokenForLocation(String val)
     {
@@ -100,6 +120,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         setContentView(R.layout.activity_modify_plan_list);
         ButterKnife.inject(this);
         setupToolbar();
+        mCondition = new WeatherConditionList();
 
         moveTrain = (LinearLayout)findViewById(R.id.MoveToTrain);
         moveBus = (LinearLayout)findViewById(R.id.MoveTobus);
@@ -124,6 +145,20 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         eLocation = (Button)findViewById(R.id.set_end_location);
         wSleep = (Button)findViewById(R.id.btn_Sleep_location);
         wEat = (Button)findViewById(R.id.btn_toMeal_location);
+
+        start_Train_Weather = (Button)findViewById(R.id.btn_start_train_Weather);
+        end_Train_Weather = (Button)findViewById(R.id.btn_end_train_Weather);;
+        start_Region_Weather= (Button)findViewById(R.id.btn_start_region_Weather);
+        end_Region_Weather= (Button)findViewById(R.id.btn_end_region_Weather);;
+        meal_Weather = (Button)findViewById(R.id.btn_meal_Weather);
+        sleep_Weather = (Button)findViewById(R.id.btn_Sleep_Weather);
+
+        start_Train_Weather.setOnClickListener(this);
+        end_Train_Weather.setOnClickListener(this);
+        start_Region_Weather.setOnClickListener(this);
+        end_Region_Weather.setOnClickListener(this);
+        meal_Weather.setOnClickListener(this);
+        sleep_Weather.setOnClickListener(this);
 
         sStation.setOnClickListener(this);
         eStation.setOnClickListener(this);
@@ -223,15 +258,64 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 break;
         }
     }
-    ContentValues start_Weather;
-    ContentValues end_Weather;
+    // 이부분은 Train 에만 해당, 4가지 다 되게 바꿔야함
     public void CheckWeather()
     {
         mLocationData = new LocationChangeLonLat();
-        mLocationData.initControl(TokenForLocation(String.valueOf(sStation.getText())),
-                TokenForLocation(String.valueOf(eStation.getText())),this );
+
+        if(selected == 0) TrainLocateAndWeather();
+        else if(selected == 1) RegionLocateAndWeather();
+        else if(selected == 2) MealLocateAndWeather();
+        else SleepLocateAndWeather();
+
+    }
+    public void SleepLocateAndWeather()
+    {
+        mLocationData.initControl(TokenForLocation(String.valueOf(wSleep.getText())),
+                "",this);
+
+
+        mStartInform = mLocationData.getStartLocationLonLat();
+
+        if(mStartInform != null ) {
+            ForeCast mWeather = new ForeCast(mStartInform,mEndInform);
+            start_Weather = mWeather.getStart_Weatehr();
+
+            Input_Weather();
+        }else {
+            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
+        }
+        mSleepWeather.setPicture_Category(Calculator_Weather(mStartRegionWeather.getWeather_Number()));
+        mSleepWeather.setPicture_ID(WeatherToPicture(mStartRegionWeather.getWeather_Number()));
+
+        sleep_Weather.setBackgroundResource(mSleepWeather.getPicture_ID());
+    }
+    public void  MealLocateAndWeather()
+    {
+        mLocationData.initControl(TokenForLocation(String.valueOf(wEat.getText())),
+               "",this );
+
+
+        mStartInform = mLocationData.getStartLocationLonLat();
+
+        if(mStartInform != null ) {
+            ForeCast mWeather = new ForeCast(mStartInform,mEndInform);
+            start_Weather = mWeather.getStart_Weatehr();
+
+            Input_Weather();
+        }else {
+            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
+        }
+        mMealWeather.setPicture_Category(Calculator_Weather(mStartRegionWeather.getWeather_Number()));
+        mMealWeather.setPicture_ID(WeatherToPicture(mStartRegionWeather.getWeather_Number()));
+
+        meal_Weather.setBackgroundResource(mMealWeather.getPicture_ID());
+    }
+    public void RegionLocateAndWeather()
+    {
+
         mLocationData.initControl(TokenForLocation(String.valueOf(sLocation.getText())),
-                TokenForLocation(String.valueOf(sLocation.getText())),this );
+                TokenForLocation(String.valueOf(eLocation.getText())),this );
 
         mStartInform = mLocationData.getStartLocationLonLat();
         mEndInform =  mLocationData.getEndLocationLonLat();
@@ -245,34 +329,282 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         }else {
             Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
         }
+        mStartRegionWeather.setPicture_Category(Calculator_Weather(mStartRegionWeather.getWeather_Number()));
+        mEndRegionWeather.setPicture_Category(Calculator_Weather(mEndRegionWeather.getWeather_Number()));
+        mStartRegionWeather.setPicture_ID(WeatherToPicture(mStartRegionWeather.getWeather_Number()));
+        mEndRegionWeather.setPicture_ID(WeatherToPicture(mEndRegionWeather.getWeather_Number()));
+
+        start_Region_Weather.setBackgroundResource(mStartRegionWeather.getPicture_ID());
+        end_Region_Weather.setBackgroundResource(mEndRegionWeather.getPicture_ID());
+    }
+    public void TrainLocateAndWeather()
+    {
+        mLocationData.initControl(TokenForLocation(String.valueOf(sStation.getText())),
+                TokenForLocation(String.valueOf(eStation.getText())),this );
+
+
+        mStartInform = mLocationData.getStartLocationLonLat();
+        mEndInform =  mLocationData.getEndLocationLonLat();
+
+        if(mStartInform != null && mEndInform != null) {
+            ForeCast mWeather = new ForeCast(mStartInform,mEndInform);
+            mWeather.run();
+            start_Weather = mWeather.getStart_Weatehr();
+            end_Weather = mWeather.getEnd_Weather();
+
+            Input_Weather();
+        }else {
+            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
+        }
+        mStartTrainWeather.setPicture_Category(Calculator_Weather(mStartTrainWeather.getWeather_Number()));
+        mEndTrainWeather.setPicture_Category(Calculator_Weather(mEndTrainWeather.getWeather_Number()));
+        mStartTrainWeather.setPicture_ID(WeatherToPicture(mStartTrainWeather.getWeather_Number()));
+        mEndTrainWeather.setPicture_ID(WeatherToPicture(mEndTrainWeather.getWeather_Number()));
+
+
+        start_Train_Weather.setBackgroundResource(mStartTrainWeather.getPicture_ID());
+        end_Train_Weather.setBackgroundResource(mEndTrainWeather.getPicture_ID());
 
     }
 
     public void Input_Weather()
     {
+        if(selected == 0)
+        {
+            mStartTrainWeather = new WeatherInfo(
+                    String.valueOf(start_Weather.get("weather_Name")),  String.valueOf(start_Weather.get("weather_Number")), String.valueOf(start_Weather.get("weather_Much")),
+                    String.valueOf(start_Weather.get("weather_Type")),  String.valueOf(start_Weather.get("wind_Direction")),  String.valueOf(start_Weather.get("wind_SortNumber")),
+                    String.valueOf(start_Weather.get("wind_SortCode")),  String.valueOf(start_Weather.get("wind_Speed")),  String.valueOf(start_Weather.get("wind_Name")),
+                    String.valueOf(start_Weather.get("temp_Min")),  String.valueOf(start_Weather.get("temp_Max")),  String.valueOf(start_Weather.get("humidity")),
+                    String.valueOf(start_Weather.get("Clouds_Value")),  String.valueOf(start_Weather.get("Clouds_Sort")), String.valueOf(start_Weather.get("Clouds_Per"))
+            );
+            mEndTrainWeather = new WeatherInfo(
+                    String.valueOf(end_Weather.get("weather_Name")),  String.valueOf(end_Weather.get("weather_Number")), String.valueOf(end_Weather.get("weather_Much")),
+                    String.valueOf(end_Weather.get("weather_Type")),  String.valueOf(end_Weather.get("wind_Direction")),  String.valueOf(end_Weather.get("wind_SortNumber")),
+                    String.valueOf(end_Weather.get("wind_SortCode")),  String.valueOf(end_Weather.get("wind_Speed")),  String.valueOf(end_Weather.get("wind_Name")),
+                    String.valueOf(end_Weather.get("temp_Min")),  String.valueOf(end_Weather.get("temp_Max")),  String.valueOf(end_Weather.get("humidity")),
+                    String.valueOf(end_Weather.get("Clouds_Value")),  String.valueOf(end_Weather.get("Clouds_Sort")), String.valueOf(end_Weather.get("Clouds_Per"))
+            );
+        }else if(selected ==1)
+        {
+            mStartRegionWeather =  new WeatherInfo(
+                    String.valueOf(start_Weather.get("weather_Name")),  String.valueOf(start_Weather.get("weather_Number")), String.valueOf(start_Weather.get("weather_Much")),
+                    String.valueOf(start_Weather.get("weather_Type")),  String.valueOf(start_Weather.get("wind_Direction")),  String.valueOf(start_Weather.get("wind_SortNumber")),
+                    String.valueOf(start_Weather.get("wind_SortCode")),  String.valueOf(start_Weather.get("wind_Speed")),  String.valueOf(start_Weather.get("wind_Name")),
+                    String.valueOf(start_Weather.get("temp_Min")),  String.valueOf(start_Weather.get("temp_Max")),  String.valueOf(start_Weather.get("humidity")),
+                    String.valueOf(start_Weather.get("Clouds_Value")),  String.valueOf(start_Weather.get("Clouds_Sort")), String.valueOf(start_Weather.get("Clouds_Per"))
+            );
+            mEndRegionWeather = new WeatherInfo(
+                    String.valueOf(end_Weather.get("weather_Name")),  String.valueOf(end_Weather.get("weather_Number")), String.valueOf(end_Weather.get("weather_Much")),
+                    String.valueOf(end_Weather.get("weather_Type")),  String.valueOf(end_Weather.get("wind_Direction")),  String.valueOf(end_Weather.get("wind_SortNumber")),
+                    String.valueOf(end_Weather.get("wind_SortCode")),  String.valueOf(end_Weather.get("wind_Speed")),  String.valueOf(end_Weather.get("wind_Name")),
+                    String.valueOf(end_Weather.get("temp_Min")),  String.valueOf(end_Weather.get("temp_Max")),  String.valueOf(end_Weather.get("humidity")),
+                    String.valueOf(end_Weather.get("Clouds_Value")),  String.valueOf(end_Weather.get("Clouds_Sort")), String.valueOf(end_Weather.get("Clouds_Per"))
+            );
+        }else if(selected == 2)
+        {
+            mMealWeather =  new WeatherInfo(
+                    String.valueOf(start_Weather.get("weather_Name")),  String.valueOf(start_Weather.get("weather_Number")), String.valueOf(start_Weather.get("weather_Much")),
+                    String.valueOf(start_Weather.get("weather_Type")),  String.valueOf(start_Weather.get("wind_Direction")),  String.valueOf(start_Weather.get("wind_SortNumber")),
+                    String.valueOf(start_Weather.get("wind_SortCode")),  String.valueOf(start_Weather.get("wind_Speed")),  String.valueOf(start_Weather.get("wind_Name")),
+                    String.valueOf(start_Weather.get("temp_Min")),  String.valueOf(start_Weather.get("temp_Max")),  String.valueOf(start_Weather.get("humidity")),
+                    String.valueOf(start_Weather.get("Clouds_Value")),  String.valueOf(start_Weather.get("Clouds_Sort")), String.valueOf(start_Weather.get("Clouds_Per"))
+            );
+        }else if(selected == 3)
+        {
+            mSleepWeather=  new WeatherInfo(
+                    String.valueOf(start_Weather.get("weather_Name")),  String.valueOf(start_Weather.get("weather_Number")), String.valueOf(start_Weather.get("weather_Much")),
+                    String.valueOf(start_Weather.get("weather_Type")),  String.valueOf(start_Weather.get("wind_Direction")),  String.valueOf(start_Weather.get("wind_SortNumber")),
+                    String.valueOf(start_Weather.get("wind_SortCode")),  String.valueOf(start_Weather.get("wind_Speed")),  String.valueOf(start_Weather.get("wind_Name")),
+                    String.valueOf(start_Weather.get("temp_Min")),  String.valueOf(start_Weather.get("temp_Max")),  String.valueOf(start_Weather.get("humidity")),
+                    String.valueOf(start_Weather.get("Clouds_Value")),  String.valueOf(start_Weather.get("Clouds_Sort")), String.valueOf(start_Weather.get("Clouds_Per"))
+            );
+        }
 
-                mStartWeather = new WeatherInfo(
-                        String.valueOf(start_Weather.get("weather_Name")),  String.valueOf(start_Weather.get("weather_Number")), String.valueOf(start_Weather.get("weather_Much")),
-                        String.valueOf(start_Weather.get("weather_Type")),  String.valueOf(start_Weather.get("wind_Direction")),  String.valueOf(start_Weather.get("wind_SortNumber")),
-                        String.valueOf(start_Weather.get("wind_SortCode")),  String.valueOf(start_Weather.get("wind_Speed")),  String.valueOf(start_Weather.get("wind_Name")),
-                        String.valueOf(start_Weather.get("temp_Min")),  String.valueOf(start_Weather.get("temp_Max")),  String.valueOf(start_Weather.get("humidity")),
-                        String.valueOf(start_Weather.get("Clouds_Value")),  String.valueOf(start_Weather.get("Clouds_Sort")), String.valueOf(start_Weather.get("Clouds_Per"))
-                );
-
-
-                mEndWeather = new WeatherInfo(
-                        String.valueOf(end_Weather.get("weather_Name")),  String.valueOf(end_Weather.get("weather_Number")), String.valueOf(end_Weather.get("weather_Much")),
-                        String.valueOf(end_Weather.get("weather_Type")),  String.valueOf(end_Weather.get("wind_Direction")),  String.valueOf(end_Weather.get("wind_SortNumber")),
-                        String.valueOf(end_Weather.get("wind_SortCode")),  String.valueOf(end_Weather.get("wind_Speed")),  String.valueOf(end_Weather.get("wind_Name")),
-                        String.valueOf(end_Weather.get("temp_Min")),  String.valueOf(end_Weather.get("temp_Max")),  String.valueOf(end_Weather.get("humidity")),
-                        String.valueOf(end_Weather.get("Clouds_Value")),  String.valueOf(end_Weather.get("Clouds_Sort")), String.valueOf(end_Weather.get("Clouds_Per"))
-                );
 
     }
-    public void Calculator_Weather()
+    WeatherConditionList mCondition = new WeatherConditionList();
+//    public void ChangeWeatherPicture()
+//    {
+//        if(selected == 0)
+//        {
+//            ChangeTrainWeatherBtn();
+//        }else if(selected == 1)
+//        {
+//            ChangeRegionWeatherBtn();
+//        }else if(selected == 2)
+//        {
+//            ChangeMealWeatherBtn();
+//        }else if(selected == 3)
+//        {
+//            ChangeSleepWeatherBtn();
+//        }
+//
+//    }
+//
+//    public void ChangeTrainWeatherBtn()
+//    {
+//
+//    }
+//
+//    public void ChangeRegionWeatherBtn()
+//    {
+////        if(whatWeather == SNOW)
+////        else if(whatWeather == CLEAR_SKY))
+////        else if(whatWeather == BROKEN_CLOUDS)
+////        else if(whatWeather == FEW_CLOUDS)
+////        else if(whatWeather == SCATTERED_CLOUDS)
+////        else if(whatWeather == RAIN)
+////        else if(whatWeather == SHOWER_RAIN)
+////        else if(whatWeather == THUNDERSTORM)
+////        else if(whatWeather == MIST)
+//        //else
+//        //  return 0;
+//    }
+//
+//    public void ChangeMealWeatherBtn()
+//    {
+////        if(whatWeather == SNOW)
+////        else if(whatWeather == CLEAR_SKY))
+////        else if(whatWeather == BROKEN_CLOUDS)
+////        else if(whatWeather == FEW_CLOUDS)
+////        else if(whatWeather == SCATTERED_CLOUDS)
+////        else if(whatWeather == RAIN)
+////        else if(whatWeather == SHOWER_RAIN)
+////        else if(whatWeather == THUNDERSTORM)
+////        else if(whatWeather == MIST)
+//        //else
+//        //  return 0;
+//    }
+//    public void ChangeSleepWeatherBtn()
+//    {
+////        if(whatWeather == SNOW)
+////        else if(whatWeather == CLEAR_SKY))
+////        else if(whatWeather == BROKEN_CLOUDS)
+////        else if(whatWeather == FEW_CLOUDS)
+////        else if(whatWeather == SCATTERED_CLOUDS)
+////        else if(whatWeather == RAIN)
+////        else if(whatWeather == SHOWER_RAIN)
+////        else if(whatWeather == THUNDERSTORM)
+////        else if(whatWeather == MIST)
+//        //else
+//        //  return 0;
+//    }
+    public int Calculator_Weather(String weatherNumber)
     {
 
+        if(isSnow(weatherNumber)) return SNOW;
+        else if(isClear(weatherNumber)) return CLEAR_SKY;
+        else if(isBroken_Clouds(weatherNumber)) return BROKEN_CLOUDS;
+        else if(isFew_Clouds(weatherNumber)) return FEW_CLOUDS;
+        else if(isScattered_Clouds(weatherNumber)) return SCATTERED_CLOUDS;
+        else if(isRain(weatherNumber)) return RAIN;
+        else if(isShower_Rain(weatherNumber)) return SHOWER_RAIN;
+        else if(isThunderStrom(weatherNumber)) return THUNDERSTORM;
+        else if(isMist(weatherNumber)) return MIST;
+        else
+            return 0;
     }
+    public int WeatherToPicture(String weatherNumber)
+    {
+
+        if(isSnow(weatherNumber)) return R.drawable.car;
+        else if(isClear(weatherNumber)) return R.drawable.ic_email;
+        else if(isBroken_Clouds(weatherNumber)) return R.drawable.ic_email;
+        else if(isFew_Clouds(weatherNumber)) return R.drawable.beach_with_hair;
+        else if(isScattered_Clouds(weatherNumber)) return R.drawable.ic_android;
+        else if(isRain(weatherNumber)) return R.drawable.ic_email;
+        else if(isShower_Rain(weatherNumber)) return R.drawable.ic_location;
+        else if(isThunderStrom(weatherNumber)) return R.drawable.ic_menu;
+        else if(isMist(weatherNumber)) return R.drawable.ic_folder;
+        else
+            return 0;
+    }
+
+
+    public boolean isSnow(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListSnow.size() ; i++)
+        {
+            if(mCondition.mListSnow.get(i).equals(weatherNumber))
+                return true;
+        }
+        return false;
+    }
+    public boolean isClear(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListClearSky.size() ; i++)
+        {
+            if(mCondition.mListClearSky.get(i).getId().equals(weatherNumber))
+                return true;
+        }
+        return false;
+    }
+    public boolean isBroken_Clouds(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListBroken_Clouds.size() ; i++)
+        {
+            if(mCondition.mListBroken_Clouds.get(i).getId().equals(weatherNumber))
+                return true;
+        }
+        return false;
+    }
+    public boolean isFew_Clouds(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListFew_Clouds.size() ; i++)
+        {
+            if(mCondition.mListFew_Clouds.get(i).getId().equals(weatherNumber))
+                return true;
+        }
+        return false;
+    }
+    public boolean isScattered_Clouds(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListScattered_Clouds.size() ; i++)
+        {
+            if(mCondition.mListScattered_Clouds.get(i).getId().equals(weatherNumber))
+                return true;
+        }
+        return false;
+    }
+    public boolean isRain(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListRain.size() ; i++)
+        {
+            if(mCondition.mListRain.get(i).getId().equals(weatherNumber))
+                return true;
+        }
+        return false;
+    }
+    public boolean isShower_Rain(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListShower_Rain.size() ; i++)
+        {
+            if(mCondition.mListShower_Rain.get(i).getId().equals(weatherNumber))
+                return true;
+        }
+        return false;
+    }
+    public boolean isThunderStrom(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListThunderStorm.size() ; i++)
+        {
+            if(mCondition.mListThunderStorm.get(i).getId().equals(weatherNumber))
+                return true;
+        }
+        return false;
+    }
+    public boolean isMist(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListMist.size() ; i++)
+        {
+            if(mCondition.mListMist.get(i).getId().equals(weatherNumber))
+                return true;
+        }
+        return false;
+
+    }
+
     public Intent InputData(int index)
     {
 
@@ -327,11 +659,11 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
         return urlString.toString();
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // moveFab();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        // moveFab();
+//    }
 
 
     BufferedWriter buf;
@@ -449,6 +781,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         {
 
         }
+
+        CheckWeather();
     }
 
     //토큰 분리
@@ -469,6 +803,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     // 기차역 조회
     private void onTestReadAndSet(int check) {
         //mCast = new ForeCast();
+
         String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
         try{
             File file;
@@ -506,6 +841,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             }
             eStation.setText(default_eStation + data_endStation.getStationName());
         }
+
+        CheckWeather();
     }
 
 
@@ -545,6 +882,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         {
             onTestReadAndSet(2);
         }
+
+
 
 
     }
