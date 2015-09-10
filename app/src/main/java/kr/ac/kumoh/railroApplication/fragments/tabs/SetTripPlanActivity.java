@@ -337,6 +337,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         start_Region_Weather.setBackgroundResource(mStartRegionWeather.getPicture_ID());
         end_Region_Weather.setBackgroundResource(mEndRegionWeather.getPicture_ID());
     }
+    //TODO 할건 하자.
     public void TrainLocateAndWeather()
     {
         mLocationData.initControl(TokenForLocation(String.valueOf(sStation.getText())),
