@@ -45,7 +45,7 @@ public class ForeCast extends Thread {
     LocationInform mStartLocation;
     LocationInform mEndLocation;
 
-    public ContentValues getStart_Weatehr()
+    public ContentValues getStart_Weather()
     {
         return start_Weatehr;
     }
@@ -150,12 +150,12 @@ public class ForeCast extends Thread {
                             mContent.put("temp_Max",parser.getAttributeValue(null,"max"));
                             break;
                         case "humidity": // 습도
-                            mContent.put("humidity_",parser.getAttributeValue(null,"value"));
+                            mContent.put("humidity",parser.getAttributeValue(null,"value"));
                             mContent.put("humidity_unit",parser.getAttributeValue(null,"unit"));
                             break;
-                        case "clouds ": // 구름종류
-                            mContent.put("Clouds_Value",parser.getAttributeValue(null,"value"));
-                            mContent.put("Clouds_Sort",parser.getAttributeValue(null,"all"));
+                        case "clouds": // 구름종류
+                            mContent.put("Clouds_Sort",parser.getAttributeValue(null,"value"));
+                            mContent.put("Clouds_Value",parser.getAttributeValue(null,"all"));
                             mContent.put("Clouds_Per",parser.getAttributeValue(null,"unit"));
                             break;
                     }

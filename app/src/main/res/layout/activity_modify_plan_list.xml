@@ -79,7 +79,60 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_android"/>
+            <LinearLayout
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:id = "@+id/layout_Station_Start_Weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
+                <ImageView
+                    android:id = "@+id/iv_Station_Start_Weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:id = "@+id/tv_Station_Start_Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "날짜"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Station_Start_Weather_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "비옴" />
+                <TextView
+                    android:id = "@+id/tv_Station_Start_Max_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Max temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Station_Start_Min_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Min temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Station_Start_Humi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "습도:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Station_Start_Clouds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "뭉개구름 / 24% "
+                    />
+                <TextView
+                    android:id = "@+id/tv_Station_Start_Winds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "산들바람 24% "/>
+            </LinearLayout>
             <Button
                 android:drawableLeft="@drawable/ic_android"
                 android:drawableRight="@drawable/ic_android"
@@ -94,6 +147,61 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_android"/>
+            <LinearLayout
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:id = "@+id/layout_Station_End_Weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id = "@+id/iv_Station_End_Weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:id = "@+id/tv_Station_End_Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "날짜"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Station_End_Weather_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "비옴" />
+                <TextView
+                    android:id = "@+id/tv_Station_End_Max_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Max temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Station_End_Min_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Min temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Station_End_Humi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "습도:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Station_End_Clouds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "뭉개구름 / 24% "
+                    />
+                <TextView
+                    android:id = "@+id/tv_Station_End_Winds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "산들바람 24% "/>
+            </LinearLayout>
+
 
             <Button
                 android:drawableLeft="@drawable/ic_android"
@@ -124,7 +232,60 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_android"/>
+            <LinearLayout
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:id = "@+id/layout_Region_Start_Weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
+                <ImageView
+                    android:id = "@+id/iv_Region_Start_Weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:id = "@+id/tv_Region_Start_Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "날짜"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Region_Start_Weather_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "비옴" />
+                <TextView
+                    android:id = "@+id/tv_Region_Start_Max_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Max temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Region_Start_Min_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Min temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Region_Start_Humi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "습도:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Region_Start_Clouds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "뭉개구름 / 24% "
+                    />
+                <TextView
+                    android:id = "@+id/tv_Region_Start_Winds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "산들바람 24% "/>
+            </LinearLayout>
             <Button
                 android:drawableLeft="@drawable/ic_android"
                 android:drawableRight="@drawable/ic_android"
@@ -133,6 +294,60 @@
                 android:id="@+id/set_end_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            <LinearLayout
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:id = "@+id/layout_Region_End_Weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id = "@+id/iv_Region_End_Weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:id = "@+id/tv_Region_End_Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "날짜"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Region_End_Weather_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "비옴" />
+                <TextView
+                    android:id = "@+id/tv_Region_End_Max_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Max temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Region_End_Min_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Min temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Region_End_Humi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "습도:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Region_End_Clouds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "뭉개구름 / 24% "
+                    />
+                <TextView
+                    android:id = "@+id/tv_Region_End_Winds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "산들바람 24% "/>
+            </LinearLayout>
             <Button
                 android:id = "@+id/btn_end_region_Weather"
                 android:layout_width="wrap_content"
@@ -171,6 +386,61 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_android"/>
+            <LinearLayout
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:id = "@+id/layout_Meal_Weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id = "@+id/iv_Meal_Weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:id = "@+id/tv_Meal_Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "날짜"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Meal_Weather_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "비옴" />
+                <TextView
+                    android:id = "@+id/tv_Meal_Max_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Max temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Meal_Min_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Min temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Meal_Humi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "습도:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Meal_Clouds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "뭉개구름 / 24% "
+                    />
+                <TextView
+                    android:id = "@+id/tv_Meal_Winds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "산들바람 24% "/>
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -194,6 +464,61 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_android"/>
+            <LinearLayout
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:id = "@+id/layout_Sleep_Weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id = "@+id/iv_Sleep_Weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:id = "@+id/tv_Sleep_Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "날짜"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Sleep_Weather_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "비옴" />
+                <TextView
+                    android:id = "@+id/tv_Sleep_Max_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Max temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Sleep_Min_Temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "Min temp:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Sleep_Humi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "습도:"
+                    />
+                <TextView
+                    android:id = "@+id/tv_Sleep_Clouds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "뭉개구름 / 24% "
+                    />
+                <TextView
+                    android:id = "@+id/tv_Sleep_Winds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "산들바람 24% "/>
+            </LinearLayout>
+
 
         </LinearLayout>
 

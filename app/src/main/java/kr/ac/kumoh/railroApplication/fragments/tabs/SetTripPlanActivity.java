@@ -13,8 +13,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -67,14 +69,15 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     //Context mContext;
     LinearLayout moveTrain;  LinearLayout moveBus;
     LinearLayout toMeal; LinearLayout sleep;
+    LinearLayout layout_station_start_Weather;LinearLayout layout_station_end_Weather;
+    LinearLayout layout_region_start_Weather; LinearLayout layout_region_end_Weather;
+    LinearLayout layout_meal_Weather; LinearLayout layout_sleep_Weather;
 
     Button doSomething; Button sTimeFix; Button eTimeFix;
     Button sLocation; Button eLocation; Button wSleep;
     Button wEat;
 
-    Button movingTime;
-    Button movingTime2;
-    Button sStation;
+    Button movingTime; Button movingTime2; Button sStation;
     Button eStation;
     Button plan_Success;
     Button start_Train_Weather;
@@ -84,14 +87,75 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     Button meal_Weather;
     Button sleep_Weather;
 
+    ImageView iv_Region_Start_Weather;
+    TextView tv_Region_Start_Weather_Name;
+    TextView tv_Region_Start_Date;
+    TextView tv_Region_Start_Max_Temp;
+    TextView tv_Region_Start_Min_Temp;
+    TextView tv_Region_Start_Humi;
+    TextView tv_Region_Start_Clouds;
+    TextView tv_Region_Start_Winds;
+
+    ImageView iv_Region_End_Weather;
+    TextView tv_Region_End_Date;
+    TextView tv_Region_End_Weather_Name;
+    TextView tv_Region_End_Max_Temp;
+    TextView tv_Region_End_Min_Temp;
+    TextView tv_Region_End_Humi;
+    TextView tv_Region_End_Clouds;
+    TextView tv_Region_End_Winds;
+
+    ImageView iv_Station_Start_Weather;
+    TextView tv_Station_Start_Weather_Name;
+    TextView tv_Station_Start_Date;
+    TextView tv_Station_Start_Max_Temp;
+    TextView tv_Station_Start_Min_Temp;
+    TextView tv_Station_Start_Humi;
+    TextView tv_Station_Start_Clouds;
+    TextView tv_Station_Start_Winds;
+
+    ImageView iv_Station_End_Weather;
+    TextView tv_Station_End_Date;
+    TextView tv_Station_End_Weather_Name;
+    TextView tv_Station_End_Max_Temp;
+    TextView tv_Station_End_Min_Temp;
+    TextView tv_Station_End_Humi;
+    TextView tv_Station_End_Clouds;
+    TextView tv_Station_End_Winds;
+
+    ImageView iv_Meal_Weather;
+    TextView tv_Meal_Weather_Name;
+    TextView tv_Meal_Date;
+    TextView tv_Meal_Max_Temp;
+    TextView tv_Meal_Min_Temp;
+    TextView tv_Meal_Humi;
+    TextView tv_Meal_Clouds;
+    TextView tv_Meal_Winds;
+
+    ImageView iv_Sleep_Weather;
+    TextView tv_Sleep_Weather_Name;
+    TextView tv_Sleep_Date;
+    TextView tv_Sleep_Max_Temp;
+    TextView tv_Sleep_Min_Temp;
+    TextView tv_Sleep_Humi;
+    TextView tv_Sleep_Clouds;
+    TextView tv_Sleep_Winds;
 
     LocationInform mStartInform;
     LocationInform mEndInform;
     StationInfo data_startStation;
     StationInfo data_endStation;
 
-    int flag_StartStation = 0;
-    int flag_EndStation = 0;
+    boolean flag_StartStation = false;
+    boolean flag_EndStation = false;
+
+    boolean flag_Start_StationLayout = false;
+    boolean flag_End_StationLayout = false;
+    boolean flag_Start_RegionLayout = false;
+    boolean flag_End_RegionLayout = false;
+    boolean flag_MealLayout = false;
+    boolean flag_SleepLayout = false;
+
 
     String default_sTime = "출발 시간:"; String default_eTime = "도착 시간:"; String default_sStation = "출발역:"; String default_eStation = "도착역:";
     String default_toDo = "할 일:"; String default_moveValue = "이동 시간:";
@@ -114,66 +178,135 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         String value = token.nextToken();
         return value;
     }
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modify_plan_list);
-        ButterKnife.inject(this);
-        setupToolbar();
-        mCondition = new WeatherConditionList();
-
+    void SetLayoutTrain()
+    {
         moveTrain = (LinearLayout)findViewById(R.id.MoveToTrain);
-        moveBus = (LinearLayout)findViewById(R.id.MoveTobus);
-        toMeal = (LinearLayout)findViewById(R.id.ToMeal);
-        sleep = (LinearLayout)findViewById(R.id.Sleep);
-
-        sTimeFix = (Button)findViewById(R.id.fix_start_Time);
-        eTimeFix = (Button)findViewById(R.id.fix_end_Time);
-        doSomething = (Button)findViewById(R.id.tv_DoSomething);
-
-
-
-        movingTime = (Button)findViewById(R.id.btn_moving_time);
-        movingTime2 = (Button)findViewById(R.id.btn_moving_time2);
+        layout_station_start_Weather =(LinearLayout)findViewById(R.id.layout_Station_Start_Weather);
+        layout_station_end_Weather = (LinearLayout)findViewById(R.id.layout_Station_End_Weather);
+        start_Train_Weather = (Button)findViewById(R.id.btn_start_train_Weather);
+        end_Train_Weather = (Button)findViewById(R.id.btn_end_train_Weather);
 
         sStation = (Button)findViewById(R.id.set_start_station);
         eStation = (Button)findViewById(R.id.set_end_station);
 
-        plan_Success = (Button)findViewById(R.id.btn_success_plan);
-
-        sLocation = (Button)findViewById(R.id.set_start_location);
-        eLocation = (Button)findViewById(R.id.set_end_location);
-        wSleep = (Button)findViewById(R.id.btn_Sleep_location);
-        wEat = (Button)findViewById(R.id.btn_toMeal_location);
-
-        start_Train_Weather = (Button)findViewById(R.id.btn_start_train_Weather);
-        end_Train_Weather = (Button)findViewById(R.id.btn_end_train_Weather);;
-        start_Region_Weather= (Button)findViewById(R.id.btn_start_region_Weather);
-        end_Region_Weather= (Button)findViewById(R.id.btn_end_region_Weather);;
-        meal_Weather = (Button)findViewById(R.id.btn_meal_Weather);
-        sleep_Weather = (Button)findViewById(R.id.btn_Sleep_Weather);
-
+        movingTime = (Button)findViewById(R.id.btn_moving_time);
         start_Train_Weather.setOnClickListener(this);
         end_Train_Weather.setOnClickListener(this);
-        start_Region_Weather.setOnClickListener(this);
-        end_Region_Weather.setOnClickListener(this);
-        meal_Weather.setOnClickListener(this);
-        sleep_Weather.setOnClickListener(this);
-
         sStation.setOnClickListener(this);
         eStation.setOnClickListener(this);
-        plan_Success.setOnClickListener(this);
-//        plan_Cancel.setOnClickListener(this);
-        doSomething.setOnClickListener(this);
-        sTimeFix.setOnClickListener(this);
-        wEat.setOnClickListener(this);
-        wSleep.setOnClickListener(this);
+        movingTime.setOnClickListener(this);
+        SetStartTrainWeatherDetail();
+        SetEndTrainWeatherDetail();
+    }
+    void SetEndTrainWeatherDetail()
+    {
+        iv_Station_End_Weather = (ImageView)findViewById(R.id.iv_Station_End_Weather);
+        tv_Station_End_Weather_Name = (TextView)findViewById(R.id.tv_Station_End_Weather_Name);
+        tv_Station_End_Date = (TextView)findViewById(R.id.tv_Station_End_Date);
+        tv_Station_End_Max_Temp = (TextView)findViewById(R.id.tv_Station_End_Max_Temp);
+        tv_Station_End_Min_Temp = (TextView)findViewById(R.id.tv_Station_End_Min_Temp);
+        tv_Station_End_Humi = (TextView)findViewById(R.id.tv_Station_End_Humi);
+        tv_Station_End_Clouds = (TextView)findViewById(R.id.tv_Station_End_Clouds);
+        tv_Station_End_Winds = (TextView)findViewById(R.id.tv_Station_End_Winds);
+    }
+    void SetStartTrainWeatherDetail()
+    {
+        iv_Station_Start_Weather = (ImageView)findViewById(R.id.iv_Station_Start_Weather);
+        tv_Station_Start_Weather_Name = (TextView)findViewById(R.id.tv_Station_Start_Weather_Name);
+        tv_Station_Start_Date = (TextView)findViewById(R.id.tv_Station_Start_Date);
+        tv_Station_Start_Max_Temp = (TextView)findViewById(R.id.tv_Station_Start_Max_Temp);
+        tv_Station_Start_Min_Temp = (TextView)findViewById(R.id.tv_Station_Start_Min_Temp);
+        tv_Station_Start_Humi = (TextView)findViewById(R.id.tv_Station_Start_Humi);
+        tv_Station_Start_Clouds = (TextView)findViewById(R.id.tv_Station_Start_Clouds);
+        tv_Station_Start_Winds = (TextView)findViewById(R.id.tv_Station_Start_Winds);
+
+    }
+    void SetLayoutRegion()
+    {
+        layout_region_start_Weather =(LinearLayout)findViewById(R.id.layout_Region_Start_Weather);
+        layout_region_end_Weather =(LinearLayout)findViewById(R.id.layout_Region_End_Weather);
+        moveBus = (LinearLayout)findViewById(R.id.MoveTobus);
+        movingTime2 = (Button)findViewById(R.id.btn_moving_time2);
+        sLocation = (Button)findViewById(R.id.set_start_location);
+        eLocation = (Button)findViewById(R.id.set_end_location);
+        start_Region_Weather= (Button)findViewById(R.id.btn_start_region_Weather);
+        end_Region_Weather= (Button)findViewById(R.id.btn_end_region_Weather);
+        start_Region_Weather.setOnClickListener(this);
+        end_Region_Weather.setOnClickListener(this);
         eLocation.setOnClickListener(this);
         sLocation.setOnClickListener(this);
-        movingTime.setOnClickListener(this);
         movingTime2.setOnClickListener(this);
+        SetStartRegionWeatherDetail();
+        SetEndRegionWeatherDetail();
+    }
+    void SetStartRegionWeatherDetail()
+    {
+        iv_Region_Start_Weather = (ImageView)findViewById(R.id.iv_Region_Start_Weather);
+        tv_Region_Start_Weather_Name = (TextView)findViewById(R.id.tv_Region_Start_Weather_Name);
+        tv_Region_Start_Date = (TextView)findViewById(R.id.tv_Region_Start_Date);
+        tv_Region_Start_Max_Temp = (TextView)findViewById(R.id.tv_Region_Start_Max_Temp);
+        tv_Region_Start_Min_Temp = (TextView)findViewById(R.id.tv_Region_Start_Min_Temp);
+        tv_Region_Start_Humi = (TextView)findViewById(R.id.tv_Region_Start_Humi);
+        tv_Region_Start_Clouds = (TextView)findViewById(R.id.tv_Region_Start_Clouds);
+        tv_Region_Start_Winds = (TextView)findViewById(R.id.tv_Region_Start_Winds);
+    }
+    void SetEndRegionWeatherDetail()
+    {
+        iv_Region_End_Weather = (ImageView)findViewById(R.id.iv_Region_End_Weather);
+        tv_Region_End_Weather_Name = (TextView)findViewById(R.id.tv_Region_End_Weather_Name);
+        tv_Region_End_Date = (TextView)findViewById(R.id.tv_Region_End_Date);
+        tv_Region_End_Max_Temp = (TextView)findViewById(R.id.tv_Region_End_Max_Temp);
+        tv_Region_End_Min_Temp = (TextView)findViewById(R.id.tv_Region_End_Min_Temp);
+        tv_Region_End_Humi = (TextView)findViewById(R.id.tv_Region_End_Humi);
+        tv_Region_End_Clouds = (TextView)findViewById(R.id.tv_Region_End_Clouds);
+        tv_Region_End_Winds = (TextView)findViewById(R.id.tv_Region_End_Winds);
+    }
+    void SetLayoutMeal()
+    {
+        layout_meal_Weather =(LinearLayout)findViewById(R.id.layout_Meal_Weather);
+         toMeal = (LinearLayout)findViewById(R.id.ToMeal);
+        wEat = (Button)findViewById(R.id.btn_toMeal_location);
+        meal_Weather = (Button)findViewById(R.id.btn_meal_Weather);
+        meal_Weather.setOnClickListener(this);
+        wEat.setOnClickListener(this);
+        SetMealWeatherDetail();
 
 
+    }
+    void SetMealWeatherDetail()
+    {
+        iv_Meal_Weather = (ImageView)findViewById(R.id.iv_Meal_Weather);
+        tv_Meal_Weather_Name = (TextView)findViewById(R.id.tv_Meal_Weather_Name);
+        tv_Meal_Date = (TextView)findViewById(R.id.tv_Meal_Date);
+        tv_Meal_Max_Temp = (TextView)findViewById(R.id.tv_Meal_Max_Temp);
+        tv_Meal_Min_Temp = (TextView)findViewById(R.id.tv_Meal_Min_Temp);
+        tv_Meal_Humi = (TextView)findViewById(R.id.tv_Meal_Humi);
+        tv_Meal_Clouds = (TextView)findViewById(R.id.tv_Meal_Clouds);
+        tv_Meal_Winds = (TextView)findViewById(R.id.tv_Meal_Winds);
+    }
+    void SetLayoutSleep()
+    {
+        layout_sleep_Weather =(LinearLayout)findViewById(R.id.layout_Sleep_Weather);
+        sleep = (LinearLayout)findViewById(R.id.Sleep);
+        wSleep = (Button)findViewById(R.id.btn_Sleep_location);
+        sleep_Weather = (Button)findViewById(R.id.btn_Sleep_Weather);
+        sleep_Weather.setOnClickListener(this);
+        wSleep.setOnClickListener(this);
+        SetSleepWeatherDetail();
+    }
+    void SetSleepWeatherDetail()
+    {
+        iv_Sleep_Weather = (ImageView)findViewById(R.id.iv_Sleep_Weather);
+        tv_Sleep_Weather_Name = (TextView)findViewById(R.id.tv_Sleep_Weather_Name);
+        tv_Sleep_Date = (TextView)findViewById(R.id.tv_Sleep_Date);
+        tv_Sleep_Max_Temp = (TextView)findViewById(R.id.tv_Sleep_Max_Temp);
+        tv_Sleep_Min_Temp = (TextView)findViewById(R.id.tv_Sleep_Min_Temp);
+        tv_Sleep_Humi = (TextView)findViewById(R.id.tv_Sleep_Humi);
+        tv_Sleep_Clouds = (TextView)findViewById(R.id.tv_Sleep_Clouds);
+        tv_Sleep_Winds = (TextView)findViewById(R.id.tv_Sleep_Winds);
+    }
+    void ButtonEffect()
+    {
         sStation.setAlpha(200);
         eStation.setAlpha(200);
         plan_Success.setAlpha(200);
@@ -183,6 +316,30 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         wSleep.setAlpha(200);
         eLocation.setAlpha(200);
         sLocation.setAlpha(200);
+    }
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_modify_plan_list);
+        ButterKnife.inject(this);
+        setupToolbar();
+        mCondition = new WeatherConditionList();
+        SetLayoutTrain();
+        SetLayoutRegion();
+        SetLayoutMeal();
+        SetLayoutSleep();
+
+        sTimeFix = (Button)findViewById(R.id.fix_start_Time);
+        eTimeFix = (Button)findViewById(R.id.fix_end_Time);
+        doSomething = (Button)findViewById(R.id.tv_DoSomething);
+
+        plan_Success = (Button)findViewById(R.id.btn_success_plan);
+        plan_Success.setOnClickListener(this);
+//        plan_Cancel.setOnClickListener(this);
+        doSomething.setOnClickListener(this);
+        sTimeFix.setOnClickListener(this);
+
+        ButtonEffect();
         //mContext = getContext();
 
 
@@ -226,13 +383,13 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             case R.id.set_start_station: // 시작하는 기차역 조회
                 intent = new Intent(this, ReadTrainInfoSetActivity.class);
                 startActivityForResult(intent, 1);
-                flag_StartStation = 1;
+                flag_StartStation = true;
                 break;
 
             case R.id.set_end_station: // 끝나는 기차역 조회
                 intent = new Intent(this, ReadTrainInfoSetActivity.class);
                 startActivityForResult(intent, 2);
-                flag_EndStation = 1;
+                flag_EndStation = true;
                 break;
 
             case R.id.btn_success_plan: // 저장 버튼 누를시 실행
@@ -256,7 +413,153 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 startActivity(intent);
 
                 break;
+            case R.id.btn_start_train_Weather:
+                if(flag_Start_StationLayout == false)
+                {
+                    layout_station_start_Weather.setVisibility(View.VISIBLE);
+                    onDetailChangeTrain();
+                    flag_Start_StationLayout = true;
+                }else if(flag_Start_StationLayout == true)
+                {
+                    layout_station_start_Weather.setVisibility(View.GONE);
+                    flag_Start_StationLayout = false;
+                }
+                break;
+            case R.id.btn_end_train_Weather:
+                if(flag_End_StationLayout == false)
+                {
+                    layout_station_end_Weather.setVisibility(View.VISIBLE);
+                    onDetailChangeTrain();
+                    flag_End_StationLayout = true;
+                }else if(flag_End_StationLayout == true)
+                {
+                    layout_station_end_Weather.setVisibility(View.GONE);
+                    flag_End_StationLayout = false;
+                }
+                break;
+            case R.id.btn_start_region_Weather:
+                if(flag_Start_RegionLayout == false)
+                {
+                    layout_region_start_Weather.setVisibility(View.VISIBLE);
+                    onDetailChangeRegion();
+                    flag_Start_RegionLayout = true;
+                }else if(flag_Start_RegionLayout == true)
+                {
+                    layout_region_start_Weather.setVisibility(View.GONE);
+                    flag_Start_RegionLayout = false;
+                }
+                break;
+
+            case R.id.btn_end_region_Weather:
+                if(flag_End_RegionLayout == false)
+                {
+                    layout_region_end_Weather.setVisibility(View.VISIBLE);
+                    onDetailChangeRegion();
+                    flag_End_RegionLayout = true;
+                }else if(flag_End_RegionLayout == true)
+                {
+                    layout_region_end_Weather.setVisibility(View.GONE);
+                    flag_End_RegionLayout = false;
+                }
+                break;
+
+            case R.id.btn_meal_Weather:
+                if(flag_MealLayout == false)
+                {
+                    layout_meal_Weather.setVisibility(View.VISIBLE);
+                    onDetailChangeMeal();
+                    flag_MealLayout = true;
+                }else if(flag_MealLayout == true)
+                {
+                    layout_meal_Weather.setVisibility(View.GONE);
+                    flag_MealLayout = false;
+                }
+                break;
+            case R.id.btn_Sleep_Weather:
+                if(flag_SleepLayout == false)
+                {
+                    layout_sleep_Weather.setVisibility(View.VISIBLE);
+                    onDetailChangeSleep();
+                    flag_SleepLayout = true;
+                }else if(flag_SleepLayout == true)
+                {
+                    layout_sleep_Weather.setVisibility(View.GONE);
+                    flag_SleepLayout = false;
+                }
+                break;
         }
+    }
+    public void onDetailChangeTrain()
+    {
+        iv_Station_Start_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
+        tv_Station_Start_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Station_Start_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "");
+        tv_Station_Start_Min_Temp.setText(mStartTrainWeather.getTemp_Min());
+        tv_Station_Start_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
+        tv_Station_Start_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+                " : " + mStartTrainWeather.getClouds_Value() + "%");
+        tv_Station_Start_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+                mStartTrainWeather.getWind_Speed() + "mps");
+
+        //////////////////////
+        iv_Station_End_Weather.setImageResource(mEndTrainWeather.getPicture_ID());
+        tv_Station_End_Weather_Name.setText(mEndTrainWeather.getWeather_Name());
+        tv_Station_End_Max_Temp.setText(mEndTrainWeather.getTemp_Max() + "");
+        tv_Station_End_Min_Temp.setText(mEndTrainWeather.getTemp_Min());
+        tv_Station_End_Humi.setText("습도:" + mEndTrainWeather.getHumidity() + "%");
+        tv_Station_End_Clouds.setText(mEndTrainWeather.getClouds_Sort() +
+                " : " + mEndTrainWeather.getClouds_Value() + "%");
+        tv_Station_End_Winds.setText(mEndTrainWeather.getWind_Name() + " : " +
+                mEndTrainWeather.getWind_Speed() + "mps");
+    }
+    public void onDetailChangeRegion()
+    {
+        iv_Region_Start_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
+        tv_Region_Start_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Region_Start_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "");
+        tv_Region_Start_Min_Temp.setText(mStartTrainWeather.getTemp_Min());
+        tv_Region_Start_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
+        tv_Region_Start_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+                " : " + mStartTrainWeather.getClouds_Value() + "%");
+        tv_Region_Start_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+                mStartTrainWeather.getWind_Speed() + "mps");
+
+        //////////////////////
+        iv_Region_End_Weather.setImageResource(mEndTrainWeather.getPicture_ID());
+        tv_Region_End_Weather_Name.setText(mEndTrainWeather.getWeather_Name());
+        tv_Region_End_Max_Temp.setText(mEndTrainWeather.getTemp_Max() + "");
+        tv_Region_End_Min_Temp.setText(mEndTrainWeather.getTemp_Min());
+        tv_Region_End_Humi.setText("습도:" + mEndTrainWeather.getHumidity() + "%");
+        tv_Region_End_Clouds.setText(mEndTrainWeather.getClouds_Sort() +
+                " : " + mEndTrainWeather.getClouds_Value() + "%");
+        tv_Region_End_Winds.setText(mEndTrainWeather.getWind_Name() + " : " +
+                mEndTrainWeather.getWind_Speed() + "mps");
+    }
+    public void onDetailChangeMeal()
+    {
+        iv_Meal_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
+        tv_Meal_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Meal_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "");
+        tv_Meal_Min_Temp.setText(mStartTrainWeather.getTemp_Min());
+        tv_Meal_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
+        tv_Meal_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+                " : " + mStartTrainWeather.getClouds_Value() + "%");
+        tv_Meal_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+                mStartTrainWeather.getWind_Speed() + "mps");
+
+    }
+
+    public void onDetailChangeSleep()
+    {
+        iv_Sleep_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
+        tv_Sleep_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Sleep_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "");
+        tv_Sleep_Min_Temp.setText(mStartTrainWeather.getTemp_Min());
+        tv_Sleep_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
+        tv_Sleep_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+                " : " + mStartTrainWeather.getClouds_Value() + "%");
+        tv_Sleep_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+                mStartTrainWeather.getWind_Speed() + "mps");
     }
     // 이부분은 Train 에만 해당, 4가지 다 되게 바꿔야함
     public void CheckWeather()
@@ -279,7 +582,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
         if(mStartInform != null ) {
             ForeCast mWeather = new ForeCast(mStartInform,mEndInform);
-            start_Weather = mWeather.getStart_Weatehr();
+            mWeather.run();
+            start_Weather = mWeather.getStart_Weather();
 
             Input_Weather();
         }else {
@@ -300,7 +604,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
         if(mStartInform != null ) {
             ForeCast mWeather = new ForeCast(mStartInform,mEndInform);
-            start_Weather = mWeather.getStart_Weatehr();
+            mWeather.run();
+            start_Weather = mWeather.getStart_Weather();
 
             Input_Weather();
         }else {
@@ -322,7 +627,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
         if(mStartInform != null && mEndInform != null) {
             ForeCast mWeather = new ForeCast(mStartInform,mEndInform);
-            start_Weather = mWeather.getStart_Weatehr();
+            mWeather.run();
+            start_Weather = mWeather.getStart_Weather();
             end_Weather = mWeather.getEnd_Weather();
 
             Input_Weather();
@@ -337,7 +643,6 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         start_Region_Weather.setBackgroundResource(mStartRegionWeather.getPicture_ID());
         end_Region_Weather.setBackgroundResource(mEndRegionWeather.getPicture_ID());
     }
-    //TODO 할건 하자.
     public void TrainLocateAndWeather()
     {
         mLocationData.initControl(TokenForLocation(String.valueOf(sStation.getText())),
@@ -350,7 +655,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         if(mStartInform != null && mEndInform != null) {
             ForeCast mWeather = new ForeCast(mStartInform,mEndInform);
             mWeather.run();
-            start_Weather = mWeather.getStart_Weatehr();
+            start_Weather = mWeather.getStart_Weather();
             end_Weather = mWeather.getEnd_Weather();
 
             Input_Weather();
@@ -425,75 +730,9 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
     }
     WeatherConditionList mCondition = new WeatherConditionList();
-//    public void ChangeWeatherPicture()
-//    {
-//        if(selected == 0)
-//        {
-//            ChangeTrainWeatherBtn();
-//        }else if(selected == 1)
-//        {
-//            ChangeRegionWeatherBtn();
-//        }else if(selected == 2)
-//        {
-//            ChangeMealWeatherBtn();
-//        }else if(selected == 3)
-//        {
-//            ChangeSleepWeatherBtn();
-//        }
-//
-//    }
-//
-//    public void ChangeTrainWeatherBtn()
-//    {
-//
-//    }
-//
-//    public void ChangeRegionWeatherBtn()
-//    {
-////        if(whatWeather == SNOW)
-////        else if(whatWeather == CLEAR_SKY))
-////        else if(whatWeather == BROKEN_CLOUDS)
-////        else if(whatWeather == FEW_CLOUDS)
-////        else if(whatWeather == SCATTERED_CLOUDS)
-////        else if(whatWeather == RAIN)
-////        else if(whatWeather == SHOWER_RAIN)
-////        else if(whatWeather == THUNDERSTORM)
-////        else if(whatWeather == MIST)
-//        //else
-//        //  return 0;
-//    }
-//
-//    public void ChangeMealWeatherBtn()
-//    {
-////        if(whatWeather == SNOW)
-////        else if(whatWeather == CLEAR_SKY))
-////        else if(whatWeather == BROKEN_CLOUDS)
-////        else if(whatWeather == FEW_CLOUDS)
-////        else if(whatWeather == SCATTERED_CLOUDS)
-////        else if(whatWeather == RAIN)
-////        else if(whatWeather == SHOWER_RAIN)
-////        else if(whatWeather == THUNDERSTORM)
-////        else if(whatWeather == MIST)
-//        //else
-//        //  return 0;
-//    }
-//    public void ChangeSleepWeatherBtn()
-//    {
-////        if(whatWeather == SNOW)
-////        else if(whatWeather == CLEAR_SKY))
-////        else if(whatWeather == BROKEN_CLOUDS)
-////        else if(whatWeather == FEW_CLOUDS)
-////        else if(whatWeather == SCATTERED_CLOUDS)
-////        else if(whatWeather == RAIN)
-////        else if(whatWeather == SHOWER_RAIN)
-////        else if(whatWeather == THUNDERSTORM)
-////        else if(whatWeather == MIST)
-//        //else
-//        //  return 0;
-//    }
+
     public int Calculator_Weather(String weatherNumber)
     {
-
         if(isSnow(weatherNumber)) return SNOW;
         else if(isClear(weatherNumber)) return CLEAR_SKY;
         else if(isBroken_Clouds(weatherNumber)) return BROKEN_CLOUDS;
@@ -660,11 +899,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
         return urlString.toString();
     }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        // moveFab();
-//    }
+
 
 
     BufferedWriter buf;
@@ -825,7 +1060,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         if(check == 1) //startStation
         {
 
-            flag_StartStation = 0 ;
+            flag_StartStation = false ;
             data_startStation = StringToToken(named_buffer);
             if(data_startStation == null){
                 sStation.setText(default_sStation + "서울역");
@@ -834,7 +1069,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             sStation.setText(default_sStation + data_startStation.getStationName());
         }else if(check == 2) // endStation
         {
-            flag_EndStation = 0;
+            flag_EndStation = false;
             data_endStation = StringToToken(named_buffer);
             if(data_endStation == null){
                 eStation.setText(default_eStation + "부산역");
@@ -875,11 +1110,11 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     @Override // 기차역 조회 Activity 끝나고 실행되는 함수 onStart
     public void onStart() {
         super.onStart();
-        if (flag_StartStation == 1) // 시작
+        if (flag_StartStation == true) // 시작
         {
             onTestReadAndSet(1);
         }
-        if (flag_EndStation == 1) // 종료
+        if (flag_EndStation == true) // 종료
         {
             onTestReadAndSet(2);
         }
@@ -900,6 +1135,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 moveBus.setVisibility(View.GONE);
                 toMeal.setVisibility(View.GONE);
                 sleep.setVisibility(View.GONE);
+                CheckWeather();
             }else if(position == 1) // Bus
             {
                 selected = 1;
@@ -907,6 +1143,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 moveBus.setVisibility(View.VISIBLE);
                 toMeal.setVisibility(View.GONE);
                 sleep.setVisibility(View.GONE);
+                CheckWeather();
             }else if(position == 2) // Sleep
             {
                 selected = 2;
@@ -914,6 +1151,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 moveBus.setVisibility(View.GONE);
                 toMeal.setVisibility(View.GONE);
                 sleep.setVisibility(View.VISIBLE);
+//                CheckWeather();
             }else // toMeal
             {
                 selected = 3;
@@ -921,6 +1159,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 moveBus.setVisibility(View.GONE);
                 toMeal.setVisibility(View.VISIBLE);
                 sleep.setVisibility(View.GONE);
+//                CheckWeather();
             }
             readCheck = -1;
             return ;
@@ -935,6 +1174,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             toMeal.setVisibility(View.GONE);
             sleep.setVisibility(View.GONE);
 
+            CheckWeather();
 
         }else if(position == 1) // Bus
         {
@@ -942,18 +1182,24 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             moveBus.setVisibility(View.VISIBLE);
             toMeal.setVisibility(View.GONE);
             sleep.setVisibility(View.GONE);
+
+            CheckWeather();
         }else if(position == 2) // Sleep
         {
             moveTrain.setVisibility(View.GONE);
             moveBus.setVisibility(View.GONE);
             toMeal.setVisibility(View.GONE);
             sleep.setVisibility(View.VISIBLE);
+
+            CheckWeather();
         }else // toMeal
         {
             moveTrain.setVisibility(View.GONE);
             moveBus.setVisibility(View.GONE);
             toMeal.setVisibility(View.VISIBLE);
             sleep.setVisibility(View.GONE);
+
+            CheckWeather();
         }
     }
 
@@ -963,4 +1209,6 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
 }
