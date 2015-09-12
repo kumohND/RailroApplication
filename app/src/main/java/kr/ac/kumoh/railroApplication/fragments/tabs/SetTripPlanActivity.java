@@ -49,6 +49,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
     Spinner mSpinner;
 
+    Intent mIntent;
+
     private ArrayAdapter<String> cate;
     int selected;
 
@@ -105,6 +107,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         setContentView(R.layout.activity_modify_plan_list);
         ButterKnife.inject(this);
         setupToolbar();
+
+
 
         moveTrain = (LinearLayout)findViewById(R.id.MoveToTrain);
         moveBus = (LinearLayout)findViewById(R.id.MoveTobus);
@@ -207,6 +211,17 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             case R.id.btn_success_plan: // 저장 버튼 누를시 실행
                 onPlanOkay();
+                //TODO : 정보 여기로 넘겨줄 수 있도록 하기
+              /*  mIntent = new Intent();
+                mIntent.putExtra("Result","SUCCESS");
+                mIntent.putExtra("setTime",22);
+                mIntent.putExtra("setImage",R.drawable.ic_email);
+                mIntent.putExtra("setRate", 100);
+                mIntent.putExtra("setTitle", "위치정보");
+                mIntent.putExtra("setCategory","한식");
+                setResult(RESULT_OK, mIntent);
+                finish();*/
+
                 break;
             case R.id.btn_moving_time:
                     intent = InputData(1);
@@ -224,7 +239,6 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                     break;
                 }
                 startActivity(intent);
-
                 break;
         }
     }

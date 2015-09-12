@@ -5,6 +5,11 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,10 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.PlanListRVArrayAdapter;
+import kr.ac.kumoh.railroApplication.classes.AddItem;
 import kr.ac.kumoh.railroApplication.classes.PlanListItem;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
+import kr.ac.kumoh.railroApplication.util.AnimUtils;
 import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
 
 /**
@@ -29,6 +37,7 @@ import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
  */
 public class TabFragment extends BaseFragment {
 
+
     private static final String ARG_START = "start_param";
     public static final int USER_SET_START_TIME = 6;
     public static final int USER_SET_END_TIME = 22;
@@ -37,6 +46,10 @@ public class TabFragment extends BaseFragment {
     private
     @DrawableRes
     int mStart;
+
+    private final int REQUEST_PLAN = 1000;
+    private final int REQUEST_CANCLE = 1001;
+    private final int REQUEST_MODIFY = 1002;
 /*
     private final
     @DrawableRes
@@ -97,6 +110,7 @@ public class TabFragment extends BaseFragment {
 
 
     private void setupRecyclerView(View view) {
+        mPlanList = new ArrayList<>();
 
         recyclerView = ButterKnife.findById(view, R.id.simpleGrid);
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity(), new RecyclerClickListener.OnItemClickListener() {
@@ -104,7 +118,7 @@ public class TabFragment extends BaseFragment {
             public void onItemClick(View view, int position) {
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_PLAN);
 
             }
         }));
@@ -117,10 +131,11 @@ public class TabFragment extends BaseFragment {
     }
 
     private void InitializeData() {
-        mPlanList = new ArrayList<>();
 
+
+        mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 7 ));
         for (int i = USER_SET_START_TIME; i <= USER_SET_END_TIME; i++) {
-            mPlanList.add(new PlanListItem("", "", i, R.color.cardview_shadow_end_color));
+           // mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, i ));
         }
         // mPlanList.add(new PlanListItem("이동(기차)", "서울역 -> 대전역", R.color.titleTextColor));
         //  mPlanList.add(new PlanListItem("이동(버스)", "범물동 -> 지산동", 0));
@@ -133,7 +148,20 @@ public class TabFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+       // super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case REQUEST_PLAN:
+
+                Toast.makeText(getActivity(), "YEEEEEEEEEEEH", Toast.LENGTH_SHORT).show();
+                String Title = data.getStringExtra("setTitle");
+                String Detail = data.getStringExtra("setTitle");
+                int Image = data.getIntExtra("setImage", 0);
+                int Time = data.getIntExtra("setTime",6);
+                mPlanList.add(new PlanListItem(Title, Detail, Image, Time));
+
+                InitializeAdapter();
+                break;
+        }
     }
 
     @Override
@@ -157,6 +185,8 @@ public class TabFragment extends BaseFragment {
         }
         return data;
     }*/
+
+
 
     @Override
     protected int getLayout() {

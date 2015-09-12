@@ -1,8 +1,12 @@
 package kr.ac.kumoh.railroApplication.fragments.tabs;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -21,11 +25,18 @@ import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
  * create an instance of this fragment.
  */
 public class PlanListTabFragment extends BaseFragment {
+
     @InjectView(R.id.tab_layout)
     TabLayout mTabLayout;
 
     @InjectView(R.id.view_pager)
     ViewPager mViewPager;
+
+/*    @InjectView(R.id.share_menu_item)
+    FloatingActionButton mFab;
+
+    @InjectView(R.id.coordinator_layout)
+    CoordinatorLayout mCoordinatorLayout;*/
 
     /**
      * Use this factory method to create a new instance of
@@ -50,10 +61,29 @@ public class PlanListTabFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root =  super.onCreateView(inflater, container, savedInstanceState);
+
+     /*   mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(mCoordinatorLayout, "블루투스를 검색합니다!", Snackbar.LENGTH_LONG).show();
+
+            }
+        });*/
         setupTabTextColor();
         setupViewPager();
         return root;
     }
+
+    View.OnClickListener snackbarClickListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+
+            Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
+            //TODO : 선정 나중에 StartActivityForResult해서 값 받아서 세팅
+            startActivity(intent);
+        }
+    };
 
     private void setupTabTextColor() {
         int tabTextColor = getResources().getColor(R.color.titleTextColor);
