@@ -10,13 +10,19 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.List;
 
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.PagerAdapter;
+import kr.ac.kumoh.railroApplication.classes.AddItem;
+import kr.ac.kumoh.railroApplication.classes.PlanListItem;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 
 /**
@@ -32,11 +38,15 @@ public class PlanListTabFragment extends BaseFragment {
     @InjectView(R.id.view_pager)
     ViewPager mViewPager;
 
-/*    @InjectView(R.id.share_menu_item)
+    @InjectView(R.id.share_menu_item)
     FloatingActionButton mFab;
 
     @InjectView(R.id.coordinator_layout)
-    CoordinatorLayout mCoordinatorLayout;*/
+    CoordinatorLayout mCoordinatorLayout;
+
+    private final int REQUEST_PLAN = 1000;
+    AddItem item;
+    static String check;
 
     /**
      * Use this factory method to create a new instance of
@@ -55,26 +65,61 @@ public class PlanListTabFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setHasOptionsMenu(true);
+        // setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root =  super.onCreateView(inflater, container, savedInstanceState);
+        View root = super.onCreateView(inflater, container, savedInstanceState);
 
-     /*   mFab.setOnClickListener(new View.OnClickListener() {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(mCoordinatorLayout, "블루투스를 검색합니다!", Snackbar.LENGTH_LONG).show();
+                // Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
+                // startActivityForResult(intent, REQUEST_PLAN);
 
             }
-        });*/
+        });
         setupTabTextColor();
         setupViewPager();
         return root;
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+       /* List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
 
-    View.OnClickListener snackbarClickListener = new View.OnClickListener(){
+                fragment.onActivityResult(requestCode, resultCode, data);
+                Log.d("d", "Parent Fragment"+fragment);
+            }
+        }
+
+        Log.d("d", "Parent Fragment");
+      /*  List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments == null) {
+            return;
+        }
+        for (Fragment f : fragments) {
+            if (f == null) {
+                continue;
+            }
+            f.onActivityResult(requestCode, resultCode, data);
+        }*/
+
+        if (requestCode == REQUEST_PLAN) {
+            Log.d("d", "Parent Fragment");
+           // setupViewPager("Hello");
+
+        }
+
+
+
+    }
+
+
+    View.OnClickListener snackbarClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {

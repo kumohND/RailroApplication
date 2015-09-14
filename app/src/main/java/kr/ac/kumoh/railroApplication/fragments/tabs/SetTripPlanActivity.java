@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +26,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import butterknife.ButterKnife;
@@ -50,6 +53,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     Spinner mSpinner;
 
     Intent mIntent;
+
+    private final int REQUEST_PLAN = 1000;
 
     private ArrayAdapter<String> cate;
     int selected;
@@ -107,8 +112,6 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         setContentView(R.layout.activity_modify_plan_list);
         ButterKnife.inject(this);
         setupToolbar();
-
-
 
         moveTrain = (LinearLayout)findViewById(R.id.MoveToTrain);
         moveBus = (LinearLayout)findViewById(R.id.MoveTobus);
@@ -171,6 +174,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
     }
 
+
+
     private void setupToolbar() {
         mToolbar = ButterKnife.findById(this, R.id.toolbar);
         if (mToolbar == null) {
@@ -183,6 +188,11 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         actionBar.setTitle("여행 설정");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
     }
 
     @Override
@@ -211,17 +221,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             case R.id.btn_success_plan: // 저장 버튼 누를시 실행
                 onPlanOkay();
-                //TODO : 정보 여기로 넘겨줄 수 있도록 하기
-              /*  mIntent = new Intent();
-                mIntent.putExtra("Result","SUCCESS");
-                mIntent.putExtra("setTime",22);
-                mIntent.putExtra("setImage",R.drawable.ic_email);
-                mIntent.putExtra("setRate", 100);
-                mIntent.putExtra("setTitle", "위치정보");
-                mIntent.putExtra("setCategory","한식");
-                setResult(RESULT_OK, mIntent);
-                finish();*/
-
+                finish();
                 break;
             case R.id.btn_moving_time:
                     intent = InputData(1);
@@ -315,6 +315,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             file.mkdirs();
         }
         file = new File(path + File.separator + "201508065" + ".txt"); // 여기서 텍스트 이름만 수정하면 될듯
+
         try{
 
             int check = selected;
@@ -346,9 +347,6 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             }else{ //toMeal
                 buf.write((String) wEat.getText());
             }
-
-
-
             buf.close();
 
         }catch(IOException e)
@@ -380,6 +378,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             {
                 rawData += (temp + "\r\n");
             }
+
+            Log.d("READ",rawData);
 
             buw.close();
             if(rawData.equals("")) return ;

@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_white"
+        android:src="@drawable/ic_mode_edit_white_18pt_3x"
         app:borderWidth="0dp"
         app:layout_anchor="@id/coordinator_layout"
         app:layout_anchorGravity="bottom|right|end" />
