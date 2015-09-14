@@ -3,6 +3,8 @@ package kr.ac.kumoh.railroApplication.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -51,11 +54,16 @@ public class TripInfoFragment extends BaseFragment {
     private RecyclerView recyclerView;
     private Bitmap mBitmap;
 
-    Bitmap bmImg;
+    TextView text;
+
+    private Bitmap bmImg;
     String data;
     String imageUrl = "http://tong.visitkorea.or.kr/cms/resource/35/1571735_image2_1.jpg";
-    String queryUrl = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=IAWLeyO6k7e9XukxBm1HzSMs9IcPrz8jT9gpnefN4UxHGayHQb0fDMCuEMXjwocvlYEViBAPflKAlYqz16g%2Bmg%3D%3D&MobileOS=AND&MobileApp=AppTesting";
+    String queryUrl = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=IAWLeyO6k7e9XukxBm1HzSMs9IcPrz8jT9gpnefN4UxHGayHQb0fDMCuEMXjwocvlYEViBAPflKAlYqz16g%2Bmg%3D%3D&contentTypeId=12&MobileOS=AND&MobileApp=AppTesting";
 
+    String title = null;
+
+    String addr = null;
 
     public static TripInfoFragment newInstance() {
         return new TripInfoFragment();
@@ -66,8 +74,19 @@ public class TripInfoFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        data = getXmlData();
+        text.setText(data);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = (View) inflater.inflate(R.layout.mainlist, container, false);
+
+        text = (TextView)rootView.findViewById(R.id.text);
 
         return super.onCreateView(inflater, container, savedInstanceState);
         // return rootView;
@@ -108,9 +127,6 @@ public class TripInfoFragment extends BaseFragment {
     private void InitializeData() {
         mTripInfoList = new ArrayList<>();
 
-      //  downloadFile(imageUrl);
-
-
    /*
         지연: 여기에 불러오는 코드 그대로 넣으면 될듯!
         InputStream is;
@@ -119,45 +135,16 @@ public class TripInfoFragment extends BaseFragment {
         BitmapDrawable bitmapDrawable = (BitmapDrawable)bitmap;
         Drawable drawable = (Drawable)bitmapDrawable;*/
 
-        mTripInfoList.add(new TripInfoListItem(R.drawable.fantastic, "전주 명동성당", "전주 전주동 전주주", 5));
-        mTripInfoList.add(new TripInfoListItem(R.drawable.plunge, "홍익대학교", "서울시 마포구 와우산로", 4));
-        mTripInfoList.add(new TripInfoListItem(R.drawable.desert, "사막", "서울시 마포구 와우산로", 3));
-        mTripInfoList.add(new TripInfoListItem(R.drawable.fantastic, "벽", "서울시 마포구 와우산로", 1));
+      //  mTripInfoList.add(new TripInfoListItem(R.drawable.fantastic, "전주 명동성당", "전주 전주동 전주주", 5));
+      //  mTripInfoList.add(new TripInfoListItem(R.drawable.plunge, "홍익대학교", "서울시 마포구 와우산로", 4));
+      //  mTripInfoList.add(new TripInfoListItem(R.drawable.desert, "사막", "서울시 마포구 와우산로", 3));
+      //  mTripInfoList.add(new TripInfoListItem(R.drawable.fantastic, "벽", "서울시 마포구 와우산로", 1));
 
     }
-    void downloadFile(String fileUrl)
-    {
-        URL myFileUrl = null; // URL 타입의 myFileUrl을  NULL로 초기화 시켜줍니다.
 
-        try
-        {
-            myFileUrl = new URL(fileUrl); //  파라미터로 넘어온 Url을 myFileUrl에 대입합니다.
-
-        }
-        catch(MalformedURLException e) // 예외처리를 해줍니다.
-        {
-            // Todo Auto-generated catch block
-            e.printStackTrace();
-        }
-        try
-        {
-            // 실질적인 통신이 이루어지는 부분입니다.
-            // myFileUrl 로 접속을 시도합니다.
-            HttpURLConnection conn = (HttpURLConnection)myFileUrl.openConnection();
-            conn.setDoInput(true);
-            conn.connect();
-            int length = conn.getContentLength(); // 받아온 컨텐츠의 길이를 length 변수에 저장합니다.
-            InputStream is = conn.getInputStream(); // InputStream is 변수에 받아온 InputStream을 저장합니다.
-
-            bmImg = BitmapFactory.decodeStream(is); // 받아온 이미지를 bmImg에 넣어둡니다.
-            //imView.setImageBitmap(bmImg); // imView에 이미지를 셋팅합니다.
-        }
-        catch(IOException e) // 예외처리를 해줍니다.
-        {
-            e.printStackTrace();
-        }
-    }
     String getXmlData(){
+
+        //xml주소 에서 관광지 정보를 추출
         StringBuffer buffer = new StringBuffer();
         //한글의 경우 인식이 안되기에 utf-8 방식으로 encoding..
 
@@ -196,6 +183,8 @@ public class TripInfoFragment extends BaseFragment {
                         }
                         else if(tag.equals("firstimage")){
                             imageUrl=xpp.getText();
+                            buffer.append(xpp.getText());
+                            buffer.append("\n");
                         }
 
                         break;
@@ -219,7 +208,56 @@ public class TripInfoFragment extends BaseFragment {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return buffer.toString(); //StringBuffer 문자열 객체 반환
+
+       return buffer.toString();
+    }
+
+    //html 주소 string을 받아 해당 주소의 이미지를 화면에 띄움
+    void downloadFile(String fileUrl)
+    {
+        URL myFileUrl = null; // URL 타입의 myFileUrl을  NULL로 초기화 시켜줍니다.
+
+        try
+        {
+            myFileUrl = new URL(fileUrl); //  파라미터로 넘어온 Url을 myFileUrl에 대입합니다.
+        }
+        catch(MalformedURLException e) // 예외처리를 해줍니다.
+        {
+            // Todo Auto-generated catch block
+            e.printStackTrace();
+        }
+        try
+        {
+            // 실질적인 통신이 이루어지는 부분입니다.
+            // myFileUrl 로 접속을 시도합니다.
+            HttpURLConnection conn = (HttpURLConnection)myFileUrl.openConnection();
+            conn.setDoInput(true);
+            conn.connect();
+            int length = conn.getContentLength(); // 받아온 컨텐츠의 길이를 length 변수에 저장합니다.
+            InputStream is = conn.getInputStream(); // InputStream is 변수에 받아온 InputStream을 저장합니다.
+
+            bmImg = BitmapFactory.decodeStream(is); // 받아온 이미지를 bmImg에 넣어둡니다.
+
+            /*InputStream is;
+            mBitmap = BitmapFactory.decodeStream();
+            //Bitmap to Drawable
+            BitmapDrawable bitmapDrawable = (BitmapDrawable)bitmap;
+            Drawable drawable = (Drawable)bitmapDrawable;*/
+
+            getDrawableFromBitmap(bmImg);
+
+
+            //imView.setImageBitmap(bmImg); // imView에 이미지를 셋팅합니다.
+        }
+        catch(IOException e) // 예외처리를 해줍니다.
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public Drawable getDrawableFromBitmap(Bitmap bitmap){
+        Drawable d = new BitmapDrawable(bitmap);
+        return d;
     }
 
     private void InitializeAdapter() {

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mCurrentMenuItem = R.id.toolbar_flexible_space_with_image;
        // setNewRootFragment(dddndardAppBarFragment.newInstance());
         setNewRootFragment(HomeFragment.newInstance());
-        //TODO : ¿Ãº±¡§ ºº¡©±Õ
+        //TODO : Ïù¥ÏÑ†Ï†ï ÏÑ∏Ï†§Í∑Ä
     }
 
     @Override
