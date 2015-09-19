@@ -623,7 +623,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             Input_Weather();
         }else {
-            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
+            Toast.makeText(this, "위치 정보가 잘못되었습니다!",Toast.LENGTH_SHORT);
         }
         mMealWeather.setPicture_Category(Calculator_Weather(mStartRegionWeather.getWeather_Number()));
         mMealWeather.setPicture_ID(WeatherToPicture(mStartRegionWeather.getWeather_Number()));
