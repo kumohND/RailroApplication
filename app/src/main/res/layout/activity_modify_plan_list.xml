@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
-        android:background="@drawable/edittextstyle" />
+        android:background="@android:drawable/arrow_down_float" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -39,23 +39,24 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp">
 
                 <ImageView
                     android:id="@+id/ic_startime"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
                     android:src="@drawable/ic_access_time_36pt_2x" />
 
                 <Button
                     android:id="@+id/fix_start_Time"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_toRightOf="@id/ic_startime"
                     android:clickable="false"
-                    android:gravity="left|center_vertical"
+                    android:gravity="center_vertical"
                     android:text="시작 시간:" />
 
             </RelativeLayout>
