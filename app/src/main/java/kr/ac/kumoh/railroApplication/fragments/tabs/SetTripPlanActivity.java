@@ -762,15 +762,15 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     public int WeatherToPicture(String weatherNumber)
     {
 
-        if(isSnow(weatherNumber)) return R.drawable.ic_menu;
-        else if(isClear(weatherNumber)) return R.drawable.ic_email;
-        else if(isBroken_Clouds(weatherNumber)) return R.drawable.ic_email;
-        else if(isFew_Clouds(weatherNumber)) return R.drawable.beach_with_hair;
-        else if(isScattered_Clouds(weatherNumber)) return R.drawable.ic_android;
-        else if(isRain(weatherNumber)) return R.drawable.ic_email;
-        else if(isShower_Rain(weatherNumber)) return R.drawable.ic_location;
-        else if(isThunderStrom(weatherNumber)) return R.drawable.ic_menu;
-        else if(isMist(weatherNumber)) return R.drawable.ic_folder;
+        if(isSnow(weatherNumber)) return R.drawable.snow;
+        else if(isClear(weatherNumber)) return R.drawable.sun;
+        else if(isBroken_Clouds(weatherNumber)) return R.drawable.broken_cloud;
+        else if(isFew_Clouds(weatherNumber)) return R.drawable.few_clouds;
+        else if(isScattered_Clouds(weatherNumber)) return R.drawable.scattered_clouds;
+        else if(isRain(weatherNumber)) return R.drawable.rainy;
+        else if(isShower_Rain(weatherNumber)) return R.drawable.shower_rain;
+        else if(isThunderStrom(weatherNumber)) return R.drawable.thunder_strom;
+        else if(isMist(weatherNumber)) return R.drawable.mist;
         else
             return 0;
     }
