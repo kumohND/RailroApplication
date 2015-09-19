@@ -762,7 +762,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     public int WeatherToPicture(String weatherNumber)
     {
 
-        if(isSnow(weatherNumber)) return R.drawable.car;
+        if(isSnow(weatherNumber)) return R.drawable.ic_menu;
         else if(isClear(weatherNumber)) return R.drawable.ic_email;
         else if(isBroken_Clouds(weatherNumber)) return R.drawable.ic_email;
         else if(isFew_Clouds(weatherNumber)) return R.drawable.beach_with_hair;
