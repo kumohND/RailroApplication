@@ -507,8 +507,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     {
         iv_Station_Start_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
         tv_Station_Start_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
-        tv_Station_Start_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "");
-        tv_Station_Start_Min_Temp.setText(mStartTrainWeather.getTemp_Min());
+        tv_Station_Start_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
+        tv_Station_Start_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Station_Start_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
         tv_Station_Start_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
