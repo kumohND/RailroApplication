@@ -1,7 +1,9 @@
 package kr.ac.kumoh.railroApplication.fragments.tabs;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.design.widget.AppBarLayout;
@@ -32,6 +34,7 @@ import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.PlanListRVArrayAdapter;
 import kr.ac.kumoh.railroApplication.classes.AddItem;
 import kr.ac.kumoh.railroApplication.classes.PlanListItem;
+import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 import kr.ac.kumoh.railroApplication.util.AnimUtils;
 import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
@@ -41,6 +44,7 @@ import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
  * Use the {@link TabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+//Tab 에서 수정해야될 가능성이 높을듯..
 public class TabFragment extends BaseFragment {
 
 
@@ -56,6 +60,9 @@ public class TabFragment extends BaseFragment {
     public static int AAA;
 
     private final int REQUEST_PLAN = 1000;
+
+    static LocationManager mManager;
+    static RealTimeLocationListener mRTLocation;
 /*
     private final
     @DrawableRes
@@ -143,6 +150,18 @@ public class TabFragment extends BaseFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         setupRecyclerView(view);
+
+//        mRTLocation = new RealTimeLocationListener(view.getContext());
+//        long minTime = 1000;
+//        float minDistance = 0;
+//
+////        isGPSEnabled = mManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+////        if(isGPSEnabled != false) {
+//        mManager = (LocationManager) view.getContext().getSystemService(Context.LOCATION_SERVICE);
+//        mManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, mRTLocation);
+//        //}
+
+
 
         return view;
     }
