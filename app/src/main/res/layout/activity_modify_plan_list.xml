@@ -19,10 +19,12 @@
             app:layout_scrollFlags="scroll|enterAlways" />
     </android.support.design.widget.AppBarLayout>
 
+    <!--Spinner : 이동(기차), 이동(버스), 숙박, 식사, 여행지-->
     <Spinner
         android:id="@+id/category_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
         android:background="@drawable/edittextstyle"
@@ -39,6 +41,7 @@
             android:layout_marginLeft="12dp"
             android:orientation="vertical">
 
+            <!--시작 시간-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,7 +66,7 @@
 
             </LinearLayout>
 
-
+            <!--종료 시간-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,6 +90,7 @@
             </LinearLayout>
 
 
+            <!--기차 출발역-->
             <LinearLayout
                 android:id="@+id/MoveToTrain"
                 android:layout_width="match_parent"
@@ -119,13 +123,14 @@
 
             </LinearLayout>
 
+            <!--출발역 날씨-->
             <LinearLayout
                 android:id="@+id/layout_Station_Start_Weather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="8dp"
-                android:background="@color/dim_foreground_disabled_material_dark"
+                android:background="@color/button_material_light"
                 android:orientation="horizontal"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
@@ -228,11 +233,10 @@
 
             </LinearLayout>
 
-
+            <!--기차 도착역-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -259,13 +263,14 @@
 
             </LinearLayout>
 
+            <!--도착역 날씨-->
             <LinearLayout
                 android:id="@+id/layout_Station_End_Weather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="8dp"
-                android:background="@color/dim_foreground_disabled_material_dark"
+                android:background="@color/button_material_light"
                 android:orientation="horizontal"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
@@ -367,15 +372,30 @@
 
             </LinearLayout>
 
-
-            <Button
-                android:id="@+id/btn_moving_time"
+            <!--이동 시간-->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#0000FFFF"
-                android:drawableLeft="@drawable/ic_android"
-                android:gravity="left|center_vertical"
-                android:text="이동 시간 : " />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="start|center_vertical"
+                    android:src="@drawable/ic_timelapse_36pt_2x" />
+
+                <Button
+                    android:id="@+id/btn_moving_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:background="#0000FFFF"
+                    android:text="이동시간 열람 " />
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/MoveTobus"
@@ -693,20 +713,38 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/tv_DoSomething"
+            <!--설명-->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#0000FFFF"
-                android:drawableLeft="@drawable/ic_android"
-                android:gravity="left|center_vertical"
-                android:text="Explain" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="start|center_vertical"
+                    android:src="@drawable/ic_find_in_page_black_36dp" />
+
+                <Button
+                    android:id="@+id/tv_DoSomething"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:background="#0000FFFF"
+                    android:text="설명" />
+
+            </LinearLayout>
+
 
             <Button
                 android:id="@+id/btn_success_plan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#0000FFFF"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@color/button_material_light"
                 android:text="완료" />
 
         </LinearLayout>
