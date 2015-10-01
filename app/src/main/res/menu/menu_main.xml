@@ -7,4 +7,11 @@
         android:orderInCategory="100"
         android:title="ActionSettings"
         app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/menu_realTime_GPS"
+        android:orderInCategory="100"
+        android:title="현재 위치 날씨 추적"
+        app:showAsAction="never" />
 </menu>

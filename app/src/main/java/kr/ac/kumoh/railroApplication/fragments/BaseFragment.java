@@ -1,5 +1,7 @@
 package kr.ac.kumoh.railroApplication.fragments;
 
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
@@ -14,10 +16,16 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import kr.ac.kumoh.railroApplication.MainActivity;
 import kr.ac.kumoh.railroApplication.R;
+import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
 
 
 public abstract class BaseFragment extends Fragment {
     Toolbar mToolbar;
+    RealTimeLocationListener mLocation;
+    Context mContext;
+    static LocationManager mManager;
+    static RealTimeLocationListener mRTLocation;
+    boolean isGPSEnabled;
 
     public MainActivity getDrawerActivity(){
         return ((MainActivity) super.getActivity());
@@ -27,7 +35,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(getLayout(), container, false);
-
+        mContext = view.getContext();
         ButterKnife.inject(this, view);
         return view;
     }
@@ -53,7 +61,20 @@ public abstract class BaseFragment extends Fragment {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     // Handle the menu item
-                    return true;
+
+                    switch(item.getItemId())
+                    {
+                        case R.id.menu_realTime_GPS:
+                            StartLocationService();
+                            return true;
+                        case R.id.action_settings:
+
+                        return true;
+
+                    }
+
+
+                    return false;
                 }
             });
             mToolbar.inflateMenu(R.menu.menu_main);
@@ -74,4 +95,30 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected abstract  @LayoutRes int getLayout();
+
+    public void StartLocationService()
+    {
+        mRTLocation = new RealTimeLocationListener(mContext);
+        if(mRTLocation.isGetLocation()){
+            double latitude = mRTLocation.getLatitude();
+            double longitude = mRTLocation.getLongitude();
+
+
+
+        }
+//        long minTime = 1000;
+//        float minDistance = 0;
+//
+////        isGPSEnabled = mManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+////        if(isGPSEnabled != false) {
+//            mManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+//            mManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, mRTLocation);
+//        //}
+    }
+
+    public void StopLocationService()
+    {
+        mManager.removeUpdates(mRTLocation);
+    }
+
 }
