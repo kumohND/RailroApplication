@@ -24,7 +24,17 @@
             android:layout_height="?attr/actionBarSize"
             android:minHeight="?attr/actionBarSize"
             android:popupTheme="@android:style/ThemeOverlay.Material.Light"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            app:layout_scrollFlags="scroll|enterAlways">
+
+
+        </android.support.v7.widget.Toolbar>
+
+        <ImageButton
+            android:id="@+id/tab_weather"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:visibility="gone"
+            android:src="@drawable/doll" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"

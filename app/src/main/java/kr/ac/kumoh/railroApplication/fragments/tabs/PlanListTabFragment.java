@@ -14,10 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.PagerAdapter;
@@ -48,6 +50,9 @@ public class PlanListTabFragment extends BaseFragment {
     AddItem item;
     static String check;
 
+    Button mMenu1;
+    Button mMenu2;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -63,10 +68,18 @@ public class PlanListTabFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setHasOptionsMenu(true);
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,10 +93,17 @@ public class PlanListTabFragment extends BaseFragment {
 
             }
         });
+
         setupTabTextColor();
+
         setupViewPager();
+
+
+
+
         return root;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
@@ -110,10 +130,9 @@ public class PlanListTabFragment extends BaseFragment {
 
         if (requestCode == REQUEST_PLAN) {
             Log.d("d", "Parent Fragment");
-           // setupViewPager("Hello");
+            // setupViewPager("Hello");
 
         }
-
 
 
     }
