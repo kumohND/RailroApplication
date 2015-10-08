@@ -2,6 +2,7 @@ package kr.ac.kumoh.railroApplication.fragments.tabs;
 
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,7 +30,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -178,6 +182,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     ContentValues start_Weather;
     ContentValues end_Weather;
     String year; String month; String day;
+    Calendar calendar = Calendar.getInstance();
+
     String TokenForLocation(String val)
     {
         StringTokenizer token = new StringTokenizer(val,":");
@@ -336,6 +342,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         SetLayoutMeal();
         SetLayoutSleep();
 
+        calendar = Calendar.getInstance();
         sTimeFix = (Button)findViewById(R.id.fix_start_Time);
         eTimeFix = (Button)findViewById(R.id.fix_end_Time);
         doSomething = (Button)findViewById(R.id.tv_DoSomething);
@@ -382,13 +389,23 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
     }
 
+
     @Override
     public void onClick(View v) {
         Intent intent ;
+
+
         switch (v.getId()) {
             case R.id.fix_start_Time: // STARTtIME만 설정
-                TimePickerDialog dialog = new TimePickerDialog(this, listener, 00, 00, false);
+                TimePickerDialog dialog = new TimePickerDialog(this, listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
                 dialog.show();
+                dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        //Toast.makeText(, "주소 오류", Toast.LENGTH_SHORT);
+                        return false;
+                    }
+                });
                 break;
             case R.id.fix_end_Time: // STARTtIME만 설정
                 TimePickerDialog dialog2 = new TimePickerDialog(this, listener, 00, 00, false);
