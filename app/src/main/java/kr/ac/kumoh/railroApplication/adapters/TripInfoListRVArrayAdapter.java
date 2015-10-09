@@ -67,7 +67,9 @@ public class TripInfoListRVArrayAdapter extends RecyclerView.Adapter<TripInfoLis
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         //  viewHolder.mTextView.setText(mData[position]);
-        viewHolder.mBackground.setImageResource(mTripInfoList.get(position).getTripImg());
+     //   viewHolder.mBackground.setImageResource(mTripInfoList.get(position).getTripImg());
+       // viewHolder.mBackground.setImageDrawable(mTripInfoList.get(position));
+        viewHolder.mBackground.setImageBitmap(mTripInfoList.get(position).getTripImg());
         viewHolder.mTripName.setText(mTripInfoList.get(position).getTripTitle());
         viewHolder.mTripLocale.setText(mTripInfoList.get(position).getTripLocale());
         //viewHolder.mStar = mTripInfoList.get(position).getmStar();
