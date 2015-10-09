@@ -7,18 +7,18 @@ public class PlanListItem {
 
     String PlanTitle;
     String PlanDetail;
+    int PlanImg;
     int Time;
-    int tagColor;
 
-    public PlanListItem(){
+    public PlanListItem() {
         super();
     }
 
-    public PlanListItem(String planTitle, String planDetail, int Time, int tagColor) {
+    public PlanListItem(String planTitle, String planDetail, int PlanImg, int Time) {
         PlanTitle = planTitle;
         PlanDetail = planDetail;
+        this.PlanImg = PlanImg;
         this.Time = Time;
-        this.tagColor = tagColor;
     }
 
     public String getPlanTitle() {
@@ -37,12 +37,12 @@ public class PlanListItem {
         PlanDetail = planDetail;
     }
 
-    public int getTagColor() {
-        return tagColor;
+    public int getPlanImg() {
+        return PlanImg;
     }
 
-    public void setTagColor(int tagColor) {
-        this.tagColor = tagColor;
+    public void setPlanImg(int PlanImg) {
+        this.PlanImg = PlanImg;
     }
 
     public int getTime() {

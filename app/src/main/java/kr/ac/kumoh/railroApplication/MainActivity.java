@@ -1,5 +1,6 @@
 package kr.ac.kumoh.railroApplication;
 
+import android.location.LocationManager;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
+import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 import kr.ac.kumoh.railroApplication.fragments.DigitalFootprintFragment;
 import kr.ac.kumoh.railroApplication.fragments.MyTripListFragment;
@@ -32,17 +34,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @InjectView(R.id.navigation_view)
     NavigationView mNavigationView;
-
+    static LocationManager mManager;
+    static RealTimeLocationListener mRTLocation;
     private static Navigator mNavigator;
     private Toolbar mToolbar;
     private @IdRes
     int mCurrentMenuItem;
+    //TODO : 어쩌꼬 저쩌꼬
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+
         setupToolbar();
         setupNavDrawer();
         initNavigator();
@@ -59,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -68,12 +73,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+       if (id == R.id.action_settings) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     private void initNavigator() {
         if (mNavigator != null) return;

@@ -4,6 +4,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -52,19 +55,24 @@ public class PlanListRVArrayAdapter extends RecyclerView.Adapter<PlanListRVArray
     */
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        //ImageView mPlanBackGround;
+        LinearLayout mPlanBackGround;
         TextView mPlanTitle;
         TextView mPlanDetail;
-        TextView mTime;
-        int mTagColor;
-        TextView mAMPM;
+        ImageView mPlanImg;
+        Button mTime;
+        //  int mTagColor;
+        //TextView mAMPM;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            mPlanBackGround = (LinearLayout) itemView.findViewById(R.id.linearLayout);
             mPlanTitle = (TextView) itemView.findViewById(R.id.plan_title);
             mPlanDetail = (TextView) itemView.findViewById(R.id.plan_detail);
-            mTime = (TextView) itemView.findViewById(R.id.time_text);
-            mTagColor = R.color.titleTextColor;
-            mAMPM = (TextView) itemView.findViewById(R.id.am_pm);
+            mTime = (Button) itemView.findViewById(R.id.time_text);
+            mPlanImg = (ImageView) itemView.findViewById(R.id.plan_img);
+            // mTagColor = R.color.titleTextColor;
+            // mAMPM = (TextView) itemView.findViewById(R.id.am_pm);
         }
     }
 
@@ -88,11 +96,25 @@ public class PlanListRVArrayAdapter extends RecyclerView.Adapter<PlanListRVArray
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
+
+
         viewHolder.mPlanTitle.setText(mPlanList.get(position).getPlanTitle());
         viewHolder.mPlanDetail.setText(mPlanList.get(position).getPlanDetail());
+        viewHolder.mPlanImg.setImageResource(mPlanList.get(position).getPlanImg());
+        viewHolder.mPlanBackGround.setBackgroundResource(0);
 
         int mSetTime = mPlanList.get(position).getTime();
-        if( mSetTime>0 && mSetTime<10 ){
+        if (mSetTime < 10) {
+            viewHolder.mTime.setText("0" + mSetTime + ":00");
+        } else {
+            viewHolder.mTime.setText(mSetTime + ":00");
+        }
+
+
+
+
+
+      /*  if( mSetTime>0 && mSetTime<10 ){
             viewHolder.mAMPM.setText("am");
             viewHolder.mTime.setText("0"+Integer.toString(mSetTime));
         }
@@ -115,9 +137,9 @@ public class PlanListRVArrayAdapter extends RecyclerView.Adapter<PlanListRVArray
         else if( mSetTime == 24 ){
             viewHolder.mAMPM.setText("am");
             viewHolder.mTime.setText("0");
-        }
+        }*/
         //    viewHolder.mTime.setText(Integer.toString(mPlanList.get(position).getTime()));
-        viewHolder.mTagColor = R.color.titleTextColor;
+        //  viewHolder.mTagColor = R.color.titleTextColor;
     }
 
 

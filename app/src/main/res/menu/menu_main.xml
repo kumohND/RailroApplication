@@ -3,8 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:id="@+id/action_show_weather"
+        android:icon="@drawable/ic_wb_sunny_white_18dp"
+        android:orderInCategory="1"
         android:title="ActionSettings"
+        android:menuCategory="secondary"
+        app:showAsAction="ifRoom" />
+
+
+    <item
+        android:id="@+id/menu_realTime_GPS"
+        android:orderInCategory="100"
+        android:title="현재 위치 날씨 추적"
         app:showAsAction="never" />
 </menu>

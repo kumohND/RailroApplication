@@ -23,8 +23,18 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:minHeight="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:popupTheme="@android:style/ThemeOverlay.Material.Light"/>
+            android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+
+        </android.support.v7.widget.Toolbar>
+
+        <ImageButton
+            android:id="@+id/tab_weather"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:visibility="gone"
+            android:src="@drawable/doll" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"
@@ -33,6 +43,18 @@
             android:layout_below="@+id/toolbar_tabbar"
             android:background="?attr/colorPrimary"
             android:scrollbars="horizontal" />
+
     </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/share_menu_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_mode_edit_white_18pt_3x"
+        app:borderWidth="0dp"
+        app:layout_anchor="@id/coordinator_layout"
+        app:layout_anchorGravity="bottom|right|end" />
 
 </android.support.design.widget.CoordinatorLayout>

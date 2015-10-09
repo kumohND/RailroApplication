@@ -4,27 +4,36 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.ViewGroup;
 
 import kr.ac.kumoh.railroApplication.R;
+import kr.ac.kumoh.railroApplication.classes.AddItem;
 import kr.ac.kumoh.railroApplication.fragments.tabs.TabFragment;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
     private Context mContext;
+    private String mdata;
+
 
     public PagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         mContext = context;
+
     }
 
     @Override
     public Fragment getItem(int position) {
+        // AddItem item = new AddItem();
         return TabFragment.newInstance(getOffset(position));
         //return TabFragment.newInstance();
     }
 
-    private int getOffset(int position){
-        switch (position){
+
+    private int getOffset(int position) {
+        switch (position) {
             /*
             case 0: return 0;
             case 1: return 5;
@@ -33,6 +42,19 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
         }
         return 1;
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        TabFragment f = (TabFragment) super.instantiateItem(container, position);
+       // String title = mList.get(position);
+      //  f.setTitle(title);
+        return f;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return PagerAdapter.POSITION_NONE;
     }
 
     @Override
