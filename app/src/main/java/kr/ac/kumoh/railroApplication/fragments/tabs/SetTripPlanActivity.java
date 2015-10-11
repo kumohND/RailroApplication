@@ -320,15 +320,15 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     }
     void ButtonEffect()
     {
-        sStation.setAlpha(200);
-        eStation.setAlpha(200);
-        plan_Success.setAlpha(200);
-        doSomething.setAlpha(200);
-        sTimeFix.setAlpha(200);
-        wEat.setAlpha(200);
-        wSleep.setAlpha(200);
-        eLocation.setAlpha(200);
-        sLocation.setAlpha(200);
+//        sStation.setAlpha(200);
+//        eStation.setAlpha(200);
+//        plan_Success.setAlpha(200);
+//        doSomething.setAlpha(200);
+//        sTimeFix.setAlpha(200);
+//        wEat.setAlpha(200);
+//        wSleep.setAlpha(200);
+//        eLocation.setAlpha(200);
+//        sLocation.setAlpha(200);
     }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
