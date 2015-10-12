@@ -45,7 +45,7 @@ public class ReadTrainInfoSetActivity extends Activity {
     //자음
     private static final char[] INITIAL_SOUND = { 'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ' };
     AssetManager mag;
-
+    String index[] = {"ㄱ","ㄴ","ㄷ","ㄹ","ㅁ","ㅂ","ㅅ","ㅇ","ㅈ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"};
     ArrayList<StationInfo> mList;
     TrainListAdpater mAdapter;
     short flag_onClick = 0;
@@ -241,6 +241,7 @@ public class ReadTrainInfoSetActivity extends Activity {
             Sort_String();
             notifyDataSetChanged();
         }
+
         public  boolean matchString(String value, String search){
             int t = 0;
             int seof = value.length() - search.length();
@@ -306,8 +307,8 @@ public class ReadTrainInfoSetActivity extends Activity {
         public int getPositionForSection(int i) {
 
             //Log.d(TAG, "getPositionForSection " + i);
-//            return (int) (getCount() * ((float)i/(float)getSections().length));
-            return (int) (items.size() * ((float)i/(float)getSections().length));
+            return (int) (getCount() * ((float)i/(float)getSections().length));
+//            return (int) (items.size() * ((float)i/(float)getSections().length));
         }
 
 
