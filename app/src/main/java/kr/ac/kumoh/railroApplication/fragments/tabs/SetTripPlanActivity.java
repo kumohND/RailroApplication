@@ -703,7 +703,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         end_Train_Weather.setBackgroundResource(mEndTrainWeather.getPicture_ID());
 
     }
-
+    //TODO : 꾸꾸까까꾸까ㅜ까
     public void Input_Weather()
     {
         if(selected == 0)
