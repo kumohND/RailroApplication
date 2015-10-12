@@ -55,8 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mCurrentMenuItem = R.id.toolbar_flexible_space_with_image;
        // setNewRootFragment(dddndardAppBarFragment.newInstance());
         setNewRootFragment(HomeFragment.newInstance());
-
-
+        //TODO : 이선정 세젤귀
     }
 
     @Override
