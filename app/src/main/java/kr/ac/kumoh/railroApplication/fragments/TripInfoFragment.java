@@ -182,29 +182,72 @@ public class TripInfoFragment extends BaseFragment {
                     case XmlPullParser.START_DOCUMENT:
                         break;
 
-                    case XmlPullParser.START_TAG:
+                    case XmlPullParser.START_TAG:  //태그별로 안의 정보를 얻어온다.
                         tag= xpp.getName();    //테그 이름 얻어오기
-                        if(tag.equals("item")) {
-                           // buffer.append("이름 : ");
-                            buffer.append( "(" + cnt + ")");
-                            cnt++;
+                        if(tag.equals("item")) ;// 첫번째 검색결과
+
+                        else if(tag.equals("title")){
+                            buffer.append("이름 :");
+                            xpp.next();
+                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n");          //줄바꿈 문자 추가
                         }
+                        else if(tag.equals("addr1")){
+                            buffer.append("주소 :");
+                            xpp.next();
+                            buffer.append(xpp.getText()); //title 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n");          //줄바꿈 문자 추가
+                        }
+                        else if(tag.equals("addr2")){
+                            buffer.append("       ");
+                            xpp.next();
+                            buffer.append(xpp.getText()); //category 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n");          //줄바꿈 문자 추가
+                        }
+                        else if(tag.equals("areacode")){
+                            buffer.append("지역코드 :");
+                            xpp.next();
+                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n");          //줄바꿈 문자 추가
+                        }
+                        else if(tag.equals("contenttypeid")){
+                            buffer.append("콘텐츠 타입 :");
+                            xpp.next();
+                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n");          //줄바꿈 문자 추가
+                        }
+                        else if(tag.equals("image")){
+                            buffer.append("이미지 :");
+                            xpp.next();
+                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n");          //줄바꿈 문자 추가
+                        }
+                        else if(tag.equals("mapx")){
+                            buffer.append("x 좌표 :");
+                            xpp.next();
+                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n");          //줄바꿈 문자 추가
+                        }
+                        else if(tag.equals("mapy")){
+                            buffer.append("y좌표 :");
+                            xpp.next();
+                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n");          //줄바꿈 문자 추가
+                        }
+                        else if(tag.equals("zipcode")){
+                            buffer.append("우편번호 :");
+                            xpp.next();
+                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n");          //줄바꿈 문자 추가
+                        }
+
                         break;
 
                     case XmlPullParser.TEXT:
                         //buffer.append(xpp.getText());
-                        //buffer.append(xpp.getText());
-                        buffer.append(xpp.getText());
                         break;
 
                     case XmlPullParser.END_TAG:
-                        tag= xpp.getName();    //테그 이름 얻어오기
-
-                        if(tag.equals("item"))
-                            //buffer.add();
-                                buffer.append("ENTER!!!\n\n");
-                            //buffer.append("\n"); // 첫번째 검색결과종료..줄바꿈
-
                         break;
                 }
 
