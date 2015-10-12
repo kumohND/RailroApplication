@@ -79,7 +79,9 @@ ArrayList<String> mCastList;
     {
 
         start_Weatehr = GetOpenWeather(year,month,day,String.valueOf(this.mStartLocation.latlng.getLng()),String.valueOf(this.mStartLocation.latlng.getLat()));
-        if(end_Weather !=null ) end_Weather = GetOpenWeather(year,month,day,String.valueOf(this.mEndLocation.latlng.getLng()),String.valueOf(this.mEndLocation.latlng.getLat()));
+        if(mEndLocation !=null ){
+            end_Weather = GetOpenWeather(year,month,day,String.valueOf(this.mEndLocation.latlng.getLng()),String.valueOf(this.mEndLocation.latlng.getLat()));
+        }
     }
 
 
