@@ -29,4 +29,6 @@
         <item>식사</item>
         <item>여행지</item>
     </string-array>
+
+    <string name="spinnerSearch1">장소 선택</string>
 </resources>

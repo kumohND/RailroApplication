@@ -1,11 +1,11 @@
 package kr.ac.kumoh.railroApplication;
 
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -14,13 +14,12 @@ import android.view.MenuItem;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 import kr.ac.kumoh.railroApplication.fragments.DigitalFootprintFragment;
-import kr.ac.kumoh.railroApplication.fragments.MyTripListFragment;
-import kr.ac.kumoh.railroApplication.fragments.HomeFragment;
 import kr.ac.kumoh.railroApplication.fragments.FloatingActionButtonFragment;
+import kr.ac.kumoh.railroApplication.fragments.HomeFragment;
+import kr.ac.kumoh.railroApplication.fragments.MyTripListFragment;
 import kr.ac.kumoh.railroApplication.fragments.TripInfoFragment;
 import kr.ac.kumoh.railroApplication.fragments.tabs.PlanListTabFragment;
 import kr.ac.kumoh.railroApplication.util.LogUtils;
@@ -55,8 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mCurrentMenuItem = R.id.toolbar_flexible_space_with_image;
        // setNewRootFragment(dddndardAppBarFragment.newInstance());
         setNewRootFragment(HomeFragment.newInstance());
-
-
+        //TODO : 전지연 세젤예
     }
 
     @Override
@@ -80,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return super.onOptionsItemSelected(item);
     }*/
-
+//TODO : 이졸미 수정
     private void initNavigator() {
         if (mNavigator != null) return;
         mNavigator = new Navigator(getSupportFragmentManager(), R.id.container);
@@ -167,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.share_menu_item:
                 setNewRootFragment(FloatingActionButtonFragment.newInstance());
                 break;
+
         }
         mCurrentMenuItem = id;
         menuItem.setChecked(true);

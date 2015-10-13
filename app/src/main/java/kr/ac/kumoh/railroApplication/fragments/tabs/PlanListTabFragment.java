@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -15,16 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import java.util.List;
-
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.PagerAdapter;
 import kr.ac.kumoh.railroApplication.classes.AddItem;
-import kr.ac.kumoh.railroApplication.classes.PlanListItem;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 
 /**
@@ -88,8 +82,8 @@ public class PlanListTabFragment extends BaseFragment {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
-                // startActivityForResult(intent, REQUEST_PLAN);
+                Intent intent = new Intent(getActivity(), SearchPlaceActivity.class);
+                startActivityForResult(intent, REQUEST_PLAN);
 
             }
         });

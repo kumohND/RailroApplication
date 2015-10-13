@@ -28,9 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="kr.ac.kumoh.railroApplication.fragments.tabs.SetTripPlanActivity"></activity>
-        <activity android:name=".classes.ReadTrainInfoSetActivity"></activity>
+        <activity android:name=".fragments.tabs.SetTripPlanActivity"/>
+        <activity android:name=".classes.ReadTrainInfoSetActivity"/>
         <activity android:name=".classes.WebViewActivity"/>
+        <activity android:name=".fragments.tabs.SearchPlaceActivity" />
     </application>
 
 </manifest>
