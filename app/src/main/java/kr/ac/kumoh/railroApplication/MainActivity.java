@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         switch (id) {
             case R.id.home_menu_item:
+                //TODO : askldaslkdjaslkdj
                 //TODO : Change Homefragment and FloatingButton Fragment(SJ)
                 setNewRootFragment(HomeFragment.newInstance());
                 break;
