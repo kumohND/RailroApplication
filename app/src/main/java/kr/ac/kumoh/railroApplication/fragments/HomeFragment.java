@@ -1,25 +1,41 @@
 package kr.ac.kumoh.railroApplication.fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
+import kr.ac.kumoh.railroApplication.adapters.TripListRVArrayAdapter;
+import kr.ac.kumoh.railroApplication.classes.TripListItem;
+import me.drakeet.materialdialog.MaterialDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,19 +44,23 @@ import kr.ac.kumoh.railroApplication.R;
  */
 public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener, View.OnTouchListener {
 
-    @InjectView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout mCollapsingToolbar;
+   /* @InjectView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout mCollapsingToolbar;*/
 
     @InjectView(R.id.coordinator_layout)
     CoordinatorLayout mCoordinatorLayout;
 
+    @InjectView(R.id.toolbar_flexible_space_with_image)
+    Toolbar mToolbar;
+
     @InjectView(R.id.share_menu_item)
-    FloatingActionButton mFloatingButton;
+    FloatingActionButton mFab;
 
+    MaterialDialog mMaterialDialog;
     ViewFlipper viewFlipper;
-
-
     // 터치 이벤트 발생 지점의 x좌표 저장
+
+    RadioButton radioButton;
     float xAtDown;
     float xAtUp;
 
@@ -63,15 +83,22 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
         // Required empty public constructor
     }
 
+    public String[] getData() {
+        return getActivity().getResources().getStringArray(R.array.countries);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mCollapsingToolbar.setTitle(getString(getTitle()));
+        // mCollapsingToolbar.setTitle(getString(getTitle()));
+        mToolbar.setTitle("");
+        mToolbar.setBackgroundColor(Color.TRANSPARENT);
+
 
         int color = getResources().getColor(android.R.color.transparent);
         mCoordinatorLayout.setStatusBarBackgroundColor(color);
+
 
         mButton = ButterKnife.findById(getActivity(), R.id.date_picker_btn);
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -93,17 +120,48 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
         viewFlipper = ButterKnife.findById(getActivity(), R.id.viewFlipper);
         viewFlipper.setOnTouchListener(this);
 
-        mFloatingButton.setOnClickListener(new View.OnClickListener() {
+
+        ArrayAdapter<String> aa = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, R.array.countries);
+
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mMaterialDialog = new MaterialDialog(getActivity())
+                        .setTitle("MaterialDialog")
+                        .setMessage("Hello world!")
+                        .setContentView(radioButton)
+                        .setPositiveButton("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mMaterialDialog.dismiss();
+
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mMaterialDialog.dismiss();
+
+                            }
+                        });
+
+                mMaterialDialog.show();
+
+              /*  Calendar now = Calendar.getInstance();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        HomeFragment.this,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
+*/
 
             }
         });
 
     }
-
-    ;
-
 
     @Override
     protected int getToolbarId() {
