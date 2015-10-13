@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,10 +29,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import butterknife.ButterKnife;
@@ -352,6 +349,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 //        plan_Cancel.setOnClickListener(this);
         doSomething.setOnClickListener(this);
         sTimeFix.setOnClickListener(this);
+        eTimeFix.setOnClickListener(this);
 
         ButtonEffect();
         //mContext = getContext();
@@ -397,19 +395,26 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
         switch (v.getId()) {
             case R.id.fix_start_Time: // STARTtIME만 설정
-                TimePickerDialog dialog = new TimePickerDialog(this, listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+                TimePickerDialog dialog = new TimePickerDialog(this, start_Listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
                 dialog.show();
-                dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        //Toast.makeText(, "주소 오류", Toast.LENGTH_SHORT);
-                        return false;
-                    }
-                });
+//                dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+//                    @Override
+//                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+//                        //Toast.makeText(, "주소 오류", Toast.LENGTH_SHORT);
+//                        return false;
+//                    }
+//                });
                 break;
             case R.id.fix_end_Time: // STARTtIME만 설정
-                TimePickerDialog dialog2 = new TimePickerDialog(this, listener, 00, 00, false);
+                TimePickerDialog dialog2 = new TimePickerDialog(this, end_Listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
                 dialog2.show();
+//                dialog2.setOnKeyListener(new DialogInterface.OnKeyListener() {
+//                    @Override
+//                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+//                        //Toast.makeText(, "주소 오류", Toast.LENGTH_SHORT);
+//                        return false;
+//                    }
+//                });
                 break;
             case R.id.set_start_station: // 시작하는 기차역 조회
                 intent = new Intent(this, ReadTrainInfoSetActivity.class);
@@ -703,7 +708,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         end_Train_Weather.setBackgroundResource(mEndTrainWeather.getPicture_ID());
 
     }
-
+    //TODO : 꾸꾸까까꾸까ㅜ까
     public void Input_Weather()
     {
         if(selected == 0)
@@ -1129,11 +1134,21 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         return temp;
     }
 
-
-    private TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+    private TimePickerDialog.OnTimeSetListener end_Listener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             //startTime.setText(hourOfDay + minute);
+            eTimeFix.setText("종료 시간 : "+ hourOfDay + ":" +minute);
+
+
+
+        }
+    };
+    private TimePickerDialog.OnTimeSetListener start_Listener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            //startTime.setText(hourOfDay + minute);
+            sTimeFix.setText("시작 시간 : " + hourOfDay + ":" + minute);
         }
     };
 

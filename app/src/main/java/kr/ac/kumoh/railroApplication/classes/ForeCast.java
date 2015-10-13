@@ -79,7 +79,9 @@ ArrayList<String> mCastList;
     {
 
         start_Weatehr = GetOpenWeather(year,month,day,String.valueOf(this.mStartLocation.latlng.getLng()),String.valueOf(this.mStartLocation.latlng.getLat()));
-        if(end_Weather !=null ) end_Weather = GetOpenWeather(year,month,day,String.valueOf(this.mEndLocation.latlng.getLng()),String.valueOf(this.mEndLocation.latlng.getLat()));
+        if(mEndLocation !=null ){
+            end_Weather = GetOpenWeather(year,month,day,String.valueOf(this.mEndLocation.latlng.getLng()),String.valueOf(this.mEndLocation.latlng.getLat()));
+        }
     }
 
 
@@ -98,7 +100,7 @@ ArrayList<String> mCastList;
         return empty;
     }
 
-
+    //TODO : ㅁㄴㅇㄹ
     // API 키 입력해줘야함.
     public ContentValues GetOpenWeather(String year,String month,String day,String lon,String lat)
     {
@@ -108,14 +110,11 @@ ArrayList<String> mCastList;
 //        mWeatherCast = new ArrayList<ForeXmlData>();
         String lat1 = "35";
         String lon1 = "138";
-        String id = "524901";
-        String key = "c7695e7ba8f1cb6e7bb3ddd8049641c8";
-        String key2 = "745debedf4a728f264830ee92ce390c7";
-        String key3 = "0dcf7375b443e0a6c6717fe7e956fac7";
+
+        String key = "0dcf7375b443e0a6c6717fe7e956fac7";
         try{
             URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?"+
-                    "id=" +id +
-                    "&APPID=" + key3 +
+                    "&APPID=" + key +
                     "&lat="+lat+
                     "&lon="+lon+
                     "&mode=xml" +
