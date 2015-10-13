@@ -100,7 +100,7 @@ ArrayList<String> mCastList;
         return empty;
     }
 
-
+    //TODO : ㅁㄴㅇㄹ
     // API 키 입력해줘야함.
     public ContentValues GetOpenWeather(String year,String month,String day,String lon,String lat)
     {
