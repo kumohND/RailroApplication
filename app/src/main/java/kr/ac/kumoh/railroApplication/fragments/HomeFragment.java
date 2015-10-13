@@ -88,7 +88,7 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mMaterialDialog.dismiss();
+//        mMaterialDialog.dismiss();
     }
 
     @Override
