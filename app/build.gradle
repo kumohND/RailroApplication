@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
@@ -32,4 +32,10 @@ dependencies {
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.wdullaer:materialdatetimepicker:1.4.2'
+
+    compile files('libs/libDaumMapAndroid.jar')
+    compile files('src/main/jniLibs/libDaumMapAndroid.jar')
+    //another
+    compile 'me.drakeet.materialdialog:library:1.2.2'
+
 }
