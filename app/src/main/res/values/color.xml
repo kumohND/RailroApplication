@@ -6,4 +6,5 @@
     <color name="titleTextColor">@android:color/white</color>
     <color name="primaryTextColor">#212121</color>
     <color name="colorAccent">#ff5252</color>
+    <color name="darkGray">#A9A9A9</color>
 </resources>
