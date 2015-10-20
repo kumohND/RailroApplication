@@ -1,11 +1,15 @@
 package kr.ac.kumoh.railroApplication.fragments;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +31,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.classes.SetTripDate;
+import kr.ac.kumoh.railroApplication.classes.UseDB;
+import kr.ac.kumoh.railroApplication.fragments.tabs.SetTripPlanActivity;
+import kr.ac.kumoh.railroApplication.fragments.tabs.TabFragment;
 import me.drakeet.materialdialog.MaterialDialog;
 
 /**
@@ -59,8 +66,8 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
     ArrayAdapter<String> mAdapter;
     int mDays, mYear, mMonth, mDay = 0;
     String mTripTitle;
-
-
+    UseDB mDB;
+    Context mContext;
     SetTripDate mSetTripDate; // 여행 시작 시 일정 지정 class
 
     float xAtDown;
@@ -94,7 +101,7 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
+        mContext = getActivity().getApplicationContext();
         // mCollapsingToolbar.setTitle(getString(getTitle()));
         mToolbar.setTitle("");
         mToolbar.setBackgroundColor(Color.TRANSPARENT);
@@ -234,7 +241,20 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
                 .setPositiveButton("OK", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        String total_Date = String.valueOf(mYear)+String.valueOf(mMonth) + String.valueOf(mDay);
+                        mDB = new UseDB(mContext);
+                        mDB.Insert(String.valueOf(mEditText.getText()),String.valueOf(mYear),
+                                String.valueOf(mMonth), String.valueOf(mDay)
+                                ,String.valueOf(mDays));
+
                         mSetTripTitleDialog.dismiss();
+                        //수정 부분
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.container, MyTripListFragment.newInstance(mContext));
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
                     }
                 })
                 .setNegativeButton("CANCEL", new View.OnClickListener() {

@@ -63,6 +63,7 @@ public class TabFragment extends BaseFragment {
 
     static LocationManager mManager;
     static RealTimeLocationListener mRTLocation;
+    Context mContext;
 /*
     private final
     @DrawableRes
@@ -148,7 +149,7 @@ public class TabFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-
+        mContext = view.getContext();
         setupRecyclerView(view);
 
 //        mRTLocation = new RealTimeLocationListener(view.getContext());
@@ -179,7 +180,6 @@ public class TabFragment extends BaseFragment {
             public void onItemClick(View view, int position) {
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
-
 
                 getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
                 //TODO : 선정 완성된 정보 보여주기 + 수정 버튼 포함
