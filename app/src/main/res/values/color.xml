@@ -6,10 +6,6 @@
     <color name="titleTextColor">@android:color/white</color>
     <color name="primaryTextColor">#212121</color>
     <color name="colorAccent">#ff5252</color>
-<<<<<<< HEAD
     <color name="darkGray">#A9A9A9</color>
-||||||| merged common ancestors
-=======
     <color name="colorLight">#eaeaea</color>
->>>>>>> master
 </resources>
