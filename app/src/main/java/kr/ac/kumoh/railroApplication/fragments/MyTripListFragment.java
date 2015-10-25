@@ -1,6 +1,7 @@
 package kr.ac.kumoh.railroApplication.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.TripListRVArrayAdapter;
+import kr.ac.kumoh.railroApplication.fragments.tabs.PlanListTabActivity;
+import kr.ac.kumoh.railroApplication.fragments.tabs.PlanListTabFragment;
+import kr.ac.kumoh.railroApplication.fragments.tabs.SearchPlaceActivity;
+import kr.ac.kumoh.railroApplication.fragments.tabs.SetTripPlanActivity;
 import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
 import kr.ac.kumoh.railroApplication.classes.TripListItem;
 
@@ -61,6 +66,8 @@ public class MyTripListFragment extends BaseFragment {
             public void onItemClick(View view, int position) {
                 // do whatever
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
+                startActivity(intent);
             }
         }));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
