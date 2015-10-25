@@ -179,9 +179,9 @@ public class TabFragment extends BaseFragment {
             public void onItemClick(View view, int position) {
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
+                startActivityForResult(intent, REQUEST_PLAN);
 
-
-                getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
+//                getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
                 //TODO : 선정 완성된 정보 보여주기 + 수정 버튼 포함
 
             }
@@ -227,7 +227,8 @@ public class TabFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
-                getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
+               // getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
+                startActivityForResult(intent, REQUEST_PLAN);
             }
         });
     }
