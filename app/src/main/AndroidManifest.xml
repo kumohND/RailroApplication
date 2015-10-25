@@ -31,6 +31,7 @@
         <activity android:name=".fragments.tabs.SetTripPlanActivity"/>
         <activity android:name=".classes.ReadTrainInfoSetActivity"/>
         <activity android:name=".classes.WebViewActivity"/>
+        <activity android:name=".fragments.tabs.PlanListTabActivity"/>
         <activity android:name=".fragments.tabs.SearchPlaceActivity" />
     </application>
 

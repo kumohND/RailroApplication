@@ -117,14 +117,19 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
             public void onClick(View v) {
 
                 // new DatePickerDialog(getActivity(), dpickerListener, year_x, month_x, day_x).show();
-                Calendar now = Calendar.getInstance();
+              /*  Calendar now = Calendar.getInstance();
                 DatePickerDialog dpd = DatePickerDialog.newInstance(
                         HomeFragment.this,
                         now.get(Calendar.YEAR),
                         now.get(Calendar.MONTH),
                         now.get(Calendar.DAY_OF_MONTH)
                 );
-                dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
+                dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");*/
+
+                MyTripListFragment myTripListFragment = new MyTripListFragment();
+                myTripListFragment.newInstance();
+
+                //mSetTripTitleDialog.dismiss();
             }
         });
 
@@ -241,6 +246,7 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
                 .setPositiveButton("OK", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+<<<<<<< HEAD
                         String total_Date = String.valueOf(mYear)+String.valueOf(mMonth) + String.valueOf(mDay);
                         mDB = new UseDB(mContext);
                         mDB.Insert(String.valueOf(mEditText.getText()),String.valueOf(mYear),
@@ -254,6 +260,8 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
                         fragmentTransaction.replace(R.id.container, MyTripListFragment.newInstance(mContext));
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
+=======
+>>>>>>> master
 
                     }
                 })
