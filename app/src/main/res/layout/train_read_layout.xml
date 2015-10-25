@@ -9,7 +9,25 @@
         android:id="@+id/search_station"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="25dip"
+        android:clickable="false"
+        android:background="@color/darkGray"
+        android:gravity="center_vertical"
+        android:focusable="false">
 
+        <TextView
+            android:text="ㄱ"
+            android:id="@+id/head_Section"
+            android:layout_width="56dip"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/titleTextColor"
+            android:textSize="14sp"
+            android:gravity="center"/>
+    </LinearLayout>
     <ListView
         android:id="@+id/station_list"
         android:layout_width="match_parent"
