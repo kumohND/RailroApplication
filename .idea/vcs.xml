@@ -3,10 +3,16 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+<<<<<<< HEAD
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/RailroApplication" vcs="Git" />
+||||||| merged common ancestors
+=======
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/RailroApplication" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/RailroApplication" vcs="Git" />
+>>>>>>> master
     <mapping directory="$PROJECT_DIR$/RailroApplication" vcs="Git" />
   </component>
 </project>
