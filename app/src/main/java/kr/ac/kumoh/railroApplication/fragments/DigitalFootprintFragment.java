@@ -1,29 +1,24 @@
 package kr.ac.kumoh.railroApplication.fragments;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -33,7 +28,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.classes.BeaconMacAddressInfo;
@@ -74,9 +68,9 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
     Dialog mProgress;
 
 
-    String seoul = "C8:E2:88:D8:60:9F"; // red
-    String jeonju = "FE:84:D5:15:AE:69"; // yellow
-    String donghae = "F7:B3:43:E2:FE:9A"; // green
+    String yeosoo = "C8:E2:88:D8:60:9F"; // red
+    String gyungjoo = "FE:84:D5:15:AE:69"; // yellow
+    String busan = "F7:B3:43:E2:FE:9A"; // green
 
     private void bluetoothSetup() {
         // Initialize
@@ -90,9 +84,9 @@ public class DigitalFootprintFragment extends BaseFragment implements View.OnCli
 
     void AddtoBeaconStationData() {
         bData = new ArrayList<BeaconMacAddressInfo>();
-        red = new BeaconMacAddressInfo(seoul, "Seoul Station", R.drawable.un_seoul, R.drawable.seoul);
-        yellow = new BeaconMacAddressInfo(jeonju, "Jeonju Station", R.drawable.un_jeonju, R.drawable.jeonju);
-        green = new BeaconMacAddressInfo(donghae, "Donghae Station", R.drawable.un_donghae, R.drawable.donghae);
+        red = new BeaconMacAddressInfo(yeosoo, "YeoSoo Station", R.drawable.yeosoo, R.drawable.yeosoo_color);
+        yellow = new BeaconMacAddressInfo(gyungjoo, "GyungJoo Station", R.drawable.gyungjoo, R.drawable.gyungjoo_color);
+        green = new BeaconMacAddressInfo(busan, "BuSan Station", R.drawable.busan, R.drawable.busan_color);
         bData.add(red);
         bData.add(yellow);
         bData.add(green);

@@ -93,13 +93,16 @@ public class MyTripListFragment extends BaseFragment {
 
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
+                intent.putExtra("index",position);
+                intent.putExtra("title",mTripList.get(position).getTripTitle());
                 startActivity(intent);
 
             }
         }));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
+        //recyclerView.setNestedScrollingEnabled(true);
+        recyclerView.setHasFixedSize(false);
         //  TripListRVArrayAdapter arrayAdapter = new TripListRVArrayAdapter(getData());
         // recyclerView.setAdapter(arrayAdapter);
 
