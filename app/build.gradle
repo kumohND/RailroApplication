@@ -38,4 +38,17 @@ dependencies {
     //another
     compile 'me.drakeet.materialdialog:library:1.2.2'
 
+
+    // kakao
+    compile 'com.kakao.sdk:kakaolink:1.1.0'
+
+    // 카카오스토리 sdk를 사용하기 위해 필요.
+    compile 'com.kakao.sdk:kakaostory:1.1.0'
+
+    // 카카오톡 sdk를 사용하기 위해 필요.
+  //  compile group: 'com.kakao.sdk', name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
+
+    // push sdk를 사용하기 위해 필요.
+    //compile group: 'com.kakao.sdk', name: 'push', version: project.KAKAO_SDK_VERSION
+
 }
