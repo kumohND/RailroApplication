@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.my_trip_menu_item:
-                setNewRootFragment(MyTripListFragment.newInstance());
+                setNewRootFragment(MyTripListFragment.newInstance(getApplicationContext()));
                 break;
 
             case R.id.plan_list_menu_item:

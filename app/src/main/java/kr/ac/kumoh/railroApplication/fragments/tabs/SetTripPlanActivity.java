@@ -165,7 +165,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     boolean flag_SleepLayout = false;
 
 
-    String default_sTime = "출발 시간:"; String default_eTime = "도착 시간:"; String default_sStation = "출발역:"; String default_eStation = "도착역:";
+    String default_sTime = "출발 시간:"; String default_eTime = "도착 시간:"; String default_sStation = "출발역 : "; String default_eStation = "도착역 : ";
     String default_toDo = "할 일:"; String default_moveValue = "이동 시간:";
 
 
@@ -317,15 +317,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     }
     void ButtonEffect()
     {
-//        sStation.setAlpha(200);
-//        eStation.setAlpha(200);
-//        plan_Success.setAlpha(200);
-//        doSomething.setAlpha(200);
-//        sTimeFix.setAlpha(200);
-//        wEat.setAlpha(200);
-//        wSleep.setAlpha(200);
-//        eLocation.setAlpha(200);
-//        sLocation.setAlpha(200);
+
     }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -1084,6 +1076,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 file.mkdirs();
             }
             file = new File(path + File.separator + "temp" + ".txt");
+
+
             BufferedReader buw = new BufferedReader(new FileReader(file));
 
             named_buffer = buw.readLine();
@@ -1092,8 +1086,24 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         {
 
         }
+        if(buw == null) {
+            if (check == 1) {
+                sStation.setText(default_sStation + "서울역");
+                return;
+            } else{
+                eStation.setText(default_eStation + "부산역");
+                return;
+            }
+        }
 
-        if(check == 1) //startStation
+        SetTextStation(check);
+
+        CheckWeather();
+    }
+
+    void SetTextStation(int flag)
+    {
+        if(flag == 1) //startStation
         {
 
             flag_StartStation = false ;
@@ -1103,7 +1113,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 return ;
             }
             sStation.setText(default_sStation + data_startStation.getStationName());
-        }else if(check == 2) // endStation
+        }else if(flag == 2) // endStation
         {
             flag_EndStation = false;
             data_endStation = StringToToken(named_buffer);
@@ -1114,16 +1124,11 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             eStation.setText(default_eStation + data_endStation.getStationName());
         }
 
-        CheckWeather();
     }
-
-
 
     StationInfo StringToToken(String rawString) {
         if(rawString.contains("nothing")){
-
-
-           return null;
+               return null;
         }
         StringTokenizer mToken = new StringTokenizer(rawString, "\r\n");
         StationInfo temp;
