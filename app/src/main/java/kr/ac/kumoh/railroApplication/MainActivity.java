@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ButterKnife.inject(this);
 
 
-        mSessionCallback= new SessionCallback() {
+      /*  mSessionCallback= new SessionCallback() {
             @Override
             public void onSessionOpened() {
 
@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onSessionOpening() {
 
             }
-        };
+        };*/
 
-        Session.getCurrentSession().addCallback(mSessionCallback);
+       // Session.getCurrentSession().addCallback(mSessionCallback);
        // Session.getCurrentSession().checkAndImplicitOpen();
 
 
