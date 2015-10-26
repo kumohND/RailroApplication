@@ -1,6 +1,7 @@
 package kr.ac.kumoh.railroApplication.fragments.tabs;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
@@ -25,8 +26,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -35,6 +41,7 @@ import kr.ac.kumoh.railroApplication.adapters.PlanListRVArrayAdapter;
 import kr.ac.kumoh.railroApplication.classes.AddItem;
 import kr.ac.kumoh.railroApplication.classes.PlanListItem;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
+import kr.ac.kumoh.railroApplication.classes.UseDB;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 import kr.ac.kumoh.railroApplication.util.AnimUtils;
 import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
@@ -60,10 +67,15 @@ public class TabFragment extends BaseFragment {
     public static int AAA;
 
     private final int REQUEST_PLAN = 1000;
+    private final int MOVE_TRAIN = 0;
+    private final int MOVE_BUS = 1;
+    private final int EAT = 2;
+    private final int SLEEP = 3;
 
     static LocationManager mManager;
     static RealTimeLocationListener mRTLocation;
     Context mContext;
+    String viewPagerState;
 /*
     private final
     @DrawableRes
@@ -95,7 +107,10 @@ public class TabFragment extends BaseFragment {
     private static List<PlanListItem> mPlanList;
     private RecyclerView recyclerView;
     private Button mButton;
-
+    private int index;
+    UseDB mDB;
+    String textName;
+    int duration;
     public void test() {
 
         Bundle bundle = getArguments();
@@ -145,11 +160,121 @@ public class TabFragment extends BaseFragment {
 
 
     }
+    public void GetContentValue()
+    {
+        mDB = new UseDB(mContext);
+        ContentValues mValue = mDB.Read(index);
+        textName = String.valueOf(mValue.get("dbTextName"));
+        duration = Integer.valueOf(String.valueOf(mValue.get("duration")));
+
+
+    }
+
+
+    void ReadIndex()
+    {
+        String named_buffer;
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+        try{
+            File file;
+            file = new File(path);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            file = new File(path + File.separator + "temp_index" + ".txt");
+
+
+            BufferedReader buw = new BufferedReader(new FileReader(file));
+            named_buffer = buw.readLine();
+            index = Integer.valueOf(named_buffer);
+            buw.close();
+        }catch(IOException e)
+        {
+
+        }
+    }
+    public void ReadViewPagerIdFromText()
+    {
+        String named_buffer;
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+        try{
+            File file;
+            file = new File(path);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            file = new File(path + File.separator + "temp" + ".txt");
+
+
+            BufferedReader buw = new BufferedReader(new FileReader(file));
+            named_buffer = buw.readLine();
+            viewPagerState = named_buffer;
+            buw.close();
+        }catch(IOException e)
+        {
+
+        }
+    }
+
+    public void ReadSetRecyclerView()
+    {
+        ReadViewPagerIdFromText();
+        String named_buffer;
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+        ArrayList<String> mTokens = new ArrayList<String>();
+        try{
+            File file;
+            file = new File(path);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            file = new File(path + File.separator + textName + ".txt");
+
+
+            BufferedReader buw = new BufferedReader(new FileReader(file));
+            int duration = Integer.valueOf(buw.readLine());
+            for(int i = 0 ; i < duration; i++)
+            {
+                if(buw.readLine().equals(viewPagerState)) // 해당 뷰페이저 인덱스 List
+                {
+                    for(int j = 1; j < 25; j++)
+                    {
+                        String check = buw.readLine();
+                        if(check.length() > 10){ // 데이터 존재
+                            StringTokenizer token = new StringTokenizer(check,"%&#");
+                            for( ; !token.hasMoreElements(); )
+                                 mTokens.add(token.nextToken());
+
+
+                            if(mTokens.get(0).equals(String.valueOf(MOVE_TRAIN)) || mTokens.get(0).equals(String.valueOf(MOVE_BUS))) {
+                                mPlanList.add(new PlanListItem("출발 시간 출발 장소 -> 도착 시간 도착 장소 "
+                                        , "설명", R.color.cardview_shadow_end_color, 7));
+                            }else if(mTokens.get(0).equals(String.valueOf(MOVE_TRAIN))) {
+                                mPlanList.add(new PlanListItem("출발 시간 출발 장소 -> 도착 시간 도착 장소 "
+                                        , "설명", R.color.cardview_shadow_end_color, 7));
+                            }else if(mTokens.get(0).equals(String.valueOf(MOVE_TRAIN))) {
+                                mPlanList.add(new PlanListItem("출발 시간 출발 장소 -> 도착 시간 도착 장소 "
+                                        , "설명", R.color.cardview_shadow_end_color, 7));
+                            }
+                        }
+                    }
+                }
+
+            }
+            buw.close();
+        }catch(IOException e)
+        {
+
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         mContext = view.getContext();
+        ReadIndex();
+        GetContentValue();
         setupRecyclerView(view);
 
 //        mRTLocation = new RealTimeLocationListener(view.getContext());
@@ -172,8 +297,6 @@ public class TabFragment extends BaseFragment {
 
 
         mPlanList = new ArrayList<>();
-
-
         recyclerView = ButterKnife.findById(view, R.id.simpleGrid);
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity(), new RecyclerClickListener.OnItemClickListener() {
             @Override
@@ -204,13 +327,14 @@ public class TabFragment extends BaseFragment {
 
     }
 
+    // Text 에서 데이터 읽어오면될듯, 시간정보
     private void InitializeData() {
+        ReadSetRecyclerView();
 
 
-        mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 7));
-        for (int i = USER_SET_START_TIME; i <= USER_SET_END_TIME; i++) {
-            // mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, i ));
-        }
+//        for (int i = USER_SET_START_TIME; i <= USER_SET_END_TIME; i++) {
+//            // mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, i ));
+//        }
         // mPlanList.add(new PlanListItem("이동(기차)", "서울역 -> 대전역", R.color.titleTextColor));
         //  mPlanList.add(new PlanListItem("이동(버스)", "범물동 -> 지산동", 0));
     }
