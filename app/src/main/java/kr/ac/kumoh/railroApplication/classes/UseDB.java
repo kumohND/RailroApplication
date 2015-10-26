@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.io.File;
+import java.util.Calendar;
 
 import kr.ac.kumoh.railroApplication.manager.SQLiteManager;
 
@@ -22,6 +23,42 @@ public class UseDB {
     {
         this.mContext = mContext;
         helper = new SQLiteManager(this.mContext);
+    }
+
+    public ContentValues Read(int index)
+    {
+        helper = new SQLiteManager(mContext);
+        tDb = helper.getReadableDatabase();
+        Cursor c= tDb.query("railo",null,null,null,null,null,null);
+        ContentValues values = new ContentValues();
+        while(c.moveToNext())
+        {
+
+
+            int getIndex = c.getInt(c.getColumnIndex("_id"));
+            if(getIndex == index) {
+                String dbName = c.getString(c.getColumnIndex("dbTextName"));
+                String tName = c.getString(c.getColumnIndex("dbTitleName"));
+                String date = c.getString(c.getColumnIndex("startDate"));
+                String duration = c.getString(c.getColumnIndex("duration"));
+                String year = c.getString(c.getColumnIndex("year"));
+                String month = c.getString(c.getColumnIndex("month"));
+                String day = c.getString(c.getColumnIndex("day"));
+                values.put("dbTextName",dbName);
+                values.put("dbTitleName",tName);
+                values.put("startDate", date);
+                values.put("duration",duration);
+                values.put("year",year);
+                values.put("month",month);
+                values.put("day",day);
+                return values;
+            }
+
+            // titleName , Duration + date , 그림
+        }
+        tDb.close();
+        return null;
+
     }
 
 
