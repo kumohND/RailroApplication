@@ -157,7 +157,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
         int tabTextColor = getResources().getColor(R.color.titleTextColor);
         mTabLayout.setTabTextColors(tabTextColor, tabTextColor);
     }
-
+//TOdo: asdasd
     private void setupViewPager() {
         //You could use the normal supportFragmentManger if you like
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getApplicationContext());
