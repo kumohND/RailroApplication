@@ -70,7 +70,8 @@ public class PlanListTabActivity  extends ActionBarActivity{
 
     WeatherCheck mCheck;
     ContentValues mWeather_Data;
-
+    int index;
+    String title;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,22 +81,20 @@ public class PlanListTabActivity  extends ActionBarActivity{
         mStartInform = new LocationInform();
         mCal = Calendar.getInstance();
 
-
-
+        Intent intent = getIntent();
+        index = intent.getIntExtra("index",0);
+        index++;
+        title = intent.getStringExtra("title");
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SearchPlaceActivity.class);
                 startActivity(intent);
-
             }
         });
         setupToolbar();
-
         setupTabTextColor();
-
         setupViewPager();
-
     }
 
     private void setupToolbar() {
@@ -107,7 +106,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) return;
-        actionBar.setTitle("여행 계획 작성");
+        actionBar.setTitle(title);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
     }
@@ -158,10 +157,10 @@ public class PlanListTabActivity  extends ActionBarActivity{
         int tabTextColor = getResources().getColor(R.color.titleTextColor);
         mTabLayout.setTabTextColors(tabTextColor, tabTextColor);
     }
-
+//TOdo: asdasd
     private void setupViewPager() {
         //You could use the normal supportFragmentManger if you like
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getApplicationContext());
+        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getApplicationContext(),index);
         mViewPager.setAdapter(pagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);//this is the new nice thing ;D
     }
