@@ -93,6 +93,8 @@ public class MyTripListFragment extends BaseFragment {
 
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
+                intent.putExtra("index",position);
+                intent.putExtra("title",mTripList.get(position).getTripTitle());
                 startActivity(intent);
 
             }
