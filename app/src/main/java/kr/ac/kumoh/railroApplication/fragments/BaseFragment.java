@@ -99,7 +99,8 @@ public abstract class BaseFragment extends Fragment {
 //                                        String.valueOf(mCal.get(Calendar.DAY_OF_MONTH)));
                                 mWeather_Data = cast.getStart_Weather();
                                 mCheck = new WeatherCheck(mWeather_Data);
-                                img.setBackgroundResource(mCheck.WeatherToPicture());
+                                img.setImageResource(mCheck.WeatherToPicture());
+                                //img.setBackgroundResource(mCheck.WeatherToPicture());
                                 img.setVisibility(View.VISIBLE);
                                 isOpen = true;
                             }else{

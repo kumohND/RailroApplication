@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,10 +29,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import butterknife.ButterKnife;
@@ -168,7 +165,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     boolean flag_SleepLayout = false;
 
 
-    String default_sTime = "출발 시간:"; String default_eTime = "도착 시간:"; String default_sStation = "출발역:"; String default_eStation = "도착역:";
+    String default_sTime = "출발 시간:"; String default_eTime = "도착 시간:"; String default_sStation = "출발역 : "; String default_eStation = "도착역 : ";
     String default_toDo = "할 일:"; String default_moveValue = "이동 시간:";
 
 
@@ -320,15 +317,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     }
     void ButtonEffect()
     {
-//        sStation.setAlpha(200);
-//        eStation.setAlpha(200);
-//        plan_Success.setAlpha(200);
-//        doSomething.setAlpha(200);
-//        sTimeFix.setAlpha(200);
-//        wEat.setAlpha(200);
-//        wSleep.setAlpha(200);
-//        eLocation.setAlpha(200);
-//        sLocation.setAlpha(200);
+
     }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -352,6 +341,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 //        plan_Cancel.setOnClickListener(this);
         doSomething.setOnClickListener(this);
         sTimeFix.setOnClickListener(this);
+        eTimeFix.setOnClickListener(this);
 
         ButtonEffect();
         //mContext = getContext();
@@ -397,19 +387,26 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
         switch (v.getId()) {
             case R.id.fix_start_Time: // STARTtIME만 설정
-                TimePickerDialog dialog = new TimePickerDialog(this, listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+                TimePickerDialog dialog = new TimePickerDialog(this, start_Listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
                 dialog.show();
-                dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        //Toast.makeText(, "주소 오류", Toast.LENGTH_SHORT);
-                        return false;
-                    }
-                });
+//                dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+//                    @Override
+//                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+//                        //Toast.makeText(, "주소 오류", Toast.LENGTH_SHORT);
+//                        return false;
+//                    }
+//                });
                 break;
             case R.id.fix_end_Time: // STARTtIME만 설정
-                TimePickerDialog dialog2 = new TimePickerDialog(this, listener, 00, 00, false);
+                TimePickerDialog dialog2 = new TimePickerDialog(this, end_Listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
                 dialog2.show();
+//                dialog2.setOnKeyListener(new DialogInterface.OnKeyListener() {
+//                    @Override
+//                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+//                        //Toast.makeText(, "주소 오류", Toast.LENGTH_SHORT);
+//                        return false;
+//                    }
+//                });
                 break;
             case R.id.set_start_station: // 시작하는 기차역 조회
                 intent = new Intent(this, ReadTrainInfoSetActivity.class);
@@ -703,7 +700,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         end_Train_Weather.setBackgroundResource(mEndTrainWeather.getPicture_ID());
 
     }
-
+    //TODO : 꾸꾸까까꾸까ㅜ까
     public void Input_Weather()
     {
         if(selected == 0)
@@ -1079,6 +1076,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 file.mkdirs();
             }
             file = new File(path + File.separator + "temp" + ".txt");
+
+
             BufferedReader buw = new BufferedReader(new FileReader(file));
 
             named_buffer = buw.readLine();
@@ -1087,8 +1086,24 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         {
 
         }
+        if(buw == null) {
+            if (check == 1) {
+                sStation.setText(default_sStation + "서울역");
+                return;
+            } else{
+                eStation.setText(default_eStation + "부산역");
+                return;
+            }
+        }
 
-        if(check == 1) //startStation
+        SetTextStation(check);
+
+        CheckWeather();
+    }
+
+    void SetTextStation(int flag)
+    {
+        if(flag == 1) //startStation
         {
 
             flag_StartStation = false ;
@@ -1098,7 +1113,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 return ;
             }
             sStation.setText(default_sStation + data_startStation.getStationName());
-        }else if(check == 2) // endStation
+        }else if(flag == 2) // endStation
         {
             flag_EndStation = false;
             data_endStation = StringToToken(named_buffer);
@@ -1109,16 +1124,11 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             eStation.setText(default_eStation + data_endStation.getStationName());
         }
 
-        CheckWeather();
     }
-
-
 
     StationInfo StringToToken(String rawString) {
         if(rawString.contains("nothing")){
-
-
-           return null;
+               return null;
         }
         StringTokenizer mToken = new StringTokenizer(rawString, "\r\n");
         StationInfo temp;
@@ -1129,11 +1139,21 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         return temp;
     }
 
-
-    private TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+    private TimePickerDialog.OnTimeSetListener end_Listener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             //startTime.setText(hourOfDay + minute);
+            eTimeFix.setText("종료 시간 : "+ hourOfDay + ":" +minute);
+
+
+
+        }
+    };
+    private TimePickerDialog.OnTimeSetListener start_Listener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            //startTime.setText(hourOfDay + minute);
+            sTimeFix.setText("시작 시간 : " + hourOfDay + ":" + minute);
         }
     };
 
