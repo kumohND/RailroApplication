@@ -103,8 +103,39 @@
     <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="materialdatetimepicker-1.4.2" level="project" />
+<<<<<<< HEAD
+    <orderEntry type="library" exported="" name="recyclerview-v7-22.2.0" level="project" />
+<<<<<<< HEAD
+<<<<<<< HEAD
+    <orderEntry type="library" exported="" name="butterknife-6.1.0" level="project" />
+||||||| merged common ancestors
+    <orderEntry type="library" exported="" name="cardview-v7-22.2.0" level="project" />
+=======
+>>>>>>> refs/remotes/origin/master
+    <orderEntry type="library" exported="" name="picasso-2.5.2" level="project" />
+<<<<<<< HEAD
+    <orderEntry type="library" exported="" name="support-annotations-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="palette-v7-21.0.0" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="design-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="cardview-v7-22.2.0" level="project" />
+||||||| merged common ancestors
+    <orderEntry type="library" exported="" name="appcompat-v7-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="butterknife-6.1.0" level="project" />
+=======
+=======
+>>>>>>> master
+    <orderEntry type="library" exported="" name="butterknife-6.1.0" level="project" />
+    <orderEntry type="library" exported="" name="picasso-2.5.2" level="project" />
+||||||| merged common ancestors
+    <orderEntry type="library" exported="" name="recyclerview-v7-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="picasso-2.5.2" level="project" />
+    <orderEntry type="library" exported="" name="butterknife-6.1.0" level="project" />
+=======
     <orderEntry type="library" exported="" name="design-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="jackson-databind-2.3.1" level="project" />
+>>>>>>> master
     <orderEntry type="library" exported="" name="libDaumMapAndroid" level="project" />
     <orderEntry type="library" exported="" name="1_libDaumMapAndroid" level="project" />
     <orderEntry type="library" exported="" name="util-1.0.51" level="project" />
@@ -120,6 +151,10 @@
     <orderEntry type="library" exported="" name="recyclerview-v7-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="palette-v7-21.0.0" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-22.2.0" level="project" />
+<<<<<<< HEAD
+>>>>>>> refs/remotes/origin/master
+||||||| merged common ancestors
+=======
     <orderEntry type="library" exported="" name="push-1.0.51" level="project" />
     <orderEntry type="library" exported="" name="butterknife-6.1.0" level="project" />
     <orderEntry type="library" exported="" name="kakaostory-1.0.51" level="project" />
@@ -129,5 +164,6 @@
     <orderEntry type="library" exported="" name="support-v4-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="netty-3.9.0.Final" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.0" level="project" />
+>>>>>>> master
   </component>
 </module>
