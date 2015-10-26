@@ -73,8 +73,6 @@ public class TripInfoFragment extends BaseFragment {
     double mapy;
     String title_info;
     String zipcode;
-
-
     int index = 1;
     int cnt = 0;
 
