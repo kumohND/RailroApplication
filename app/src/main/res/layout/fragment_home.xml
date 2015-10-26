@@ -91,6 +91,7 @@
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:minHeight="600dp"
         android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <!-- TODO calculate the minHeight in the fragment -->
@@ -145,33 +146,6 @@
                         </LinearLayout>-->
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <Button
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginLeft="10dp"
-                    android:text="5일"
-                    android:textSize="20sp" />
-
-                <Button
-                    android:id="@+id/date_picker_btn"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:text="7/20"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="@dimen/divider_padding"
-                android:background="@color/divider" />
 
             <!--  <ListItem
                   android:layout_width="match_parent"

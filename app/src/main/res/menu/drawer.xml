@@ -11,11 +11,11 @@
             android:id="@+id/my_trip_menu_item"
             android:icon="@drawable/ic_android"
             android:title="@string/my_plan_list" />
-        <item
+   <!--     <item
 
             android:id="@+id/plan_list_menu_item"
             android:icon="@drawable/ic_android"
-            android:title="@string/plan_list" />
+            android:title="@string/plan_list" />-->
 
         <item
             android:id="@+id/plan_info_menu_item"

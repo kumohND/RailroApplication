@@ -150,9 +150,9 @@ public class PlanListTabFragment extends BaseFragment {
 
     private void setupViewPager() {
         //You could use the normal supportFragmentManger if you like
-        PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager(), getActivity());
-        mViewPager.setAdapter(pagerAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);//this is the new nice thing ;D
+       // PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager(), getActivity(),index);
+//        mViewPager.setAdapter(pagerAdapter);
+//        mTabLayout.setupWithViewPager(mViewPager);//this is the new nice thing ;D
     }
 /*
     @Override
