@@ -160,7 +160,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
 //TOdo: asdasd
     private void setupViewPager() {
         //You could use the normal supportFragmentManger if you like
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getApplicationContext());
+        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getApplicationContext(),index);
         mViewPager.setAdapter(pagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);//this is the new nice thing ;D
     }
