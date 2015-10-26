@@ -124,7 +124,7 @@
 
             </LinearLayout>
 
-            <!--출발역 날씨-->
+            <!--기차 출발역 날씨-->
             <LinearLayout
                 android:id="@+id/layout_Station_Start_Weather"
                 android:layout_width="match_parent"
@@ -264,7 +264,7 @@
 
             </LinearLayout>
 
-            <!--도착역 날씨-->
+            <!--기차 도착역 날씨-->
             <LinearLayout
                 android:id="@+id/layout_Station_End_Weather"
                 android:layout_width="match_parent"
@@ -412,7 +412,7 @@
                     android:drawableLeft="@drawable/ic_android"
                     android:drawableRight="@drawable/ic_android"
                     android:gravity="left|center_vertical"
-                    android:text="출발지:서울역" />
+                    android:text="출발지:" />
 
                 <Button
                     android:id="@+id/btn_start_region_Weather"
