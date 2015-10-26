@@ -1,5 +1,6 @@
 package kr.ac.kumoh.railroApplication;
 
+import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -8,9 +9,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.kakao.KakaoLink;
+import com.kakao.KakaoParameterException;
+import com.kakao.KakaoTalkLinkMessageBuilder;
+import com.kakao.Session;
+import com.kakao.SessionCallback;
+import com.kakao.exception.KakaoException;
+import com.kakao.widget.LoginButton;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -41,11 +52,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int mCurrentMenuItem;
     //TODO : 어쩌꼬 저쩌꼬
 
+    private KakaoLink kakaoLink;
+    private KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder;
+
+    private LoginButton loginButton;
+
+    private SessionCallback mSessionCallback;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+
+
+      /*  mSessionCallback= new SessionCallback() {
+            @Override
+            public void onSessionOpened() {
+
+            }
+
+            @Override
+            public void onSessionClosed(KakaoException e) {
+
+            }
+
+            @Override
+            public void onSessionOpening() {
+
+            }
+        };*/
+
+       // Session.getCurrentSession().addCallback(mSessionCallback);
+       // Session.getCurrentSession().checkAndImplicitOpen();
+
+
+     /*   try {
+           kakaoLink = KakaoLink.getKakaoLink(getApplicationContext());
+            kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
+            kakaoTalkLinkMessageBuilder.addText("test");
+            kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder.build(), this);
+            kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
+        } catch (KakaoParameterException e) {
+            Log.e("error", e.getMessage());
+        }
+*/
+
+
+
+
 
         setupToolbar();
         setupNavDrawer();
@@ -141,8 +198,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         switch (id) {
             case R.id.home_menu_item:
-                //TODO : askldaslkdjaslkdj
-                //TODO : Change Homefragment and FloatingButton Fragment(SJ)
                 setNewRootFragment(HomeFragment.newInstance());
                 break;
 
@@ -150,9 +205,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setNewRootFragment(MyTripListFragment.newInstance(getApplicationContext()));
                 break;
 
-            case R.id.plan_list_menu_item:
+          /*  case R.id.plan_list_menu_item:
                 setNewRootFragment(PlanListTabFragment.newInstance());
-                break;
+                break;*/
 
             case R.id.plan_info_menu_item:
                 setNewRootFragment(TripInfoFragment.newInstance());

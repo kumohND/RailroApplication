@@ -101,7 +101,8 @@ public class MyTripListFragment extends BaseFragment {
         }));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
+        //recyclerView.setNestedScrollingEnabled(true);
+        recyclerView.setHasFixedSize(false);
         //  TripListRVArrayAdapter arrayAdapter = new TripListRVArrayAdapter(getData());
         // recyclerView.setAdapter(arrayAdapter);
 
