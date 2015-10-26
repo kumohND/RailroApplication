@@ -1,41 +1,41 @@
 package kr.ac.kumoh.railroApplication.fragments;
 
 
-        import android.graphics.Bitmap;
-        import android.graphics.BitmapFactory;
-        import android.graphics.drawable.BitmapDrawable;
-        import android.graphics.drawable.Drawable;
-        import android.os.Bundle;
-        import android.os.StrictMode;
-        import android.support.annotation.NonNull;
-        import android.support.v4.app.Fragment;
-        import android.support.v7.widget.LinearLayoutManager;
-        import android.support.v7.widget.RecyclerView;
-        import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import org.xmlpull.v1.XmlPullParser;
-        import org.xmlpull.v1.XmlPullParserFactory;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
 
-        import java.io.IOException;
-        import java.io.InputStream;
-        import java.io.InputStreamReader;
-        import java.net.HttpURLConnection;
-        import java.net.MalformedURLException;
-        import java.net.URL;
-        import java.util.ArrayList;
-        import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-        import butterknife.ButterKnife;
-        import kr.ac.kumoh.railroApplication.R;
-        import kr.ac.kumoh.railroApplication.adapters.TripInfoListRVArrayAdapter;
-        import kr.ac.kumoh.railroApplication.classes.TripInfoFragInfo;
-        import kr.ac.kumoh.railroApplication.classes.TripInfoListItem;
-        import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
+import butterknife.ButterKnife;
+import kr.ac.kumoh.railroApplication.R;
+import kr.ac.kumoh.railroApplication.adapters.TripInfoListRVArrayAdapter;
+import kr.ac.kumoh.railroApplication.classes.TripInfoFragInfo;
+import kr.ac.kumoh.railroApplication.classes.TripInfoListItem;
+import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -188,51 +188,6 @@ public class TripInfoFragment extends BaseFragment {
 
                     case XmlPullParser.START_TAG:  //태그별로 안의 정보를 얻어온다.
                         tag= xpp.getName();    //테그 이름 얻어오기
-<<<<<<< HEAD
-                        if(tag.equals("item")) ;// 첫번째 검색결과
-
-                        else if(tag.equals("title")){
-                            buffer.append("이름 :");
-                            xpp.next();
-                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
-                            buffer.append("\n");          //줄바꿈 문자 추가
-                        }
-                        else if(tag.equals("addr1")){
-                            buffer.append("주소 :");
-                            xpp.next();
-                            buffer.append(xpp.getText()); //title 요소의 TEXT 읽어와서 문자열버퍼에 추가
-                            buffer.append("\n");          //줄바꿈 문자 추가
-                        }
-                        else if(tag.equals("addr2")){
-                            buffer.append("       ");
-                            xpp.next();
-                            buffer.append(xpp.getText()); //category 요소의 TEXT 읽어와서 문자열버퍼에 추가
-                            buffer.append("\n");          //줄바꿈 문자 추가
-                        }
-                        else if(tag.equals("areacode")){
-                            buffer.append("지역코드 :");
-                            xpp.next();
-                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
-                            buffer.append("\n");          //줄바꿈 문자 추가
-                        }
-                        else if(tag.equals("contenttypeid")){
-                            buffer.append("콘텐츠 타입 :");
-                            xpp.next();
-                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
-                            buffer.append("\n");          //줄바꿈 문자 추가
-                        }
-                        else if(tag.equals("image")){
-                            buffer.append("이미지 :");
-                            xpp.next();
-                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
-                            buffer.append("\n");          //줄바꿈 문자 추가
-                        }
-                        else if(tag.equals("mapx")){
-                            buffer.append("x 좌표 :");
-                            xpp.next();
-                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
-                            buffer.append("\n");          //줄바꿈 문자 추가
-=======
                         if(tag.equals("addr1")) {
                             xpp.next();
                             addr1 = xpp.getText();
@@ -269,30 +224,10 @@ public class TripInfoFragment extends BaseFragment {
                         else if(tag.equals("zipcode")){
                             xpp.next();
                             zipcode = xpp.getText();
->>>>>>> master
                         }
-                        else if(tag.equals("mapy")){
-                            buffer.append("y좌표 :");
-                            xpp.next();
-                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
-                            buffer.append("\n");          //줄바꿈 문자 추가
-                        }
-                        else if(tag.equals("zipcode")){
-                            buffer.append("우편번호 :");
-                            xpp.next();
-                            buffer.append(xpp.getText()); //description 요소의 TEXT 읽어와서 문자열버퍼에 추가
-                            buffer.append("\n");          //줄바꿈 문자 추가
-                        }
-
                         break;
 
                     case XmlPullParser.TEXT:
-<<<<<<< HEAD
-                        //buffer.append(xpp.getText());
-                        break;
-
-                    case XmlPullParser.END_TAG:
-=======
                         break;
 
                     case XmlPullParser.END_TAG:
@@ -304,7 +239,6 @@ public class TripInfoFragment extends BaseFragment {
                             image = "";
                             index += 1;
                         }
->>>>>>> master
                         break;
                 }
                 eventType= xpp.next();
