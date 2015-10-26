@@ -240,6 +240,7 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
         Toast.makeText(getActivity(), date, Toast.LENGTH_SHORT).show();
 
 
+        //ToDo : ㅁㄴㅇㅁㄴㄻㄴㄻ
         mSetTripTitleDialog = new MaterialDialog(getActivity())
                 .setTitle(mDays + "일 -" + mYear + "/" + mMonth + "/" + mDay + "를 선택하셨군요!\n"+"내일로 여행 제목을 적어주세요:)")
                 .setContentView(mEditText)
