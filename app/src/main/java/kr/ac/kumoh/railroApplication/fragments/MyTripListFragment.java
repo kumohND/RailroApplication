@@ -1,21 +1,36 @@
 package kr.ac.kumoh.railroApplication.fragments;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.TripListRVArrayAdapter;
+import kr.ac.kumoh.railroApplication.classes.UseDB;
+import kr.ac.kumoh.railroApplication.fragments.tabs.TabFragment;
+import kr.ac.kumoh.railroApplication.manager.SQLiteManager;
+import kr.ac.kumoh.railroApplication.fragments.tabs.PlanListTabActivity;
+import kr.ac.kumoh.railroApplication.fragments.tabs.PlanListTabFragment;
+import kr.ac.kumoh.railroApplication.fragments.tabs.SearchPlaceActivity;
+import kr.ac.kumoh.railroApplication.fragments.tabs.SetTripPlanActivity;
 import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
 import kr.ac.kumoh.railroApplication.classes.TripListItem;
 
@@ -37,8 +52,10 @@ public class MyTripListFragment extends BaseFragment {
 
     private List<TripListItem> mTripList;
     private RecyclerView recyclerView;
-
-    public static MyTripListFragment newInstance() {
+    //UseDB mDB_Helper;
+    SQLiteManager mDB_Helper;
+    SQLiteDatabase mDB;
+    public static MyTripListFragment newInstance(Context mContext) {
         return new MyTripListFragment();
     }
 
@@ -46,6 +63,7 @@ public class MyTripListFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mCollapsingToolbar.setTitle(getString(getTitle()));
+        mContext = getActivity().getApplicationContext();
         setList();
     }
 
@@ -60,7 +78,23 @@ public class MyTripListFragment extends BaseFragment {
             @Override
             public void onItemClick(View view, int position) {
                 // do whatever
+
+                // 수정 부분
+                Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+//                FragmentManager fragmentManager = getFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.container, TabFragment.newInstance(0));
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//                Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
+//                getParentFragment().startActivityForResult(intent, 0);
+
+
+
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
+                startActivity(intent);
+
             }
         }));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -75,9 +109,34 @@ public class MyTripListFragment extends BaseFragment {
     }
 
     private void InitializeData() {
+//        mTripList = new ArrayList<>();
+//        mTripList.add(new TripListItem("맛집 내일로 여행", "2015/07/25 ~ 2015/08/01", R.drawable.ic_android));
+//        mTripList.add(new TripListItem("사진 여행", "2015/08/11 ~ 2015/08/15", R.drawable.ic_android));
+        mDB_Helper = new SQLiteManager(mContext);
+        mDB = mDB_Helper.getReadableDatabase();
+        Cursor c= mDB.query("railo",null,null,null,null,null,null);
         mTripList = new ArrayList<>();
-        mTripList.add(new TripListItem("맛집 내일로 여행", "2015/07/25 ~ 2015/08/01", R.drawable.ic_android));
-        mTripList.add(new TripListItem("사진 여행", "2015/08/11 ~ 2015/08/15", R.drawable.ic_android));
+
+        while(c.moveToNext())
+        {
+            String duration = c.getString(c.getColumnIndex("duration"));
+            String year = c.getString(c.getColumnIndex("year"));
+            String month = c.getString(c.getColumnIndex("month"));
+            String day = c.getString(c.getColumnIndex("day"));
+            Calendar compare = Calendar.getInstance();
+            compare.set(Calendar.YEAR, Integer.valueOf(year));
+            compare.set(Calendar.MONTH, (Integer.valueOf(month)));
+            compare.set(Calendar.DAY_OF_MONTH, Integer.valueOf(day));
+            for(int i = 0 ; i < (Integer.valueOf(duration) -1) ; i++) // 날자증가
+                compare.add(Calendar.DAY_OF_MONTH,1);
+
+            mTripList.add(new TripListItem(c.getString(c.getColumnIndex("dbTitleName")),
+                    year + "/" + month + "/" + day + "~" +
+                            compare.get(Calendar.YEAR) + "/" + (compare.get(Calendar.MONTH))
+                            + "/" + compare.get(Calendar.DAY_OF_MONTH), R.drawable.ic_android));
+            // titleName , Duration + date , 그림
+        }
+
     }
 
     private void InitializeAdapter() {
