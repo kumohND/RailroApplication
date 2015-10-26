@@ -26,8 +26,7 @@
     <TextView
         android:id="@+id/TextViewid"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="eedafdsa"/>
+        android:layout_height="wrap_content"/>
 </android.support.design.widget.CoordinatorLayout>
 
 
