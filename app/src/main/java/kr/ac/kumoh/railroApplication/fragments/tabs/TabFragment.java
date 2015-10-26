@@ -84,7 +84,7 @@ public class TabFragment extends BaseFragment {
             R.drawable.beach_with_hair,
             R.drawable.cat_window,
             R.drawable.crying,
-            R.drawable.food,
+
             R.drawable.map,
             R.drawable.mini_food,
             R.drawable.mirror,

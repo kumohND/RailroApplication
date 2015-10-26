@@ -544,8 +544,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     {
         iv_Region_Start_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
         tv_Region_Start_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
-        tv_Region_Start_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "");
-        tv_Region_Start_Min_Temp.setText(mStartTrainWeather.getTemp_Min());
+        tv_Region_Start_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
+        tv_Region_Start_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Region_Start_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
         tv_Region_Start_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
@@ -555,8 +555,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         //////////////////////
         iv_Region_End_Weather.setImageResource(mEndTrainWeather.getPicture_ID());
         tv_Region_End_Weather_Name.setText(mEndTrainWeather.getWeather_Name());
-        tv_Region_End_Max_Temp.setText(mEndTrainWeather.getTemp_Max() + "");
-        tv_Region_End_Min_Temp.setText(mEndTrainWeather.getTemp_Min());
+        tv_Region_End_Max_Temp.setText(mEndTrainWeather.getTemp_Max() + "℃");
+        tv_Region_End_Min_Temp.setText(mEndTrainWeather.getTemp_Min() + "℃");
         tv_Region_End_Humi.setText("습도:" + mEndTrainWeather.getHumidity() + "%");
         tv_Region_End_Clouds.setText(mEndTrainWeather.getClouds_Sort() +
                 " : " + mEndTrainWeather.getClouds_Value() + "%");
@@ -567,8 +567,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     {
         iv_Meal_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
         tv_Meal_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
-        tv_Meal_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "");
-        tv_Meal_Min_Temp.setText(mStartTrainWeather.getTemp_Min());
+        tv_Meal_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
+        tv_Meal_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Meal_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
         tv_Meal_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
@@ -581,8 +581,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     {
         iv_Sleep_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
         tv_Sleep_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
-        tv_Sleep_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "");
-        tv_Sleep_Min_Temp.setText(mStartTrainWeather.getTemp_Min());
+        tv_Sleep_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
+        tv_Sleep_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Sleep_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
         tv_Sleep_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
