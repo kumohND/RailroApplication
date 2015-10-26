@@ -1,14 +1,11 @@
 package kr.ac.kumoh.railroApplication.fragments;
 
 
-<<<<<<< HEAD
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-=======
 import android.content.Intent;
->>>>>>> master
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
@@ -27,16 +24,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.TripListRVArrayAdapter;
-<<<<<<< HEAD
 import kr.ac.kumoh.railroApplication.classes.UseDB;
 import kr.ac.kumoh.railroApplication.fragments.tabs.TabFragment;
 import kr.ac.kumoh.railroApplication.manager.SQLiteManager;
-=======
 import kr.ac.kumoh.railroApplication.fragments.tabs.PlanListTabActivity;
 import kr.ac.kumoh.railroApplication.fragments.tabs.PlanListTabFragment;
 import kr.ac.kumoh.railroApplication.fragments.tabs.SearchPlaceActivity;
 import kr.ac.kumoh.railroApplication.fragments.tabs.SetTripPlanActivity;
->>>>>>> master
 import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
 import kr.ac.kumoh.railroApplication.classes.TripListItem;
 
@@ -84,23 +78,23 @@ public class MyTripListFragment extends BaseFragment {
             @Override
             public void onItemClick(View view, int position) {
                 // do whatever
-<<<<<<< HEAD
+
                 // 수정 부분
                 Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, TabFragment.newInstance(0));
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-//                Intent intent = new Intent(getActivity(), TabFragment.class);
+//                FragmentManager fragmentManager = getFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.container, TabFragment.newInstance(0));
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//                Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
 //                getParentFragment().startActivityForResult(intent, 0);
 
 
-=======
+
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
                 startActivity(intent);
->>>>>>> master
+
             }
         }));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
