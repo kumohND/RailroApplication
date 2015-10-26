@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
     defaultConfig {
         applicationId "kr.ac.kumoh.railroApplication"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -18,6 +18,12 @@ android {
     }
     productFlavors {
     }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+
 }
 
 dependencies {
@@ -32,23 +38,19 @@ dependencies {
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.wdullaer:materialdatetimepicker:1.4.2'
-
     compile files('libs/libDaumMapAndroid.jar')
     compile files('src/main/jniLibs/libDaumMapAndroid.jar')
     //another
     compile 'me.drakeet.materialdialog:library:1.2.2'
+    //KakaoTalk
 
-/*
-    // kakao
-    compile 'com.kakao.sdk:kakaolink:1.1.0'
-
-    // Ä«Ä«¿À½ºÅä¸® sdk¸¦ »ç¿ëÇÏ±â À§ÇØ ÇÊ¿ä.
-    compile 'com.kakao.sdk:kakaostory:1.1.0'
-
-    // Ä«Ä«¿ÀÅå sdk¸¦ »ç¿ëÇÏ±â À§ÇØ ÇÊ¿ä.
-  //  compile group: 'com.kakao.sdk', name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
-
-    // push sdk¸¦ »ç¿ëÇÏ±â À§ÇØ ÇÊ¿ä.
-    //compile group: 'com.kakao.sdk', name: 'push', version: project.KAKAO_SDK_VERSION*/
-
+    compile group: project.KAKAO_SDK_GROUP, name: 'kakaolink', version: project.KAKAO_SDK_VERSION
+// ì¹´ì¹´ì˜¤ìŠ¤í† ë¦¬ sdkë¥¼ ì‚¬ìš©í•˜ê¸° ìœ„í•´ í•„ìš”.
+    compile group: project.KAKAO_SDK_GROUP, name: 'kakaostory', version: project.KAKAO_SDK_VERSION
+// ì¹´ì¹´ì˜¤í†¡ sdkë¥¼ ì‚¬ìš©í•˜ê¸° ìœ„í•´ í•„ìš”.
+    compile group: project.KAKAO_SDK_GROUP, name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
+// push sdkë¥¼ ì‚¬ìš©í•˜ê¸° ìœ„í•´ í•„ìš”.
+    compile group: project.KAKAO_SDK_GROUP, name: 'push', version: project.KAKAO_SDK_VERSION
+// ì‚¬ìš©ìê´€ë¦¬ sdkë¥¼ ì‚¬ìš©í•˜ê¸° ìœ„í•´ í•„ìš”.
+    compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
 }
