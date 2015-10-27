@@ -21,6 +21,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 
 import butterknife.ButterKnife;
@@ -31,6 +37,7 @@ import kr.ac.kumoh.railroApplication.classes.ForeCast;
 import kr.ac.kumoh.railroApplication.classes.LatLng;
 import kr.ac.kumoh.railroApplication.classes.LocationInform;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
+import kr.ac.kumoh.railroApplication.classes.UseDB;
 import kr.ac.kumoh.railroApplication.classes.WeatherCheck;
 
 /**
@@ -72,6 +79,9 @@ public class PlanListTabActivity  extends ActionBarActivity{
     ContentValues mWeather_Data;
     int index;
     String title;
+    String textName;
+    int duration;
+    UseDB mDB;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +94,9 @@ public class PlanListTabActivity  extends ActionBarActivity{
         Intent intent = getIntent();
         index = intent.getIntExtra("index",0);
         index++;
+        onIntTripList();
+        GetContentValue();
+        isFirstTextRead();
         title = intent.getStringExtra("title");
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +109,86 @@ public class PlanListTabActivity  extends ActionBarActivity{
         setupTabTextColor();
         setupViewPager();
     }
+    public void GetContentValue()
+    {
+        mDB = new UseDB(mContext);
+        ContentValues mValue = mDB.Read(index);
+        textName = String.valueOf(mValue.get("dbTextName"));
+        duration = Integer.valueOf(String.valueOf(mValue.get("duration")));
 
+
+    }
+
+
+    private void isFirstTextRead()
+    {
+        File file;
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        file = new File(path + File.separator + textName + ".txt");
+        try {
+
+            BufferedReader bur = new BufferedReader(new FileReader(file));
+            if(bur == null) {
+                BufferedWriter buw = new BufferedWriter(new FileWriter(file));
+                buw.write(String.valueOf(duration));
+                buw.newLine();
+                for (int i = 0; i < duration; i++) {
+                    buw.write(String.valueOf(i));
+                    buw.newLine();
+                    for (int j = 1; j < 25; j++) { // 24시간 간격만듬
+                        buw.write("time "+ j + "%&#"); // time 1/
+                        buw.newLine();
+                    }
+                }
+                buw.close();
+            }
+            bur.close();
+        } catch (IOException e) {
+
+        }
+    }
+
+
+    private void onIntTripList() { // 임시로, 기차역 출발 , 도착역 씀
+        File file;
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + "temp_index" + ".txt");
+        try {
+            BufferedWriter buw = new BufferedWriter(new FileWriter(file));
+            buw.write(String.valueOf(index));
+            buw.newLine();
+            buw.close();
+        } catch (IOException e) {
+
+        }
+    }
+    private void ChangeViewPagerIdToText(int position)
+    {
+        File file;
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + "temp" + ".txt");
+        try {
+            BufferedWriter buw = new BufferedWriter(new FileWriter(file));
+            buw.write(String.valueOf(position));
+            buw.newLine();
+            buw.close();
+        } catch (IOException e) {
+
+        }
+    }
     private void setupToolbar() {
         mToolbar = ButterKnife.findById(this, R.id.toolbar);
         if (mToolbar == null) {
@@ -162,6 +254,23 @@ public class PlanListTabActivity  extends ActionBarActivity{
         //You could use the normal supportFragmentManger if you like
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getApplicationContext(),index);
         mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                // 여기서 변경점 저장
+                ChangeViewPagerIdToText(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mTabLayout.setupWithViewPager(mViewPager);//this is the new nice thing ;D
     }
 
