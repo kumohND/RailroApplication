@@ -14,6 +14,7 @@ public class TripInfoFragInfo {
     String Addr2;
     int AreaCode;
     int ContentTypeId;
+    int ContentId;
     String Image;
     double MapX;
     double MapY;
@@ -23,12 +24,13 @@ public class TripInfoFragInfo {
     int Count;
 
 
-    public TripInfoFragInfo(String addr1, String addr2, int areacode, int contenttypeid, String image, double mapx, double mapy,
+    public TripInfoFragInfo(String addr1, String addr2, int areacode, int contenttypeid, int contentid, String image, double mapx, double mapy,
                             String title, String zipcode, int index, int count) {
         Addr1 = addr1;
         Addr2 = addr2;
         AreaCode = areacode;
         this.ContentTypeId = contenttypeid;
+        this.ContentId = contentid;
         this.Image = image;
         MapX = mapx;
         MapY = mapy;
@@ -56,6 +58,10 @@ public class TripInfoFragInfo {
     public int getContentTypeId() { return ContentTypeId;}
 
     public void setContentTypeId(int contenttypeid) { ContentTypeId = contenttypeid;}
+
+    public int getContentId() { return ContentId;}
+
+    public void setContentId(int contentid) { ContentId = contentid;}
 
     public String getImage(){return Image;}
 

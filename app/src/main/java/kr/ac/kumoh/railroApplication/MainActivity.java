@@ -1,6 +1,7 @@
 package kr.ac.kumoh.railroApplication;
 
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -15,13 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.kakao.KakaoLink;
-import com.kakao.KakaoParameterException;
-import com.kakao.KakaoTalkLinkMessageBuilder;
-import com.kakao.Session;
-import com.kakao.SessionCallback;
-import com.kakao.exception.KakaoException;
-import com.kakao.widget.LoginButton;
+import com.kakao.auth.Session;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -52,13 +47,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int mCurrentMenuItem;
     //TODO : 어쩌꼬 저쩌꼬
 
-    private KakaoLink kakaoLink;
-    private KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder;
+  //  private KakaoLink kakaoLink;
+  //  private KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder;
 
-    private LoginButton loginButton;
+//    private LoginButton loginButton;
 
-    private SessionCallback mSessionCallback;
+  //  private SessionCallback callback;
 
+
+
+    private Session callback;
 
 
     @Override
@@ -66,6 +64,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+
+
+
+     /*   callback = new SessionCallback() {
+            @Override
+            public void onSessionOpened() {
+
+            }
+
+            @Override
+            public void onSessionClosed(KakaoException e) {
+
+            }
+        };*/
+
+      //  Session.getCurrentSession().addCallback(callback);
+      //  Session.getCurrentSession().checkAndImplicitOpen();
 
 
       /*  mSessionCallback= new SessionCallback() {
@@ -88,8 +103,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        // Session.getCurrentSession().addCallback(mSessionCallback);
        // Session.getCurrentSession().checkAndImplicitOpen();
 
+/*
+        try {
 
-     /*   try {
            kakaoLink = KakaoLink.getKakaoLink(getApplicationContext());
             kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
             kakaoTalkLinkMessageBuilder.addText("test");
@@ -112,6 +128,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        // setNewRootFragment(dddndardAppBarFragment.newInstance());
         setNewRootFragment(HomeFragment.newInstance());
         //TODO : 전지연 세젤예
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+      //  if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+       //     return;
+      //  }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
