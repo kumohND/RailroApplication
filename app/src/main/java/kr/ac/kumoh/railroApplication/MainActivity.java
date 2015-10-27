@@ -16,7 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.kakao.auth.KakaoAdapter;
+import com.kakao.auth.KakaoSDK;
 import com.kakao.auth.Session;
+import com.kakao.auth.ISessionCallback;
+import com.kakao.util.exception.KakaoException;
+import com.kakao.util.helper.log.Logger;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,21 +48,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static RealTimeLocationListener mRTLocation;
     private static Navigator mNavigator;
     private Toolbar mToolbar;
-    private @IdRes
+    private
+    @IdRes
     int mCurrentMenuItem;
     //TODO : 어쩌꼬 저쩌꼬
 
-  //  private KakaoLink kakaoLink;
-  //  private KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder;
+    //  private KakaoLink kakaoLink;
+    //  private KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder;
 
 //    private LoginButton loginButton;
 
-  //  private SessionCallback callback;
+    //  private SessionCallback callback;
 
 
+    private ISessionCallback callback;
 
-    private Session callback;
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 세션을 초기화 한다
+     //   if(Session.initializeSession(this, mySessionCallback)){
+            // 1. 세션을 갱신 중이면, 프로그레스바를 보이거나 버튼을 숨기는 등의 액션을 취한다
+     //       loginButton.setVisibility(View.GONE);
+     //   } else if (Session.getCurrentSession().isOpened()){
+            // 2. 세션이 오픈된된 상태이면, 다음 activity로 이동한다.
+       //     onSessionOpened();
+      //  }
+        // 3. else 로그인 창이 보인다.
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,42 +84,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ButterKnife.inject(this);
 
 
-
-     /*   callback = new SessionCallback() {
+/*
+        callback = new ISessionCallback() {
             @Override
             public void onSessionOpened() {
 
             }
 
             @Override
-            public void onSessionClosed(KakaoException e) {
+            public void onSessionOpenFailed(KakaoException e) {
 
             }
-        };*/
+        };
+        Session.getCurrentSession().addCallback(callback);
+        Session.getCurrentSession().checkAndImplicitOpen();
 
-      //  Session.getCurrentSession().addCallback(callback);
-      //  Session.getCurrentSession().checkAndImplicitOpen();
 
-
-      /*  mSessionCallback= new SessionCallback() {
-            @Override
-            public void onSessionOpened() {
-
-            }
-
-            @Override
-            public void onSessionClosed(KakaoException e) {
-
-            }
-
-            @Override
-            public void onSessionOpening() {
-
-            }
-        };*/
-
-       // Session.getCurrentSession().addCallback(mSessionCallback);
-       // Session.getCurrentSession().checkAndImplicitOpen();
 
 /*
         try {
@@ -117,27 +115,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 */
 
 
-
-
-
         setupToolbar();
         setupNavDrawer();
         initNavigator();
-       // mCurrentMenuItem = R.id.standard_app_bar_menu_item;
+        // mCurrentMenuItem = R.id.standard_app_bar_menu_item;
         mCurrentMenuItem = R.id.toolbar_flexible_space_with_image;
-       // setNewRootFragment(dddndardAppBarFragment.newInstance());
+        // setNewRootFragment(dddndardAppBarFragment.newInstance());
         setNewRootFragment(HomeFragment.newInstance());
         //TODO : 전지연 세젤예
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+      //  Session.getCurrentSession().removeCallback(callback);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-      //  if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
-       //     return;
-      //  }
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    private class SessionCallback implements ISessionCallback {
+
+        @Override
+        public void onSessionOpened() {
+            redirectSignupActivity();
+        }
+
+        @Override
+        public void onSessionOpenFailed(KakaoException exception) {
+            if(exception != null) {
+                Logger.e(exception);
+            }
+        }
+    }
+
+    protected void redirectSignupActivity() {
+        final Intent intent = new Intent(this, SampleSignupActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -145,21 +168,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-/*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-       if (id == R.id.action_settings) {
-            return true;
-        }
+    /*
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            // Handle action bar item clicks here. The action bar will
+            // automatically handle clicks on the Home/Up button, so long
+            // as you specify a parent activity in AndroidManifest.xml.
+            int id = item.getItemId();
 
-        return super.onOptionsItemSelected(item);
-    }*/
+            //noinspection SimplifiableIfStatement
+           if (id == R.id.action_settings) {
+                return true;
+            }
+
+            return super.onOptionsItemSelected(item);
+        }*/
 //TODO : 이졸미 수정
     private void initNavigator() {
         if (mNavigator != null) return;
