@@ -37,45 +37,45 @@
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal">
 
-                    <TextView
-                        android:id="@+id/view1"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:layout_gravity="center"
-                        android:background="@color/dim_foreground_disabled_material_dark"
-                        android:text="View 1"
-                        android:textColor="#FF0000"
-                        android:textSize="30px" />
+                    <!-- <TextView
+                         android:id="@+id/view1"
+                         android:layout_width="match_parent"
+                         android:layout_height="250dp"
+                         android:layout_gravity="center"
+                         android:background="@color/dim_foreground_disabled_material_dark"
+                         android:text="View 1"
+                         android:textColor="#FF0000"
+                         android:textSize="30px" />-->
 
-
-                    <TextView
-                        android:id="@+id/view2"
+                    <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:layout_gravity="center"
-                        android:text="View 2"
-                        android:textColor="#00FF00"
-                        android:textSize="30px" />
+                        android:layout_height="match_parent"
+                        android:scaleType="fitStart"
+                        android:src="@drawable/home_tab1" />
 
-                    <TextView
-                        android:id="@+id/view3"
+                    <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:layout_gravity="center"
-                        android:text="View 3"
-                        android:textColor="#0000FF"
-                        android:textSize="30px" />
+                        android:layout_height="match_parent"
+                        android:scaleType="fitStart"
+                        android:src="@drawable/home_tab2" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitStart"
+                        android:src="@drawable/home_tab3" />
+
                 </ViewFlipper>
 
             </FrameLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:background="@drawable/gradient"
-                android:fitsSystemWindows="true"
+            <!--        <View
+                        android:layout_width="match_parent"
+                        android:layout_height="240dp"
+                        android:background="@drawable/gradient"
+                        android:fitsSystemWindows="true"
 
-                />
+                        />-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar_flexible_space_with_image"
@@ -91,8 +91,8 @@
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:minHeight="600dp"
         android:fitsSystemWindows="true"
+        android:minHeight="600dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <!-- TODO calculate the minHeight in the fragment -->
 
@@ -146,7 +146,6 @@
                         </LinearLayout>-->
 
 
-
             <!--  <ListItem
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
@@ -155,17 +154,17 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@drawable/ic_android" />
+                android:background="@drawable/home_1" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@drawable/ic_android" />
+                android:background="@drawable/home_2" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@drawable/ic_android" />
+                android:background="@drawable/home_3" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -188,7 +187,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_mode_edit_white_18pt_3x"
         app:borderWidth="0dp"
-        app:layout_anchor="@id/coordinator_layout"
+        app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
 </android.support.design.widget.CoordinatorLayout>
 
