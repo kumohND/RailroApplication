@@ -52,12 +52,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int mCurrentMenuItem;
     //TODO : 어쩌꼬 저쩌꼬
 
-    private KakaoLink kakaoLink;
-    private KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder;
+  //  private KakaoLink kakaoLink;
+   // private KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder;
 
-    private LoginButton loginButton;
+//    private LoginButton loginButton;
 
-    private SessionCallback mSessionCallback;
+//    private SessionCallback mSessionCallback;
 
 
 
