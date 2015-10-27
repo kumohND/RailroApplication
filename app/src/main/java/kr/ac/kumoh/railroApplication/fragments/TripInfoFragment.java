@@ -33,6 +33,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.TripInfoListRVArrayAdapter;
+import kr.ac.kumoh.railroApplication.classes.TripInfoFragInfo;
 import kr.ac.kumoh.railroApplication.classes.TripInfoListItem;
 import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
 
@@ -52,7 +53,8 @@ public class TripInfoFragment extends BaseFragment {
      * @return A new instance of fragment TripInfoFragment.
      */
 
-    private List<TripInfoListItem> mTripInfoList;
+    private ArrayList<TripInfoListItem> mTripInfoList;
+    private ArrayList<TripInfoFragInfo> mTripInfoFragList;
     private RecyclerView recyclerView;
     private Bitmap mBitmap;
 
@@ -61,12 +63,20 @@ public class TripInfoFragment extends BaseFragment {
     Bitmap bmImg;
     BitmapDrawable draw1;
     String data;
-    String imageUrl = "http://tong.visitkorea.or.kr/cms/resource/35/1571735_image2_1.jpg";
 
+    String addr1 ;
+    String addr2  ;
+    int areacode;
+    int contenttypeid;
+    String image;
+    double mapx;
+    double mapy;
+    String title_info;
+    String zipcode;
+    int index = 1;
+    int cnt = 0;
 
     String title = null;
-
-    String addr = null;
 
     public static TripInfoFragment newInstance() {
         return new TripInfoFragment();
@@ -87,31 +97,29 @@ public class TripInfoFragment extends BaseFragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //  getXmlData();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-
-        data = getXmlData();
-        text.setText(data);
-
 
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // getXmlData();
         setList();
+
         text = (TextView)ButterKnife.findById(getActivity(), R.id.TextViewid);
 
     }
 
     private void setList() {
- /*   RecyclerView recyclerView = ButterKnife.findById(getActivity(),R.id.simpleList);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-*/
-        //  TripListRVArrayAdapter arrayAdapter = new TripListRVArrayAdapter(getData());
-        //  recyclerView.setAdapter(arrayAdapter);
 
         recyclerView = ButterKnife.findById(getActivity(), R.id.simpleList);
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity(), new RecyclerClickListener.OnItemClickListener() {
@@ -132,36 +140,31 @@ public class TripInfoFragment extends BaseFragment {
 
     private void InitializeData() {
         mTripInfoList = new ArrayList<>();
+        mTripInfoFragList = new ArrayList<>();
+        getXmlData();
+        String url;
+
+        BitmapDrawable temp=(BitmapDrawable)getResources().getDrawable(R.drawable.ic_android);
         Drawable drawable;
-   /*
-        지연: 여기에 불러오는 코드 그대로 넣으면 될듯!
-        InputStream is;
-        mBitmap = BitmapFactory.decodeStream();
-        //Bitmap to Drawable
-        BitmapDrawable bitmapDrawable = (BitmapDrawable)bitmap;
-        Drawable drawable = (Drawable)bitmapDrawable;*/
 
-      drawable = downloadFile(imageUrl);
+        int Size = mTripInfoFragList.size();
+        while(mTripInfoFragList.size()!=cnt){
 
-   //     Log.d("ddd", data);
+            drawable = downloadFile(mTripInfoFragList.get(cnt).getImage());
 
+            Log.d("d", mTripInfoFragList.get(cnt).getImage());
 
-        mTripInfoList.add(new TripInfoListItem(bmImg, "bhhh", "전주 전주동 전주주", 5));
-      //  mTripInfoList.add(new TripInfoListItem(R.drawable.plunge, "홍익대학교", "서울시 마포구 와우산로", 4));
-      //  mTripInfoList.add(new TripInfoListItem(R.drawable.desert, "사막", "서울시 마포구 와우산로", 3));
-      //  mTripInfoList.add(new TripInfoListItem(R.drawable.fantastic, "벽", "서울시 마포구 와우산로", 1));
-
+            mTripInfoList.add(new TripInfoListItem(bmImg, mTripInfoFragList.get(cnt).getTitle(), mTripInfoFragList.get(cnt).getAddr1(), 5));
+            bmImg = temp.getBitmap();
+            cnt++;
+        }
     }
 
-    String getXmlData(){
+    void getXmlData(){
 
         //xml주소 에서 관광지 정보를 추출
         String queryUrl = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=IAWLeyO6k7e9XukxBm1HzSMs9IcPrz8jT9gpnefN4UxHGayHQb0fDMCuEMXjwocvlYEViBAPflKAlYqz16g%2Bmg%3D%3D&contentTypeId=12&MobileOS=AND&MobileApp=AppTesting";
         StringBuffer buffer = new StringBuffer();
-        //ArrayList<String> buffer = new ArrayList<String>();
-        //한글의 경우 인식이 안되기에 utf-8 방식으로 encoding..
-
-        int cnt = 0;
 
         try {
             URL url= new URL(queryUrl); //문자열로 된 요청 url을 URL 객체로 생성.
@@ -173,51 +176,78 @@ public class TripInfoFragment extends BaseFragment {
 
             String tag;
 
-          //  xpp.next();
-
             int eventType= xpp.getEventType();
-
             while( eventType != XmlPullParser.END_DOCUMENT ){
+
                 switch( eventType ){
+
                     case XmlPullParser.START_DOCUMENT:
                         break;
 
-                    case XmlPullParser.START_TAG:
+                    case XmlPullParser.START_TAG:  //태그별로 안의 정보를 얻어온다.
                         tag= xpp.getName();    //테그 이름 얻어오기
-                        if(tag.equals("item")) {
-                           // buffer.append("이름 : ");
-                            buffer.append( "(" + cnt + ")");
-                            cnt++;
+                        if(tag.equals("addr1")) {
+                            xpp.next();
+                            addr1 = xpp.getText();
+                        }
+                        else if(tag.equals("addr2")){
+                            xpp.next();//category 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            addr2 = xpp.getText();
+                        }
+                        else if(tag.equals("areacode")){
+                            xpp.next();
+                            areacode =Integer.parseInt(xpp.getText());
+                        }
+                        else if(tag.equals("contenttypeid")){
+                            xpp.next();
+                            contenttypeid = Integer.parseInt(xpp.getText());
+                        }
+                        else if(tag.equals("firstimage")){
+                            xpp.next();
+                            image = xpp.getText();
+                            //image = null;
+                        }
+                        else if(tag.equals("mapx")){
+                            xpp.next();
+                            mapx = Double.parseDouble(xpp.getText());
+                        }
+                        else if(tag.equals("mapy")){
+                            xpp.next();
+                            mapy = Double.parseDouble(xpp.getText());
+                        }
+                        else if(tag.equals("title")){
+                            xpp.next();
+                            title_info = xpp.getText();
+                        }
+                        else if(tag.equals("zipcode")){
+                            xpp.next();
+                            zipcode = xpp.getText();
                         }
                         break;
 
                     case XmlPullParser.TEXT:
-                        //buffer.append(xpp.getText());
-                        //buffer.append(xpp.getText());
-                        buffer.append(xpp.getText());
                         break;
 
                     case XmlPullParser.END_TAG:
                         tag= xpp.getName();    //테그 이름 얻어오기
 
-                        if(tag.equals("item"))
-                            //buffer.add();
-                                buffer.append("ENTER!!!\n\n");
-                            //buffer.append("\n"); // 첫번째 검색결과종료..줄바꿈
-
+                        if(tag.equals("item")) {
+                            mTripInfoFragList.add(new TripInfoFragInfo(addr1, addr2, areacode, contenttypeid, image, mapx, mapy, title_info, zipcode, index, 0));
+                            Log.d("d", "!!!!!!!!!!!!11");
+                            image = "";
+                            index += 1;
+                        }
                         break;
                 }
-
                 eventType= xpp.next();
+
             }
+
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-
-        return buffer.toString();
     }
 
     //html 주소 string을 받아 해당 주소의 이미지를 화면에 띄움
@@ -238,6 +268,8 @@ public class TripInfoFragment extends BaseFragment {
         {
             // 실질적인 통신이 이루어지는 부분입니다.
             // myFileUrl 로 접속을 시도합니다.
+            if(fileUrl.equals("")) return null;
+
             HttpURLConnection conn = (HttpURLConnection)myFileUrl.openConnection();
             conn.setDoInput(true);
             conn.connect();
@@ -245,14 +277,6 @@ public class TripInfoFragment extends BaseFragment {
             InputStream is = conn.getInputStream(); // InputStream is 변수에 받아온 InputStream을 저장합니다.
 
             bmImg = BitmapFactory.decodeStream(is); // 받아온 이미지를 bmImg에 넣어둡니다.
-
-            /*InputStream is;
-            mBitmap = BitmapFactory.decodeStream();
-            //Bitmap to Drawable
-            BitmapDrawable bitmapDrawable = (BitmapDrawable)bitmap;
-            Drawable drawable = (Drawable)bitmapDrawable;*/
-
-            //imView.setImageBitmap(bmImg); // imView에 이미지를 셋팅합니다.
         }
         catch(IOException e) // 예외처리를 해줍니다.
         {
