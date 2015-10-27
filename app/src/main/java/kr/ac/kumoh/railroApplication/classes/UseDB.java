@@ -51,6 +51,8 @@ public class UseDB {
                 values.put("year",year);
                 values.put("month",month);
                 values.put("day",day);
+
+                tDb.close();
                 return values;
             }
 

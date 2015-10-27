@@ -106,6 +106,12 @@
 <<<<<<< HEAD
     <orderEntry type="library" exported="" name="recyclerview-v7-22.2.0" level="project" />
 <<<<<<< HEAD
+    <orderEntry type="library" exported="" name="butterknife-6.1.0" level="project" />
+    <orderEntry type="library" exported="" name="picasso-2.5.2" level="project" />
+    <orderEntry type="library" exported="" name="libDaumMapAndroid" level="project" />
+    <orderEntry type="library" exported="" name="1_libDaumMapAndroid" level="project" />
+=======
+<<<<<<< HEAD
 <<<<<<< HEAD
     <orderEntry type="library" exported="" name="butterknife-6.1.0" level="project" />
 ||||||| merged common ancestors
@@ -114,6 +120,7 @@
 >>>>>>> refs/remotes/origin/master
     <orderEntry type="library" exported="" name="picasso-2.5.2" level="project" />
 <<<<<<< HEAD
+>>>>>>> master
     <orderEntry type="library" exported="" name="support-annotations-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="palette-v7-21.0.0" level="project" />

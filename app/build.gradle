@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
     defaultConfig {
         applicationId "kr.ac.kumoh.railroApplication"
-        minSdkVersion 17
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
@@ -43,14 +43,20 @@ dependencies {
     //another
     compile 'me.drakeet.materialdialog:library:1.2.2'
     //KakaoTalk
-
     compile group: project.KAKAO_SDK_GROUP, name: 'kakaolink', version: project.KAKAO_SDK_VERSION
-// 카카오스토리 sdk를 사용하기 위해 필요.
+    // 카카오스토리 sdk를 사용하기 위해 필요.
     compile group: project.KAKAO_SDK_GROUP, name: 'kakaostory', version: project.KAKAO_SDK_VERSION
-// 카카오톡 sdk를 사용하기 위해 필요.
+    // 카카오톡 sdk를 사용하기 위해 필요.
     compile group: project.KAKAO_SDK_GROUP, name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
-// push sdk를 사용하기 위해 필요.
+    // push sdk를 사용하기 위해 필요.
     compile group: project.KAKAO_SDK_GROUP, name: 'push', version: project.KAKAO_SDK_VERSION
-// 사용자관리 sdk를 사용하기 위해 필요.
+    // 사용자관리 sdk를 사용하기 위해 필요.
     compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+
+    /*
+
+    compile 'com.kakao.sdk:kakaotalk:1.0.46'
+    compile 'com.kakao.sdk:push:1.0.46'
+    compile 'com.kakao.sdk:usermgmt:1.0.46'
+    compile 'com.kakao.sdk:kakaolink:1.0.46'*/
 }

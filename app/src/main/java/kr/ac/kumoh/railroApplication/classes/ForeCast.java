@@ -3,6 +3,7 @@ package kr.ac.kumoh.railroApplication.classes;
 import android.content.ContentValues;
 import android.os.StrictMode;
 import android.text.Html;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -77,6 +78,7 @@ ArrayList<String> mCastList;
 
     public void getForeCast(String year,String month,String day)
     {
+        if(this.mStartLocation == null) return ;
 
         start_Weatehr = GetOpenWeather(year,month,day,String.valueOf(this.mStartLocation.latlng.getLng()),String.valueOf(this.mStartLocation.latlng.getLat()));
         if(mEndLocation !=null ){
