@@ -52,10 +52,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sample_email" />
-
-        <com.kakao.widget.LoginButton
-            android:id="@+id/kakao_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 </RelativeLayout>
