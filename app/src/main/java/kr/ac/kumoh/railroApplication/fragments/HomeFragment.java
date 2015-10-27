@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -113,6 +114,11 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
 
         viewFlipper = ButterKnife.findById(getActivity(), R.id.viewFlipper);
         viewFlipper.setOnTouchListener(this);
+        viewFlipper.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_left_in));
+        viewFlipper.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_left_out));
+        viewFlipper.setFlipInterval(4000);
+        viewFlipper.startFlipping();
+
 
         mListView = new ListView(getActivity());
         mList = new ArrayList<String>();
@@ -161,10 +167,10 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
                         });
 
                 //((ViewGroup)mFab.getParent()).removeView(mFab);
-              //  mFab = ButterKnife.findById(getActivity(),R.id.share_menu_item);
+                //  mFab = ButterKnife.findById(getActivity(),R.id.share_menu_item);
 
-               //mFab.setAnimation(null);
-               // ((ViewGroup)mFab.getParent()).removeView(mFab);
+                //mFab.setAnimation(null);
+                // ((ViewGroup)mFab.getParent()).removeView(mFab);
                 //getActivity().addContentView(mFab, mCoordinatorLayout.getLayoutParams());
 
                 mMaterialDialog.show();
@@ -172,10 +178,6 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
             }
 
         });
-
-
-
-
 
         //layout.addView(tv);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -235,17 +237,17 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
         Toast.makeText(getActivity(), date, Toast.LENGTH_SHORT).show();
 
         mSetTripTitleDialog = new MaterialDialog(getActivity())
-                .setTitle(mDays + "일 -" + mYear + "/" + mMonth + "/" + mDay + "를 선택하셨군요!\n"+"내일로 여행 제목을 적어주세요:)")
+                .setTitle(mDays + "일 -" + mYear + "/" + mMonth + "/" + mDay + "를 선택하셨군요!\n" + "내일로 여행 제목을 적어주세요:)")
                 .setContentView(mEditText)
                 .setPositiveButton("OK", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        String total_Date = String.valueOf(mYear)+String.valueOf(mMonth) + String.valueOf(mDay);
+                        String total_Date = String.valueOf(mYear) + String.valueOf(mMonth) + String.valueOf(mDay);
                         mDB = new UseDB(mContext);
-                        mDB.Insert(String.valueOf(mEditText.getText()),String.valueOf(mYear),
+                        mDB.Insert(String.valueOf(mEditText.getText()), String.valueOf(mYear),
                                 String.valueOf(mMonth), String.valueOf(mDay)
-                                ,String.valueOf(mDays));
+                                , String.valueOf(mDays));
 
                         mSetTripTitleDialog.dismiss();
                         //수정 부분
@@ -280,6 +282,7 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
 
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            viewFlipper.stopFlipping();
             xAtDown = event.getX(); // 터치 시작지점 x좌표 저장
 
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -287,7 +290,7 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
 
             if (xAtUp < xAtDown) {
                 // 왼쪽 방향 에니메이션 지정
-                viewFlipper.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_left_out));
+                viewFlipper.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_left_in));
 
                 viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_left_out));
 
@@ -298,12 +301,18 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
 
                 // 오른쪽 방향 에니메이션 지정
                 viewFlipper.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_right_in));
-                viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_right_in));
+                viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_right_out));
 
                 // 전 view 보여줌
                 viewFlipper.showPrevious();
             }
+
+            SystemClock.sleep(50);
+            viewFlipper.startFlipping();
+
         }
+
+
         return true;
     }
 }
