@@ -1,6 +1,7 @@
 package kr.ac.kumoh.railroApplication.fragments;
 
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -35,6 +36,8 @@ import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.TripInfoListRVArrayAdapter;
 import kr.ac.kumoh.railroApplication.classes.TripInfoFragInfo;
 import kr.ac.kumoh.railroApplication.classes.TripInfoListItem;
+import kr.ac.kumoh.railroApplication.fragments.tabs.PlanListTabActivity;
+import kr.ac.kumoh.railroApplication.fragments.tabs.TripInfoActivity;
 import kr.ac.kumoh.railroApplication.widget.RecyclerClickListener;
 
 /**
@@ -68,6 +71,7 @@ public class TripInfoFragment extends BaseFragment {
     String addr2  ;
     int areacode;
     int contenttypeid;
+    int contentid;
     String image;
     double mapx;
     double mapy;
@@ -112,21 +116,27 @@ public class TripInfoFragment extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // getXmlData();
+        //리스트 뷰
         setList();
 
-        text = (TextView)ButterKnife.findById(getActivity(), R.id.TextViewid);
+       // text = (TextView)ButterKnife.findById(getActivity(), R.id.TextViewid);
 
     }
 
+    //리스트 뷰 구성
     private void setList() {
 
         recyclerView = ButterKnife.findById(getActivity(), R.id.simpleList);
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity(), new RecyclerClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                // 지연 : 여기서 누르면 다음 화면으로 가도록 하면되용!
-                Toast.makeText(getActivity(), "Position " + position, Toast.LENGTH_SHORT).show();
+                // 리스트 눌러서 액티비티 띄우는 부분
+               //Toast.makeText(getActivity(), "Position " + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), TripInfoActivity.class);
+                intent.putExtra("id",mTripInfoFragList.get(position).getContentId());
+                intent.putExtra("star",mTripInfoList.get(position).getmStar());
+               intent.putExtra("title",mTripInfoFragList.get(position).getTitle().toString());
+                startActivity(intent);
             }
         }));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -135,9 +145,9 @@ public class TripInfoFragment extends BaseFragment {
 
         InitializeData();
         InitializeAdapter();
-
     }
 
+    //리스트 정보
     private void InitializeData() {
         mTripInfoList = new ArrayList<>();
         mTripInfoFragList = new ArrayList<>();
@@ -152,7 +162,7 @@ public class TripInfoFragment extends BaseFragment {
 
             drawable = downloadFile(mTripInfoFragList.get(cnt).getImage());
 
-            Log.d("d", mTripInfoFragList.get(cnt).getImage());
+            //Log.d("d", mTripInfoFragList.get(cnt).getImage());
 
             mTripInfoList.add(new TripInfoListItem(bmImg, mTripInfoFragList.get(cnt).getTitle(), mTripInfoFragList.get(cnt).getAddr1(), 5));
             bmImg = temp.getBitmap();
@@ -160,6 +170,7 @@ public class TripInfoFragment extends BaseFragment {
         }
     }
 
+    //XML주소에서 태그별로 데이터추출
     void getXmlData(){
 
         //xml주소 에서 관광지 정보를 추출
@@ -202,6 +213,10 @@ public class TripInfoFragment extends BaseFragment {
                             xpp.next();
                             contenttypeid = Integer.parseInt(xpp.getText());
                         }
+                        else if(tag.equals("contentid")){
+                            xpp.next();
+                            contentid = Integer.parseInt(xpp.getText());
+                        }
                         else if(tag.equals("firstimage")){
                             xpp.next();
                             image = xpp.getText();
@@ -232,8 +247,8 @@ public class TripInfoFragment extends BaseFragment {
                         tag= xpp.getName();    //테그 이름 얻어오기
 
                         if(tag.equals("item")) {
-                            mTripInfoFragList.add(new TripInfoFragInfo(addr1, addr2, areacode, contenttypeid, image, mapx, mapy, title_info, zipcode, index, 0));
-                            Log.d("d", "!!!!!!!!!!!!11");
+                            mTripInfoFragList.add(new TripInfoFragInfo(addr1, addr2, areacode, contenttypeid, contentid, image, mapx, mapy, title_info, zipcode, index, 0));
+                            //Log.d("d", "!!!!!!!!!!!!11");
                             image = "";
                             index += 1;
                         }
