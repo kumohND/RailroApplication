@@ -13,18 +13,12 @@ import com.kakao.usermgmt.LoginButton;
  */
 public class SampleSignupActivity extends ActionBarActivity{
 
-    LoginButton mButton;
+   // LoginButton mButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
 
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "DDDDDDDDdd",Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }
