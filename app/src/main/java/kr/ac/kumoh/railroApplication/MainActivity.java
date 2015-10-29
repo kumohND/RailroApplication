@@ -1,7 +1,7 @@
 package kr.ac.kumoh.railroApplication;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInstaller;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -14,17 +14,20 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Toast;
 
-import com.kakao.auth.KakaoAdapter;
+import com.kakao.auth.AuthType;
+import com.kakao.auth.ErrorResult;
 import com.kakao.auth.KakaoSDK;
 import com.kakao.auth.Session;
 import com.kakao.auth.ISessionCallback;
+import com.kakao.kakaotalk.callback.TalkResponseCallback;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import kr.ac.kumoh.railroApplication.adapters.KakaoSDKAdapter;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 import kr.ac.kumoh.railroApplication.fragments.DigitalFootprintFragment;
@@ -32,9 +35,12 @@ import kr.ac.kumoh.railroApplication.fragments.FloatingActionButtonFragment;
 import kr.ac.kumoh.railroApplication.fragments.HomeFragment;
 import kr.ac.kumoh.railroApplication.fragments.MyTripListFragment;
 import kr.ac.kumoh.railroApplication.fragments.TripInfoFragment;
-import kr.ac.kumoh.railroApplication.fragments.tabs.PlanListTabFragment;
+import kr.ac.kumoh.railroApplication.fragments.tabs.SetTripPlanActivity;
+import kr.ac.kumoh.railroApplication.util.GlobalApplication;
 import kr.ac.kumoh.railroApplication.util.LogUtils;
 import kr.ac.kumoh.railroApplication.util.Navigator;
+import kr.ac.kumoh.railroApplication.widget.LoginService;
+import kr.ac.kumoh.railroApplication.widget.SignUpService;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,29 +59,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int mCurrentMenuItem;
     //TODO : 어쩌꼬 저쩌꼬
 
-    //  private KakaoLink kakaoLink;
-    //  private KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder;
+    private SessionCallback mCallback;
 
-//    private LoginButton loginButton;
-
-    //  private SessionCallback callback;
-
-
-    private ISessionCallback callback;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // 세션을 초기화 한다
-     //   if(Session.initializeSession(this, mySessionCallback)){
-            // 1. 세션을 갱신 중이면, 프로그레스바를 보이거나 버튼을 숨기는 등의 액션을 취한다
-     //       loginButton.setVisibility(View.GONE);
-     //   } else if (Session.getCurrentSession().isOpened()){
-            // 2. 세션이 오픈된된 상태이면, 다음 activity로 이동한다.
-       //     onSessionOpened();
-      //  }
-        // 3. else 로그인 창이 보인다.
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,36 +68,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
+        mCallback = new SessionCallback();
 
-/*
-        callback = new ISessionCallback() {
-            @Override
-            public void onSessionOpened() {
 
-            }
-
-            @Override
-            public void onSessionOpenFailed(KakaoException e) {
-
-            }
-        };
-        Session.getCurrentSession().addCallback(callback);
+        Session.getCurrentSession().addCallback(mCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
-
-
-
-/*
-        try {
-
-           kakaoLink = KakaoLink.getKakaoLink(getApplicationContext());
-            kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
-            kakaoTalkLinkMessageBuilder.addText("test");
-            kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder.build(), this);
-            kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
-        } catch (KakaoParameterException e) {
-            Log.e("error", e.getMessage());
-        }
-*/
 
 
         setupToolbar();
@@ -125,19 +85,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //TODO : 전지연 세젤예
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-      //  Session.getCurrentSession().removeCallback(callback);
-    }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
-            return;
-        }
+    protected void onResume() {
+        super.onResume();
 
-        super.onActivityResult(requestCode, resultCode, data);
+        GlobalApplication.setCurrentActivity(this);
+
+
     }
 
     private class SessionCallback implements ISessionCallback {
@@ -149,18 +104,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
-            if(exception != null) {
+            if (exception != null) {
                 Logger.e(exception);
             }
         }
     }
 
-    protected void redirectSignupActivity() {
-        final Intent intent = new Intent(this, SampleSignupActivity.class);
-        startActivity(intent);
-        finish();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Session.getCurrentSession().removeCallback(mCallback);
+    }
+
+
+    protected void redirectSignupActivity() {
+        //    final Intent intent = new Intent(this, SplashActivity.class);
+        //  startActivity(intent);
+        //finish();
+        if (Session.getCurrentSession().isOpened())
+            Toast.makeText(this, "SessionOPEN", Toast.LENGTH_SHORT).show();
+        // Session.getCurrentSession().open(AuthType.KAKAO_ACCOUNT, this);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -184,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             return super.onOptionsItemSelected(item);
         }*/
-//TODO : 이졸미 수정
     private void initNavigator() {
         if (mNavigator != null) return;
         mNavigator = new Navigator(getSupportFragmentManager(), R.id.container);
