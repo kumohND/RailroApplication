@@ -99,12 +99,21 @@ public class MyTripListFragment extends BaseFragment  {
         recyclerView = ButterKnife.findById(getActivity(), R.id.simpleList);
 
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity(), new RecyclerClickListener.OnItemClickListener() {
+
+
+
             @Override
             public void onItemClick(View view, int position) {
                 // do whatever
 
                 // 수정 부분
+<<<<<<< HEAD
+           //     Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+||||||| merged common ancestors
+                Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+=======
                 //    Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+>>>>>>> master
 //                FragmentManager fragmentManager = getFragmentManager();
 //                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //                fragmentTransaction.replace(R.id.container, TabFragment.newInstance(0));
@@ -119,7 +128,6 @@ public class MyTripListFragment extends BaseFragment  {
                 intent.putExtra("index", position);
                 intent.putExtra("title", mTripList.get(position).getTripTitle());
                 startActivity(intent);
-
             }
         }));
 
@@ -127,12 +135,15 @@ public class MyTripListFragment extends BaseFragment  {
         recyclerView.setLayoutManager(layoutManager);
         //recyclerView.setNestedScrollingEnabled(true);
         recyclerView.setHasFixedSize(false);
-        //  TripListRVArrayAdapter arrayAdapter = new TripListRVArrayAdapter(getData());
-        // recyclerView.setAdapter(arrayAdapter);
 
         InitializeData();
         InitializeAdapter();
 
+    }
+    private void DeleteTextFile(int position)
+    {
+        UseDB mDB = new UseDB(mContext);
+        mDB.Delete(position);
     }
 
     private void InitializeData() {
