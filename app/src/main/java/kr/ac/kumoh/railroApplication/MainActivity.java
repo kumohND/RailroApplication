@@ -120,8 +120,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //    final Intent intent = new Intent(this, SplashActivity.class);
         //  startActivity(intent);
         //finish();
-        if (Session.getCurrentSession().isOpened())
-            Toast.makeText(this, "SessionOPEN", Toast.LENGTH_SHORT).show();
         // Session.getCurrentSession().open(AuthType.KAKAO_ACCOUNT, this);
     }
 
