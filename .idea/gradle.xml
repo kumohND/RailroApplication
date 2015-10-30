@@ -5,7 +5,33 @@
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
         <option name="gradleJvm" value="1.8" />
+||||||| merged common ancestors
+<<<<<<< HEAD
+<<<<<<< HEAD
+        <option name="gradleHome" value="C:\Program Files\Android\Android Studio\gradle\gradle-2.2.1" />
+<<<<<<< HEAD
+        <option name="gradleJvm" value="1.8" />
+||||||| merged common ancestors
+        <option name="gradleHome" value="C:\Program Files\Android\Android Studio\gradle\gradle-2.2.1" />
+        <option name="gradleJvm" value="1.7" />
+=======
+        <option name="gradleHome" value="D:\Android\Android Studio\gradle\gradle-2.4" />
+=======
+=======
+>>>>>>> 2c1284627b87e23d5f790476db33ff540ea03db4
+>>>>>>> master
+        <option name="gradleJvm" value="1.8" />
+>>>>>>> refs/remotes/origin/master
+||||||| merged common ancestors
+        <option name="gradleJvm" value="1.8" />
+=======
+        <option name="gradleJvm" value="1.7" />
+>>>>>>> master
+=======
+        <option name="gradleJvm" value="1.7" />
+>>>>>>> master
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
