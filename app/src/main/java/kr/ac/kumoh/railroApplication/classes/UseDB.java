@@ -93,10 +93,11 @@ public class UseDB {
         tDb.close();
     } // 같은 이름 예외처리
 
-    public void Delete(String deleteString)
+    public void Delete(int id)
     {
+        String str_ID = String.valueOf(id);
         tDb = helper.getWritableDatabase();
-        tDb.delete("railo","dbTextName=?",new String[]{deleteString});
+        tDb.delete("railo","_id=?",new String[]{str_ID});
         tDb.close();
     }
 

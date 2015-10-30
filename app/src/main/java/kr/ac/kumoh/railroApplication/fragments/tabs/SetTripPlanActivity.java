@@ -178,8 +178,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     boolean flag_DoSomethingLayout = false;
     int db_Index;
     String TOKEN = "%&#";
-    String default_sTime = "출발 시간:"; String default_eTime = "도착 시간:"; String default_sStation = "출발역 : "; String default_eStation = "도착역 : ";
-    String default_toDo = "할 일:"; String default_moveValue = "이동 시간:";
+    String default_sTime = "출발 시간 : "; String default_eTime = "도착 시간 : "; String default_sStation = "출발역 : "; String default_eStation = "도착역 : ";
+    String default_toDo = "할 일"; String default_moveValue = "이동 시간:";
 
 
     WeatherInfo mStartTrainWeather;
@@ -197,10 +197,11 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     ContentValues mContentValue;
     String textTitle;
     String viewPagerState;
-    int sHour = 0;
-    int eHour = 0;
+    int sHour = -1;
+    int eHour = -1;
     int selectedPosition = -1;
     int selectedHour = -1;
+    String str_DoSomeValue = "Nothing";
     public void GetContentValueFromText()
     {
         mDB = new UseDB(this);
@@ -436,7 +437,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
         switch (v.getId()) {
             case R.id.fix_start_Time: // STARTtIME만 설정
-                TimePickerDialog dialog = new TimePickerDialog(this, start_Listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+                TimePickerDialog dialog = new TimePickerDialog(this, start_Listener, calendar.get(Calendar.HOUR_OF_DAY), 00, true);
                 dialog.show();
 //                dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
 //                    @Override
@@ -447,13 +448,15 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 //                });
                 break;
             case R.id.fix_end_Time: // STARTtIME만 설정
-                TimePickerDialog dialog2 = new TimePickerDialog(this, end_Listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+                TimePickerDialog dialog2 = new TimePickerDialog(this, end_Listener, calendar.get(Calendar.HOUR_OF_DAY), 00, true);
                 dialog2.show();
 //                dialog2.setOnKeyListener(new DialogInterface.OnKeyListener() {
 //                    @Override
 //                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 //                        //Toast.makeText(, "주소 오류", Toast.LENGTH_SHORT);
 //                        return false;
+
+
 //                    }
 //                });
                 break;
@@ -470,18 +473,20 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 break;
 
             case R.id.btn_success_plan: // 저장 버튼 누를시 실행
-                onPlanOkay();
-                Intent intent_Finish = getIntent();
-                intent_Finish.putExtra("position",selectedPosition);
-                intent_Finish.putExtra("start_Hour",selectedHour);
-                intent_Finish.putExtra("end_Hour",eHour);
-                setResult(RESULT_OK,intent_Finish);
-                finish();
+                boolean isWrite = onPlanOkay();
+                if(isWrite != false) {
+                    Intent intent_Finish = getIntent();
+                    intent_Finish.putExtra("position", selectedPosition);
+                    intent_Finish.putExtra("start_Hour", selectedHour);
+                    intent_Finish.putExtra("end_Hour", eHour);
+                    setResult(RESULT_OK, intent_Finish);
+                    finish();
+                }
                 break;
             case R.id.btn_moving_time:
                 intent = InputData(1);
                 if(intent == null){
-                    Toast.makeText(this,"주소 오류",Toast.LENGTH_SHORT);
+                    Toast.makeText(this,"주소 오류",Toast.LENGTH_SHORT).show();
                     break;
                 }
                 startActivity(intent);
@@ -490,7 +495,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             case R.id.btn_moving_time2:
                 intent = InputData(2);
                 if(intent == null){
-                    Toast.makeText(this,"주소 오류",Toast.LENGTH_SHORT);
+                    Toast.makeText(this,"주소 오류",Toast.LENGTH_SHORT).show();
                     break;
                 }
                 startActivity(intent);
@@ -591,6 +596,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                             public void onClick(View v) {
 
                                 tv_Do_Something.setText(mEditText.getText());
+                                str_DoSomeValue = mEditText.getText().toString();
                                 mMaterialDialog.dismiss();
                                 //수정 부분
 
@@ -707,7 +713,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             Input_Weather();
         }else {
-            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
+            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT).show();
         }
         mSleepWeather.setPicture_Category(Calculator_Weather(mStartRegionWeather.getWeather_Number()));
         mSleepWeather.setPicture_ID(WeatherToPicture(mStartRegionWeather.getWeather_Number()));
@@ -729,7 +735,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             Input_Weather();
         }else {
-            Toast.makeText(this, "위치 정보가 잘못되었습니다!",Toast.LENGTH_SHORT);
+            Toast.makeText(this, "위치 정보가 잘못되었습니다!",Toast.LENGTH_SHORT).show();
         }
         mMealWeather.setPicture_Category(Calculator_Weather(mStartRegionWeather.getWeather_Number()));
         mMealWeather.setPicture_ID(WeatherToPicture(mStartRegionWeather.getWeather_Number()));
@@ -753,7 +759,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             Input_Weather();
         }else {
-            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
+            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT).show();
         }
         mStartRegionWeather.setPicture_Category(Calculator_Weather(mStartRegionWeather.getWeather_Number()));
         mEndRegionWeather.setPicture_Category(Calculator_Weather(mEndRegionWeather.getWeather_Number()));
@@ -780,7 +786,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             Input_Weather();
         }else {
-            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
+            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT).show();
         }
         mStartTrainWeather.setPicture_Category(Calculator_Weather(mStartTrainWeather.getWeather_Number()));
         mEndTrainWeather.setPicture_Category(Calculator_Weather(mEndTrainWeather.getWeather_Number()));
@@ -1023,9 +1029,12 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
     public String returnWriteString(int hour_index)
     {
+//        String str = "tiem " + hour_index + TOKEN + selected +
+//                TOKEN + hour_index + TOKEN + eHour + TOKEN
+//                + tv_Do_Something.getText();
         String str = "tiem " + hour_index + TOKEN + selected +
-                TOKEN+ sHour + TOKEN + eHour + TOKEN
-                + tv_Do_Something.getText();
+                TOKEN + hour_index + TOKEN + eHour + TOKEN
+                + str_DoSomeValue;
         if(selected == MOVE_BUS ) {
             str += TOKEN + TokenForLocation(sLocation.getText().toString()) + TOKEN +
                     TokenForLocation(eLocation.getText().toString());
@@ -1044,8 +1053,17 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     }
 
 
-    private void onPlanOkay() {
-        if(sHour == -1 || eHour == -1) Toast.makeText(this,"시간 설정 해주세요",Toast.LENGTH_SHORT);
+    private boolean onPlanOkay() {
+
+        if((sHour == -1 || eHour == -1) && selectedPosition == -1) {
+            Toast.makeText(this.getApplication(), "시작 및 도착 시간 설정이 필요합니다!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(sHour > eHour){
+            Toast.makeText(this.getApplication(),"종료 시간이 시작 시간보다 작을 수 없습니다!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
 
         String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext"; // 저장 할 곳
@@ -1072,7 +1090,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
             if(sHour != 0) {
                 for(int j = 0; j < duration; j++) {
                     String state = bur.readLine();
-                    dummy = dummy + state + "\r\n";
+                    dummy = dummy + state + "\r\n"; // 카테고리
                     if(state.equals(viewPagerState)) { // 데이터 체인지
                         for (int i = 1; i < 25; i++) {
                             //if(i == sHour){
@@ -1098,6 +1116,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         {
 
         }
+
+        return true;
     }
 
 
@@ -1155,38 +1175,42 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     private void onReadDetail() {
         int check;
         ArrayList<String> mData = MakeRawString();
-        if(mData != null || mData.size() != 0) {
+        if(mData != null) {
+            if(mData.size() != 0) {
+
+                readCheck = Integer.valueOf(mData.get(0));
+                check = Integer.valueOf(mData.get(0));
+                // 구분 번호 //
+                sHour = Integer.valueOf(mData.get(1));
+                eHour = Integer.valueOf(mData.get(2));
+                sTimeFix.setText(default_sTime + mData.get(1) + ":" + "00");
+                eTimeFix.setText(default_eTime + mData.get(2) + ":" + "00");
+
+                // Time Save //
+                str_DoSomeValue = mData.get(3);
+                tv_Do_Something.setText(mData.get(3));
+
+                // Do Something //
 
 
-            readCheck = Integer.valueOf(mData.get(0));
-            check = Integer.valueOf(mData.get(0));
-            // 구분 번호 //
-            sTimeFix.setText(default_sTime + mData.get(1));
-            eTimeFix.setText(default_eTime + mData.get(2));
-
-            // Time Save //
-            doSomething.setText(default_toDo + mData.get(3));
-
-            // Do Something //
-
-
-            // 보여줄 데이터 셋
-            if (check == 0) // train
-            {
-                data_startStation = new StationInfo(mData.get(4), "");
-                sStation.setText(default_sStation + mData.get(4));
-                data_endStation = new StationInfo(mData.get(5), "");
-                eStation.setText(default_eStation + mData.get(5));
+                // 보여줄 데이터 셋
+                if (check == 0) // train
+                {
+                    data_startStation = new StationInfo(mData.get(4), "");
+                    sStation.setText(default_sStation + mData.get(4));
+                    data_endStation = new StationInfo(mData.get(5), "");
+                    eStation.setText(default_eStation + mData.get(5));
 //                movingTime.setText(mData.get(7) + default_moveValue );
-            } else if (check == 1) // bus
-            {
-                sLocation.setText(mData.get(4));
-                eLocation.setText(mData.get(5));
-                //              movingTime.setText(mData.get(6) + default_moveValue);
-            } else if (check == 2) { // sleep
-                wSleep.setText(mData.get(4));
-            } else { //toMeal
-                wEat.setText(mData.get(4));
+                } else if (check == 1) // bus
+                {
+                    sLocation.setText(mData.get(4));
+                    eLocation.setText(mData.get(5));
+                    //              movingTime.setText(mData.get(6) + default_moveValue);
+                } else if (check == 2) { // sleep
+                    wSleep.setText(mData.get(4));
+                } else { //toMeal
+                    wEat.setText(mData.get(4));
+                }
             }
         }
 
@@ -1296,7 +1320,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             //startTime.setText(hourOfDay + minute);
-            eTimeFix.setText("종료 시간 : "+ hourOfDay + ":" +minute);
+            eTimeFix.setText("종료 시간 : "+ hourOfDay + ":" + 00);
             eHour = hourOfDay;
 
 
@@ -1306,7 +1330,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             //startTime.setText(hourOfDay + minute);
-            sTimeFix.setText("시작 시간 : " + hourOfDay + ":" + minute);
+            sTimeFix.setText("시작 시간 : " + hourOfDay + ":" + 00);
             sHour = hourOfDay;
         }
     };

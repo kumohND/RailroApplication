@@ -27,10 +27,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -39,6 +42,7 @@ import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.PlanListRVArrayAdapter;
 import kr.ac.kumoh.railroApplication.classes.AddItem;
+import kr.ac.kumoh.railroApplication.classes.NoAscCompare;
 import kr.ac.kumoh.railroApplication.classes.PlanListItem;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
 import kr.ac.kumoh.railroApplication.classes.UseDB;
@@ -77,6 +81,7 @@ public class TabFragment extends BaseFragment {
     Context mContext;
     String viewPagerState;
     PlanListRVArrayAdapter arrayAdapter;
+    String TOKEN = "%&#";
 /*
     private final
     @DrawableRes
@@ -170,7 +175,7 @@ public class TabFragment extends BaseFragment {
         String temp2 = String.valueOf(mValue.get("dbTextName"));
         textName = temp1 + temp2;
         duration = Integer.valueOf(String.valueOf(mValue.get("duration")));
-
+        //Collections.sort(mPlanList,new NoAscCompare());
 
     }
 
@@ -249,15 +254,12 @@ public class TabFragment extends BaseFragment {
                         if(check.length() > 10) { // 데이터 존재
 
                             String value[] = check.split("%&#");
-                            int count = Integer.valueOf(value[2]) - Integer.valueOf(value[3]);
-                            count = Math.abs(count);
 
-                            for (int z = 0; z < count; z++) {
                                 if (value[1].equals(String.valueOf(MOVE_TRAIN))
                                         || value[1].equals(String.valueOf(MOVE_BUS))) {
                                     mPlanList.add(new PlanListItem(
                                             Integer.valueOf(value[1]), // category
-                                            (Integer.valueOf(value[2])+z), // 출발 시간
+                                            Integer.valueOf(value[2]), // 출발 시간
                                             Integer.valueOf(value[3]), // 도착 시간
                                             value[4],                  // 할 일
                                             value[5],                  // 출발 장소
@@ -274,7 +276,7 @@ public class TabFragment extends BaseFragment {
                                             "",                        // 도착 장소
                                             ""));                      // 타이틀
                                 }
-                            }
+
                         }
                     }
                 }
@@ -342,6 +344,69 @@ public class TabFragment extends BaseFragment {
         return view;
     }
 
+    public String returnWriteString(int hour_index)
+    {
+        return "time " + hour_index + TOKEN;
+    }
+
+    private boolean DeleteTextLine(int position)
+    {
+
+
+
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext"; // 저장 할 곳
+        File file;
+        BufferedReader bur;
+        BufferedWriter buw;
+        int sHour = mPlanList.get(index).getTime();
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + textName + ".txt"); // 여기서 텍스트 이름만 수정하면 될듯
+
+        try{
+            String dummy = "";
+            String line;
+            //String add_Line = returnWriteString();
+            bur = new BufferedReader(new FileReader(file));
+
+            int duration = Integer.valueOf(bur.readLine());
+            dummy = String.valueOf(duration) + "\r\n";
+
+            if(sHour != 0) {
+                for(int j = 0; j < duration; j++) {
+                    String state = bur.readLine();
+                    dummy = dummy + state + "\r\n"; // 카테고리
+                    if(state.equals(viewPagerState)) { // 데이터 체인지
+                        for (int i = 1; i < 25; i++) {
+                            //if(i == sHour){
+                            if(i == sHour){
+                                String add_Line = returnWriteString(i);
+                                dummy = dummy + add_Line + "\r\n";
+                                bur.readLine();
+                            }else {
+                                dummy = dummy + bur.readLine() + "\r\n";
+                            }
+                        }
+                    }
+                    for (int i = 1; i < 25; i++)// 24시간 넘어감
+                        dummy = dummy + bur.readLine() + "\r\n";
+                }
+
+                buw = new BufferedWriter(new FileWriter(file));
+                buw.write(dummy);
+                buw.close();
+            }
+            bur.close();
+        }catch(IOException e)
+        {
+
+        }
+
+        mPlanList.remove(position);
+        return true;
+    }
 
     private void setupRecyclerView(View view) {
 
@@ -427,7 +492,7 @@ public class TabFragment extends BaseFragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
                 // getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
-              //  TestRead();
+                //  TestRead();
                 intent.putExtra("index", index);
                 intent.putExtra("pager", viewPagerState);
                 startActivityForResult(intent, REQUEST_PLAN);
@@ -461,8 +526,7 @@ public class TabFragment extends BaseFragment {
                     for(int j = 1; j < 25; j++)
                     {
                         String check = buw.readLine();
-                        if(i == Hour) { // 데이터 존재
-
+                        if(j == Hour) { // 데이터 존재
                             String value[] = check.split("%&#");
 
                                 if (value[1].equals(String.valueOf(MOVE_TRAIN))
@@ -505,14 +569,14 @@ public class TabFragment extends BaseFragment {
             int start_Hour = data.getIntExtra("start_Hour",-1);
             int end_Hour = data.getIntExtra("end_Hour",-1);
             if(position == -1) {
-                //mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
+            //mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
 //                InitializeData();
 //                InitializeAdapter();
 //                NotifyAdaptter();
                 setupRecyclerView(test);
             }else{
                 //텍스트는 수정된 상황, 추가말고
-                FixedList(start_Hour,end_Hour,position);
+                FixedList(start_Hour, end_Hour, position);
             }
 
     }
