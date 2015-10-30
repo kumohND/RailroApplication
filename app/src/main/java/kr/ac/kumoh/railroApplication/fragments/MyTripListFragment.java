@@ -107,13 +107,12 @@ public class MyTripListFragment extends BaseFragment  {
                 // do whatever
 
                 // 수정 부분
-<<<<<<< HEAD
            //     Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
-||||||| merged common ancestors
+
                 Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
-=======
+
                 //    Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
->>>>>>> master
+
 //                FragmentManager fragmentManager = getFragmentManager();
 //                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //                fragmentTransaction.replace(R.id.container, TabFragment.newInstance(0));
