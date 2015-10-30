@@ -1,6 +1,5 @@
 package kr.ac.kumoh.railroApplication;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -10,24 +9,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.kakao.auth.AuthType;
-import com.kakao.auth.ErrorResult;
-import com.kakao.auth.KakaoSDK;
 import com.kakao.auth.Session;
 import com.kakao.auth.ISessionCallback;
-import com.kakao.kakaotalk.callback.TalkResponseCallback;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import kr.ac.kumoh.railroApplication.adapters.KakaoSDKAdapter;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 import kr.ac.kumoh.railroApplication.fragments.DigitalFootprintFragment;
@@ -35,12 +28,9 @@ import kr.ac.kumoh.railroApplication.fragments.FloatingActionButtonFragment;
 import kr.ac.kumoh.railroApplication.fragments.HomeFragment;
 import kr.ac.kumoh.railroApplication.fragments.MyTripListFragment;
 import kr.ac.kumoh.railroApplication.fragments.TripInfoFragment;
-import kr.ac.kumoh.railroApplication.fragments.tabs.SetTripPlanActivity;
 import kr.ac.kumoh.railroApplication.util.GlobalApplication;
 import kr.ac.kumoh.railroApplication.util.LogUtils;
 import kr.ac.kumoh.railroApplication.util.Navigator;
-import kr.ac.kumoh.railroApplication.widget.LoginService;
-import kr.ac.kumoh.railroApplication.widget.SignUpService;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -73,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Session.getCurrentSession().addCallback(mCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
+
 
 
         setupToolbar();

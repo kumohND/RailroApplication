@@ -1,40 +1,19 @@
 package kr.ac.kumoh.railroApplication.widget;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kakao.auth.AuthType;
-import com.kakao.auth.ErrorResult;
 import com.kakao.auth.ISessionCallback;
-import com.kakao.auth.KakaoSDK;
 import com.kakao.auth.Session;
-import com.kakao.kakaotalk.callback.TalkResponseCallback;
 import com.kakao.usermgmt.LoginButton;
-import com.kakao.usermgmt.request.SignupRequest;
 import com.kakao.util.exception.KakaoException;
-import com.kakao.util.helper.StoryProtocol;
-import com.kakao.util.helper.TalkProtocol;
 import com.kakao.util.helper.log.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import kr.ac.kumoh.railroApplication.MainActivity;
 import kr.ac.kumoh.railroApplication.R;
-import kr.ac.kumoh.railroApplication.adapters.KakaoSDKAdapter;
 import kr.ac.kumoh.railroApplication.util.GlobalApplication;
 
 /**

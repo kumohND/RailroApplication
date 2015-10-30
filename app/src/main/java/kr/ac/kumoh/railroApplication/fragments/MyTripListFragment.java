@@ -13,6 +13,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,7 +25,10 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import kr.ac.kumoh.railroApplication.R;
+import kr.ac.kumoh.railroApplication.adapters.ItemTouchHelperAdapter;
+import kr.ac.kumoh.railroApplication.adapters.SimpleItemTouchHelperCallback;
 import kr.ac.kumoh.railroApplication.adapters.TripListRVArrayAdapter;
 import kr.ac.kumoh.railroApplication.classes.UseDB;
 import kr.ac.kumoh.railroApplication.fragments.tabs.TabFragment;
@@ -39,7 +45,7 @@ import kr.ac.kumoh.railroApplication.classes.TripListItem;
  * Use the {@link MyTripListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyTripListFragment extends BaseFragment {
+public class MyTripListFragment extends BaseFragment  {
 
     @InjectView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mCollapsingToolbar;
@@ -55,6 +61,21 @@ public class MyTripListFragment extends BaseFragment {
     //UseDB mDB_Helper;
     SQLiteManager mDB_Helper;
     SQLiteDatabase mDB;
+
+
+    ItemTouchHelperAdapter mAdapter = new ItemTouchHelperAdapter() {
+        @Override
+        public boolean onItemMove(int fromPosition, int toPosition) {
+            return true;
+        }
+
+        @Override
+        public void onItemDismiss(int position) {
+            Toast.makeText(getActivity(),"삭제되었습니다",Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
     public static MyTripListFragment newInstance(Context mContext) {
         return new MyTripListFragment();
     }
@@ -69,18 +90,21 @@ public class MyTripListFragment extends BaseFragment {
 
     public MyTripListFragment() {
         // Required empty public constructor
+
     }
+
 
     private void setList() {
 
         recyclerView = ButterKnife.findById(getActivity(), R.id.simpleList);
+
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity(), new RecyclerClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 // do whatever
 
                 // 수정 부분
-                Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
 //                FragmentManager fragmentManager = getFragmentManager();
 //                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //                fragmentTransaction.replace(R.id.container, TabFragment.newInstance(0));
@@ -90,15 +114,15 @@ public class MyTripListFragment extends BaseFragment {
 //                getParentFragment().startActivityForResult(intent, 0);
 
 
-
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
-                intent.putExtra("index",position);
-                intent.putExtra("title",mTripList.get(position).getTripTitle());
+                intent.putExtra("index", position);
+                intent.putExtra("title", mTripList.get(position).getTripTitle());
                 startActivity(intent);
 
             }
         }));
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         //recyclerView.setNestedScrollingEnabled(true);
@@ -117,11 +141,10 @@ public class MyTripListFragment extends BaseFragment {
 //        mTripList.add(new TripListItem("사진 여행", "2015/08/11 ~ 2015/08/15", R.drawable.ic_android));
         mDB_Helper = new SQLiteManager(mContext);
         mDB = mDB_Helper.getReadableDatabase();
-        Cursor c= mDB.query("railo",null,null,null,null,null,null);
+        Cursor c = mDB.query("railo", null, null, null, null, null, null);
         mTripList = new ArrayList<>();
 
-        while(c.moveToNext())
-        {
+        while (c.moveToNext()) {
             String duration = c.getString(c.getColumnIndex("duration"));
             String year = c.getString(c.getColumnIndex("year"));
             String month = c.getString(c.getColumnIndex("month"));
@@ -130,8 +153,8 @@ public class MyTripListFragment extends BaseFragment {
             compare.set(Calendar.YEAR, Integer.valueOf(year));
             compare.set(Calendar.MONTH, (Integer.valueOf(month)));
             compare.set(Calendar.DAY_OF_MONTH, Integer.valueOf(day));
-            for(int i = 0 ; i < (Integer.valueOf(duration) -1) ; i++) // 날자증가
-                compare.add(Calendar.DAY_OF_MONTH,1);
+            for (int i = 0; i < (Integer.valueOf(duration) - 1); i++) // 날자증가
+                compare.add(Calendar.DAY_OF_MONTH, 1);
 
             mTripList.add(new TripListItem(c.getString(c.getColumnIndex("dbTitleName")),
                     year + "/" + month + "/" + day + "~" +
@@ -145,6 +168,9 @@ public class MyTripListFragment extends BaseFragment {
     private void InitializeAdapter() {
         TripListRVArrayAdapter arrayAdapter = new TripListRVArrayAdapter(mTripList);
         recyclerView.setAdapter(arrayAdapter);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(arrayAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -171,4 +197,6 @@ public class MyTripListFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
     }
+
+
 }
