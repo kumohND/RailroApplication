@@ -2,19 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
-<<<<<<< HEAD
-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
-<<<<<<< HEAD
-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
-=======
-    <mapping directory="$PROJECT_DIR$/RailroApplication" vcs="Git" />
-||||||| merged common ancestors
-=======
-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
->>>>>>> 2bf4e9720e8bced051d5da751dfaaeb9745ff401
->>>>>>> origin/newJiyeon
   </component>
 </project>

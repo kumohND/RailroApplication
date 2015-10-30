@@ -44,6 +44,7 @@ public class UseDB {
                 String year = c.getString(c.getColumnIndex("year"));
                 String month = c.getString(c.getColumnIndex("month"));
                 String day = c.getString(c.getColumnIndex("day"));
+                values.put("index_id",getIndex);
                 values.put("dbTextName",dbName);
                 values.put("dbTitleName",tName);
                 values.put("startDate", date);

@@ -20,11 +20,11 @@ public class SampleSignupActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
 
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "DDDDDDDDdd",Toast.LENGTH_SHORT).show();
-            }
-        });
+//        mButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), "DDDDDDDDdd",Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 }

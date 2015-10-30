@@ -76,6 +76,7 @@ public class TabFragment extends BaseFragment {
     static RealTimeLocationListener mRTLocation;
     Context mContext;
     String viewPagerState;
+    PlanListRVArrayAdapter arrayAdapter;
 /*
     private final
     @DrawableRes
@@ -111,21 +112,22 @@ public class TabFragment extends BaseFragment {
     UseDB mDB;
     String textName;
     int duration;
-    public void test() {
-
-        Bundle bundle = getArguments();
-        String str = null;
-
-        if (bundle.getString("date") != null) {
-            str = bundle.getString("date!!!!!!!!!!!!!");
-        }
-
-        Log.d("d","TestFunction!");
-        Toast.makeText(getActivity(), "TestFuction!!",Toast.LENGTH_SHORT).show();
-        mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
-        InitializeAdapter();
-
-    }
+    int clicked_List = -1;
+//    public void test() {
+//
+//        Bundle bundle = getArguments();
+//        String str = null;
+//
+//        if (bundle.getString("date") != null) {
+//            str = bundle.getString("date!!!!!!!!!!!!!");
+//        }
+//
+//        Log.d("d","TestFunction!");
+//        Toast.makeText(getActivity(), "TestFuction!!",Toast.LENGTH_SHORT).show();
+//        mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
+//        InitializeAdapter();
+//
+//    }
     public static TabFragment newInstance(int start) {
         TabFragment fragment = new TabFragment();
         Bundle args = new Bundle();
@@ -164,7 +166,9 @@ public class TabFragment extends BaseFragment {
     {
         mDB = new UseDB(mContext);
         ContentValues mValue = mDB.Read(index);
-        textName = String.valueOf(mValue.get("dbTextName"));
+        String temp1 = String.valueOf(mValue.get("index_id"));
+        String temp2 = String.valueOf(mValue.get("dbTextName"));
+        textName = temp1 + temp2;
         duration = Integer.valueOf(String.valueOf(mValue.get("duration")));
 
 
@@ -203,13 +207,12 @@ public class TabFragment extends BaseFragment {
             if (!file.exists()) {
                 file.mkdirs();
             }
-            file = new File(path + File.separator + "temp" + ".txt");
+            file = new File(path + File.separator + "view_Pager" + ".txt");
 
 
             BufferedReader buw = new BufferedReader(new FileReader(file));
             named_buffer = buw.readLine();
             viewPagerState = named_buffer;
-            buw.close();
         }catch(IOException e)
         {
 
@@ -222,60 +225,107 @@ public class TabFragment extends BaseFragment {
         String named_buffer;
         String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
         ArrayList<String> mTokens = new ArrayList<String>();
-        try{
-            File file;
-            file = new File(path);
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            file = new File(path + File.separator + textName + ".txt");
+        File file;
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + textName + ".txt");
 
+
+        try{
 
             BufferedReader buw = new BufferedReader(new FileReader(file));
+
             int duration = Integer.valueOf(buw.readLine());
             for(int i = 0 ; i < duration; i++)
             {
-                if(buw.readLine().equals(viewPagerState)) // 해당 뷰페이저 인덱스 List
+                String test_Check = buw.readLine();
+                if(test_Check.equals(viewPagerState)) // 해당 뷰페이저 인덱스 List
                 {
                     for(int j = 1; j < 25; j++)
                     {
                         String check = buw.readLine();
-                        if(check.length() > 10){ // 데이터 존재
-                            StringTokenizer token = new StringTokenizer(check,"%&#");
-                            for( ; !token.hasMoreElements(); )
-                                 mTokens.add(token.nextToken());
+                        if(check.length() > 10) { // 데이터 존재
 
+                            String value[] = check.split("%&#");
+                            int count = Integer.valueOf(value[2]) - Integer.valueOf(value[3]);
+                            count = Math.abs(count);
 
-                            if(mTokens.get(0).equals(String.valueOf(MOVE_TRAIN)) || mTokens.get(0).equals(String.valueOf(MOVE_BUS))) {
-                                mPlanList.add(new PlanListItem("출발 시간 출발 장소 -> 도착 시간 도착 장소 "
-                                        , "설명", R.color.cardview_shadow_end_color, 7));
-                            }else if(mTokens.get(0).equals(String.valueOf(MOVE_TRAIN))) {
-                                mPlanList.add(new PlanListItem("출발 시간 출발 장소 -> 도착 시간 도착 장소 "
-                                        , "설명", R.color.cardview_shadow_end_color, 7));
-                            }else if(mTokens.get(0).equals(String.valueOf(MOVE_TRAIN))) {
-                                mPlanList.add(new PlanListItem("출발 시간 출발 장소 -> 도착 시간 도착 장소 "
-                                        , "설명", R.color.cardview_shadow_end_color, 7));
+                            for (int z = 0; z < count; z++) {
+                                if (value[1].equals(String.valueOf(MOVE_TRAIN))
+                                        || value[1].equals(String.valueOf(MOVE_BUS))) {
+                                    mPlanList.add(new PlanListItem(
+                                            Integer.valueOf(value[1]), // category
+                                            (Integer.valueOf(value[2])+z), // 출발 시간
+                                            Integer.valueOf(value[3]), // 도착 시간
+                                            value[4],                  // 할 일
+                                            value[5],                  // 출발 장소
+                                            value[6],                  // 도착 장소
+                                            ""));                      // 타이틀
+
+                                } else if (value[1].equals(String.valueOf(EAT)) || value[1].equals(String.valueOf(SLEEP))) {
+                                    mPlanList.add(new PlanListItem(
+                                            Integer.valueOf(value[1]), // category
+                                            Integer.valueOf(value[2]), // 출발 시간
+                                            Integer.valueOf(value[3]), // 도착 시간
+                                            value[4],                  // 할 일
+                                            value[5],                  // 출발 장소
+                                            "",                        // 도착 장소
+                                            ""));                      // 타이틀
+                                }
                             }
                         }
                     }
                 }
-
+                for(int j = 1; j < 25; j++)
+                    buw.readLine();
             }
             buw.close();
         }catch(IOException e)
         {
-
+            //e.printStackTrace();
         }
+
     }
 
-
+//    void TestRead()
+//    {
+//        BufferedReader buw;
+//        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+//        File file;
+//        file = new File(path);
+//        String rawString = "";
+//        if (!file.exists()) {
+//            file.mkdirs();
+//        }
+//        file = new File(path + File.separator + textName + ".txt");
+//
+//
+//        try{
+//            int check;
+//
+//            String rawData = "";
+//            buw =  new BufferedReader(new FileReader(file));
+//            int duration = Integer.valueOf(buw.readLine());
+//            Log.d("READ", rawData);
+//
+//
+//            buw.close();
+//        }catch(IOException e)
+//        {
+//        }
+//
+//    }
+    View test;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        test = view;
         mContext = view.getContext();
         ReadIndex();
         GetContentValue();
-        setupRecyclerView(view);
+        setupRecyclerView(view); // List초기화
 
 //        mRTLocation = new RealTimeLocationListener(view.getContext());
 //        long minTime = 1000;
@@ -303,6 +353,10 @@ public class TabFragment extends BaseFragment {
             public void onItemClick(View view, int position) {
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
+                intent.putExtra("index",index);
+                intent.putExtra("pager",viewPagerState);
+                intent.putExtra("position",position);
+                intent.putExtra("startHour",mPlanList.get(position).getTime());
                 startActivityForResult(intent, REQUEST_PLAN);
 
 
@@ -323,6 +377,19 @@ public class TabFragment extends BaseFragment {
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
+
+//        int position = intent.getIntExtra("position",-1);
+//        int start_Hour = intent.getIntExtra("start_Hour",-1);
+//
+//        if(position == -1) {
+//            //mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
+//            InitializeData();
+//            InitializeAdapter();
+//        }else{
+//            //텍스트는 수정된 상황, 추가말고
+//            FixedList(start_Hour,position);
+//        }
+
         // super.startActivityForResult(intent, ((TabFragment.mIndex + 1) << 16) + (requestCode & 0xffff));
 
     }
@@ -331,7 +398,6 @@ public class TabFragment extends BaseFragment {
     private void InitializeData() {
         ReadSetRecyclerView();
 
-
 //        for (int i = USER_SET_START_TIME; i <= USER_SET_END_TIME; i++) {
 //            // mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, i ));
 //        }
@@ -339,9 +405,15 @@ public class TabFragment extends BaseFragment {
         //  mPlanList.add(new PlanListItem("이동(버스)", "범물동 -> 지산동", 0));
     }
 
+    public void NotifyAdaptter()
+    {
+        arrayAdapter.notifyDataSetChanged();
+    }
     private void InitializeAdapter() {
-        PlanListRVArrayAdapter arrayAdapter = new PlanListRVArrayAdapter(mPlanList);
+//        PlanListRVArrayAdapter arrayAdapter = new PlanListRVArrayAdapter(mPlanList);
+        arrayAdapter = new PlanListRVArrayAdapter(mPlanList);
         recyclerView.setAdapter(arrayAdapter);
+
     }
 
 
@@ -354,22 +426,95 @@ public class TabFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
-               // getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
+                // getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
+              //  TestRead();
+                intent.putExtra("index", index);
+                intent.putExtra("pager", viewPagerState);
                 startActivityForResult(intent, REQUEST_PLAN);
             }
-        });
+        }); // 새로만든상황
+
     }
+
+    public void FixedList(int Hour,int endHour,int position)
+    {
+        ReadViewPagerIdFromText();
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+        File file;
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + textName + ".txt");
+
+
+        try{
+
+            BufferedReader buw = new BufferedReader(new FileReader(file));
+
+            int duration = Integer.valueOf(buw.readLine());
+            for(int i = 0 ; i < duration; i++)
+            {
+                String test_Check = buw.readLine();
+                if(test_Check.equals(viewPagerState)) // 해당 뷰페이저 인덱스 List
+                {
+                    for(int j = 1; j < 25; j++)
+                    {
+                        String check = buw.readLine();
+                        if(i == Hour) { // 데이터 존재
+
+                            String value[] = check.split("%&#");
+
+                                if (value[1].equals(String.valueOf(MOVE_TRAIN))
+                                        || value[1].equals(String.valueOf(MOVE_BUS))) {
+                                    mPlanList.get(position).setCategory(Integer.valueOf(value[1]));
+                                    mPlanList.get(position).setTime(Integer.valueOf(value[2]));
+                                    mPlanList.get(position).setEndTime(Integer.valueOf(value[3]));
+                                    mPlanList.get(position).setPlanDetail(value[4]);
+                                    mPlanList.get(position).setStartPlace(value[5]);
+                                    mPlanList.get(position).setEndPlace(value[6]);
+
+                                } else if (value[1].equals(String.valueOf(EAT))
+                                        || value[1].equals(String.valueOf(SLEEP))) {
+                                    mPlanList.get(position).setCategory(Integer.valueOf(value[1]));
+                                    mPlanList.get(position).setTime(Integer.valueOf(value[2]));
+                                    mPlanList.get(position).setEndTime(Integer.valueOf(value[3]));
+                                    mPlanList.get(position).setPlanDetail(value[4]);
+                                    mPlanList.get(position).setStartPlace(value[5]);
+                                }
+                            }
+
+                    }
+                }
+                for(int j = 1; j < 25; j++)
+                    buw.readLine();
+
+            }
+            buw.close();
+        }catch(IOException e)
+        {
+            //e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // super.onActivityResult(requestCode, resultCode, data);
+            int position = data.getIntExtra("position",-1);
+            int start_Hour = data.getIntExtra("start_Hour",-1);
+            int end_Hour = data.getIntExtra("end_Hour",-1);
+            if(position == -1) {
+                //mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
+//                InitializeData();
+//                InitializeAdapter();
+//                NotifyAdaptter();
+                setupRecyclerView(test);
+            }else{
+                //텍스트는 수정된 상황, 추가말고
+                FixedList(start_Hour,end_Hour,position);
+            }
 
-
-        if (requestCode == REQUEST_PLAN) {
-            Log.d("d", "!!!!!!!!!!!!!!!!!!!!");
-            mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
-            InitializeAdapter();
-        }
     }
 
     protected PlanListItem[] getData() {
@@ -386,7 +531,7 @@ public class TabFragment extends BaseFragment {
         for(int i=mStart; i<(mStart+ AMOUNT_OF_TIME_COUNT);++i){
             data[j++] = ROOT_DATA[i];
         }
-        return data;
+        return data;android:hardwareAccelerated="false" android:largeHeap="true"
     }*/
 
 
