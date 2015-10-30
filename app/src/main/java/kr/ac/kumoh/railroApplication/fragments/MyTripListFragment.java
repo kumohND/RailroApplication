@@ -124,7 +124,8 @@ public class MyTripListFragment extends BaseFragment  {
 
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
-                intent.putExtra("index", position);
+                intent.putExtra("index", mTripList.get(position).getmDB_Position());
+                //DB인덱스
                 intent.putExtra("title", mTripList.get(position).getTripTitle());
                 startActivity(intent);
             }
@@ -155,6 +156,7 @@ public class MyTripListFragment extends BaseFragment  {
         mTripList = new ArrayList<>();
 
         while (c.moveToNext()) {
+            int dbPoistion =  c.getInt(c.getColumnIndex("_id"));
             String duration = c.getString(c.getColumnIndex("duration"));
             String year = c.getString(c.getColumnIndex("year"));
             String month = c.getString(c.getColumnIndex("month"));
@@ -169,7 +171,7 @@ public class MyTripListFragment extends BaseFragment  {
             mTripList.add(new TripListItem(c.getString(c.getColumnIndex("dbTitleName")),
                     year + "/" + month + "/" + day + "~" +
                             compare.get(Calendar.YEAR) + "/" + (compare.get(Calendar.MONTH))
-                            + "/" + compare.get(Calendar.DAY_OF_MONTH), R.drawable.ic_android));
+                            + "/" + compare.get(Calendar.DAY_OF_MONTH), R.drawable.ic_android,dbPoistion));
             // titleName , Duration + date , 그림
         }
 

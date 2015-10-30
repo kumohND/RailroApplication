@@ -164,7 +164,9 @@ public class TripInfoFragment extends BaseFragment {
 
             //Log.d("d", mTripInfoFragList.get(cnt).getImage());
 
-            mTripInfoList.add(new TripInfoListItem(bmImg, mTripInfoFragList.get(cnt).getTitle(), mTripInfoFragList.get(cnt).getAddr1(), 5));
+            mTripInfoList.add(new TripInfoListItem(bmImg,
+                    mTripInfoFragList.get(cnt).getTitle(),
+                    mTripInfoFragList.get(cnt).getAddr1(), 5));
             bmImg = temp.getBitmap();
             cnt++;
         }

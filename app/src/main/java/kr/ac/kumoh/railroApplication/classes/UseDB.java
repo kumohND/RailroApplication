@@ -101,5 +101,10 @@ public class UseDB {
         tDb.close();
     }
 
+    public void DeleteTable()
+    {
+        tDb = helper.getWritableDatabase();
+        helper.onUpgrade(tDb,0,0);
+    }
 
 }

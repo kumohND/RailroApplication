@@ -26,6 +26,7 @@ import com.kakao.util.helper.log.Logger;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
+import kr.ac.kumoh.railroApplication.classes.UseDB;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 import kr.ac.kumoh.railroApplication.fragments.DigitalFootprintFragment;
 import kr.ac.kumoh.railroApplication.fragments.FloatingActionButtonFragment;
@@ -61,14 +62,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-        AdView adView = (AdView)findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("3AB81DDBDEC96ABB")
-                .addTestDevice("3D04B52E387484C9")
-                .addTestDevice("3A8318B9B9390A6A")
-                .build();
 
-        adView.loadAd(adRequest);
+        UseDB mDB = new UseDB(this);
+//        mDB.DeleteTable();
+//        AdView adView = (AdView)findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder()
+//                .addTestDevice("3AB81DDBDEC96ABB")
+//                .addTestDevice("3D04B52E387484C9")
+//                .addTestDevice("3A8318B9B9390A6A")
+//                .build();
+
+//        adView.loadAd(adRequest);
         mCallback = new SessionCallback();
 
 
