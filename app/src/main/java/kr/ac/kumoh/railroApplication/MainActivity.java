@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.kakao.auth.KakaoAdapter;
 import com.kakao.auth.KakaoSDK;
 import com.kakao.auth.Session;
@@ -82,7 +84,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+        AdView adView = (AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("3AB81DDBDEC96ABB")
+                .addTestDevice("3D04B52E387484C9")
+                .addTestDevice("3A8318B9B9390A6A")
+                .build();
 
+        adView.loadAd(adRequest);
 
 /*
         callback = new ISessionCallback() {
