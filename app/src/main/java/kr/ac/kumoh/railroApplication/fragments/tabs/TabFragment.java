@@ -413,6 +413,7 @@ public class TabFragment extends BaseFragment {
 
         mPlanList = new ArrayList<>();
         recyclerView = ButterKnife.findById(view, R.id.simpleGrid);
+
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity(), new RecyclerClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

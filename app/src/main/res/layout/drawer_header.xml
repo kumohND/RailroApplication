@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/drawer_header_height"
 
-    android:background="@drawable/default_bg">
+    android:background="@drawable/ic_android">
 
 
     <FrameLayout
