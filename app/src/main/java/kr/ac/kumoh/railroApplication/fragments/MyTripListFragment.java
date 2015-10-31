@@ -101,11 +101,49 @@ public class MyTripListFragment extends BaseFragment  {
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity(), new RecyclerClickListener.OnItemClickListener() {
           @Override
             public void onItemClick(View view, int position) {
+<<<<<<< HEAD
+||||||| merged common ancestors
+                // do whatever
+
+                // 수정 부분
+<<<<<<< HEAD
+           //     Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+||||||| merged common ancestors
+                Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+=======
+                //    Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+>>>>>>> master
+//                FragmentManager fragmentManager = getFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.container, TabFragment.newInstance(0));
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//                Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
+//                getParentFragment().startActivityForResult(intent, 0);
+=======
+                // do whatever
+
+                // 수정 부분
+           //     Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+
+                //    Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+
+//                FragmentManager fragmentManager = getFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.container, TabFragment.newInstance(0));
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//                Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
+//                getParentFragment().startActivityForResult(intent, 0);
+>>>>>>> 651d29e24a99e58c1f38d2c67310c4d0ff7a5a94
 
 
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
-                intent.putExtra("index", position);
+                intent.putExtra("index", mTripList.get(position).getmDB_Position());
+                //DB인덱스
                 intent.putExtra("title", mTripList.get(position).getTripTitle());
                 startActivity(intent);
             }
@@ -136,6 +174,7 @@ public class MyTripListFragment extends BaseFragment  {
         mTripList = new ArrayList<>();
 
         while (c.moveToNext()) {
+            int dbPoistion =  c.getInt(c.getColumnIndex("_id"));
             String duration = c.getString(c.getColumnIndex("duration"));
             String year = c.getString(c.getColumnIndex("year"));
             String month = c.getString(c.getColumnIndex("month"));
@@ -150,7 +189,7 @@ public class MyTripListFragment extends BaseFragment  {
             mTripList.add(new TripListItem(c.getString(c.getColumnIndex("dbTitleName")),
                     year + "/" + month + "/" + day + "~" +
                             compare.get(Calendar.YEAR) + "/" + (compare.get(Calendar.MONTH))
-                            + "/" + compare.get(Calendar.DAY_OF_MONTH), R.drawable.ic_android));
+                            + "/" + compare.get(Calendar.DAY_OF_MONTH), R.drawable.ic_android,dbPoistion));
             // titleName , Duration + date , 그림
         }
 

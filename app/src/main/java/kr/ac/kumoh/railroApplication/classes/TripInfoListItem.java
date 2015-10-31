@@ -14,8 +14,8 @@ public class TripInfoListItem extends Drawable {
     String TripTitle;
     String TripLocale;
     int mStar;
-
-    public TripInfoListItem(Bitmap tripImg, String tripTitle, String tripLocale, int mStar) {
+    public TripInfoListItem(Bitmap tripImg, String tripTitle,
+                            String tripLocale, int mStar) {
         TripImg = tripImg;
         TripTitle = tripTitle;
         TripLocale = tripLocale;

@@ -16,8 +16,18 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+<<<<<<< HEAD
 import com.kakao.auth.AuthType;
 import com.kakao.auth.ErrorResult;
+||||||| merged common ancestors
+import com.kakao.auth.KakaoAdapter;
+import com.kakao.auth.KakaoSDK;
+=======
+>>>>>>> origin/newWoocha
+=======
+import com.kakao.auth.KakaoAdapter;
+import com.kakao.auth.KakaoSDK;
+>>>>>>> 651d29e24a99e58c1f38d2c67310c4d0ff7a5a94
 import com.kakao.auth.Session;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.usermgmt.UserManagement;
@@ -31,6 +41,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.KakaoService.RegisterAppActivity;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
+import kr.ac.kumoh.railroApplication.classes.UseDB;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 import kr.ac.kumoh.railroApplication.fragments.DigitalFootprintFragment;
 import kr.ac.kumoh.railroApplication.fragments.FloatingActionButtonFragment;
@@ -69,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+<<<<<<< HEAD
 
 
       /*  AdView adView = (AdView)findViewById(R.id.adView);
@@ -77,8 +89,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .addTestDevice("3D04B52E387484C9")
                 .addTestDevice("3A8318B9B9390A6A")
                 .build();
+||||||| merged common ancestors
+<<<<<<< HEAD
+        AdView adView = (AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("3AB81DDBDEC96ABB")
+                .addTestDevice("3D04B52E387484C9")
+                .addTestDevice("3A8318B9B9390A6A")
+                .build();
+=======
+>>>>>>> 651d29e24a99e58c1f38d2c67310c4d0ff7a5a94
 
+<<<<<<< HEAD
         adView.loadAd(adRequest);*/
+||||||| merged common ancestors
+        adView.loadAd(adRequest);
+=======
+
+        mCallback = new SessionCallback();
+>>>>>>> origin/newWoocha
+=======
+        UseDB mDB = new UseDB(this);
+//        mDB.DeleteTable();
+//        AdView adView = (AdView)findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder()
+//                .addTestDevice("3AB81DDBDEC96ABB")
+//                .addTestDevice("3D04B52E387484C9")
+//                .addTestDevice("3A8318B9B9390A6A")
+//                .build();
+
+//        adView.loadAd(adRequest);
+        mCallback = new SessionCallback();
+>>>>>>> 651d29e24a99e58c1f38d2c67310c4d0ff7a5a94
 
 
         mCallback = new SessionCallback();

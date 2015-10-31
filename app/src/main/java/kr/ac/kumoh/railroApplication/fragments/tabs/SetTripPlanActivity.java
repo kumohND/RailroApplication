@@ -1183,6 +1183,19 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 // 구분 번호 //
                 sHour = Integer.valueOf(mData.get(1));
                 eHour = Integer.valueOf(mData.get(2));
+//                String sTime;
+//                String eTime;
+//                if(sHour > 0 && sHour < 10)
+//                    sTime = "0" + mData.get(1).toString();
+//                else
+//                    sTime = mData.get(1);
+//
+//                if(eHour > 0 && eHour < 10)
+//                    eTime = "0" + mData.get(1).toString();
+//                else
+//                    eTime = mData.get(1);
+
+
                 sTimeFix.setText(default_sTime + mData.get(1) + ":" + "00");
                 eTimeFix.setText(default_eTime + mData.get(2) + ":" + "00");
 
@@ -1320,7 +1333,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             //startTime.setText(hourOfDay + minute);
-            eTimeFix.setText("종료 시간 : "+ hourOfDay + ":" + 00);
+            eTimeFix.setText("종료 시간 : "+ hourOfDay + ":" + "00");
             eHour = hourOfDay;
 
 
@@ -1330,7 +1343,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             //startTime.setText(hourOfDay + minute);
-            sTimeFix.setText("시작 시간 : " + hourOfDay + ":" + 00);
+            sTimeFix.setText("시작 시간 : " + hourOfDay + ":" + "00");
             sHour = hourOfDay;
         }
     };

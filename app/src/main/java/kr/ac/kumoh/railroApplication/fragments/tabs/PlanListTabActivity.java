@@ -92,8 +92,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
         mCal = Calendar.getInstance();
 
         Intent intent = getIntent();
-        index = intent.getIntExtra("index",0);
-        index++;
+        index = intent.getIntExtra("index",0); //db 저장된 값을 받아옴
         onIntTripList();
         GetContentValue();
         isFirstTextRead();
@@ -253,6 +252,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
         //You could use the normal supportFragmentManger if you like
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getApplicationContext(),index);
         mViewPager.setAdapter(pagerAdapter);
+
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -270,6 +270,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
 
             }
         });
+
         mTabLayout.setupWithViewPager(mViewPager);//this is the new nice thing ;D
     }
 
