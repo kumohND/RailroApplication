@@ -1,4 +1,4 @@
-package kr.ac.kumoh.railroApplication.adapters;
+package kr.ac.kumoh.railroApplication.KakaoService;
 
 import android.app.Activity;
 import android.app.Application;

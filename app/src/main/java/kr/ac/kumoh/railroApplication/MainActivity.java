@@ -14,20 +14,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-<<<<<<< HEAD
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.kakao.auth.KakaoAdapter;
-import com.kakao.auth.KakaoSDK;
-=======
->>>>>>> origin/newWoocha
+import com.kakao.auth.AuthType;
+import com.kakao.auth.ErrorResult;
 import com.kakao.auth.Session;
 import com.kakao.auth.ISessionCallback;
+import com.kakao.usermgmt.UserManagement;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import kr.ac.kumoh.railroApplication.KakaoService.RegisterAppActivity;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 import kr.ac.kumoh.railroApplication.fragments.DigitalFootprintFragment;
@@ -40,13 +42,16 @@ import kr.ac.kumoh.railroApplication.util.LogUtils;
 import kr.ac.kumoh.railroApplication.util.Navigator;
 
 
-public class  MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @InjectView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
     @InjectView(R.id.navigation_view)
     NavigationView mNavigationView;
+
+
+
     static LocationManager mManager;
     static RealTimeLocationListener mRTLocation;
     private static Navigator mNavigator;
@@ -64,24 +69,21 @@ public class  MainActivity extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-<<<<<<< HEAD
-        AdView adView = (AdView)findViewById(R.id.adView);
+
+
+      /*  AdView adView = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("3AB81DDBDEC96ABB")
                 .addTestDevice("3D04B52E387484C9")
                 .addTestDevice("3A8318B9B9390A6A")
                 .build();
 
-        adView.loadAd(adRequest);
-=======
+        adView.loadAd(adRequest);*/
+
 
         mCallback = new SessionCallback();
->>>>>>> origin/newWoocha
-
-
         Session.getCurrentSession().addCallback(mCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
-
 
 
         setupToolbar();
@@ -135,10 +137,16 @@ public class  MainActivity extends AppCompatActivity implements NavigationView.O
 
 
     protected void redirectSignupActivity() {
-        //    final Intent intent = new Intent(this, SplashActivity.class);
-        //  startActivity(intent);
+
+        if (Session.getCurrentSession().isOpened()) {
+            final Intent intent = new Intent(this, RegisterAppActivity.class);
+            startActivity(intent);
+        }
         //finish();
-        // Session.getCurrentSession().open(AuthType.KAKAO_ACCOUNT, this);
+
+
+       // Session.getCurrentSession().open(AuthType.KAKAO_ACCOUNT, this);
+
     }
 
     @Override

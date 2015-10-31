@@ -42,9 +42,10 @@
             android:value="@string/kakao_app_key" />
 
 
-        <activity android:name=".widget.LoginService" />
+        <activity android:name=".KakaoService.LoginService" />
         <activity android:name=".SplashActivity" />
-        <activity android:name=".widget.SignUpService" />
+        <activity android:name=".KakaoService.RegisterAppActivity"/>
+        <activity android:name=".KakaoService.SignUpService" />
         <activity android:name=".fragments.tabs.SetTripPlanActivity" />
         <activity android:name=".classes.ReadTrainInfoSetActivity" />
         <activity android:name=".classes.WebViewActivity" />
