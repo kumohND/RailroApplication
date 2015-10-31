@@ -422,9 +422,10 @@ public class TabFragment extends BaseFragment {
                 intent.putExtra("index",index);
                 intent.putExtra("pager",viewPagerState);
                 intent.putExtra("position",position);
-                intent.putExtra("startHour",mPlanList.get(position).getTime());
-                startActivityForResult(intent, REQUEST_PLAN);
-
+                if(mPlanList.size() != 0) {
+                    intent.putExtra("startHour", mPlanList.get(position).getTime());
+                    startActivityForResult(intent, REQUEST_PLAN);
+                }
 
                 //getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
   //              getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
@@ -438,6 +439,8 @@ public class TabFragment extends BaseFragment {
 
         InitializeData();
         InitializeAdapter();
+        arrayAdapter.notifyDataSetChanged();
+        //view.notify();
     }
 
     @Override
@@ -473,15 +476,102 @@ public class TabFragment extends BaseFragment {
 
     public void NotifyAdaptter()
     {
-        arrayAdapter.notifyDataSetChanged();
+
+
+
+        //test.notifyAll();
     }
     private void InitializeAdapter() {
 //        PlanListRVArrayAdapter arrayAdapter = new PlanListRVArrayAdapter(mPlanList);
         arrayAdapter = new PlanListRVArrayAdapter(mPlanList);
         recyclerView.setAdapter(arrayAdapter);
+        arrayAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                //arrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+               // arrayAdapter.notifyItemRangeChanged(positionStart,itemCount);
+            }
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+               // arrayAdapter.notifyItemRangeRemoved(positionStart,itemCount);
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+               // arrayAdapter.notifyItemRangeRemoved(positionStart,itemCount);
+            }
+
+            @Override
+            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+               // arrayAdapter.notifyItemMoved(fromPosition,toPosition);
+                // TODO itemcount가 1일 경우이므로 1보다 크면 제대로 동작하지 않는다.
+            }
+        });
+
 
     }
+    //Text저장된 곳에서 지움
+    private boolean DeletePositionList(int position)
+    {
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext"; // 저장 할 곳
+        File file;
+        BufferedReader bur;
+        BufferedWriter buw;
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + textName + ".txt"); // 여기서 텍스트 이름만 수정하면 될듯
+        if(mPlanList.size() == 0) return false;
 
+        try{
+
+            String dummy = "";
+            //String add_Line = returnWriteString();
+            bur = new BufferedReader(new FileReader(file));
+
+            int duration = Integer.valueOf(bur.readLine());
+            dummy = String.valueOf(duration) + "\r\n";
+
+
+                for(int j = 0; j < duration; j++) {
+                    String state = bur.readLine();
+                    dummy = dummy + state + "\r\n"; // 카테고리
+                    if(state.equals(viewPagerState)) { // 데이터 체인지
+                        for (int i = 1; i < 25; i++) {
+                            //if(i == sHour){
+                            int deleteHour = mPlanList.get(position).getTime();
+                            if(i == deleteHour){
+                                String add_Line = "time " + deleteHour + TOKEN;
+                                dummy = dummy + add_Line + "\r\n";
+                                bur.readLine();
+                            }else {
+                                dummy = dummy + bur.readLine() + "\r\n";
+                            }
+                        }
+                    }
+                    for (int i = 1; i < 25; i++)// 24시간 넘어감
+                        dummy = dummy + bur.readLine() + "\r\n";
+                }
+
+                buw = new BufferedWriter(new FileWriter(file));
+                buw.write(dummy);
+                buw.close();
+
+            bur.close();
+        }catch(IOException e)
+        {
+
+        }
+
+        return true;
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -504,6 +594,8 @@ public class TabFragment extends BaseFragment {
 
     public void FixedList(int Hour,int endHour,int position)
     {
+        if(Hour == -1) return ;
+
         ReadViewPagerIdFromText();
         String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
         File file;
@@ -560,6 +652,7 @@ public class TabFragment extends BaseFragment {
         {
             //e.printStackTrace();
         }
+
     }
 
 
@@ -575,9 +668,11 @@ public class TabFragment extends BaseFragment {
 //                InitializeAdapter();
 //                NotifyAdaptter();
                 setupRecyclerView(test);
+                //NotifyAdaptter();
             }else{
                 //텍스트는 수정된 상황, 추가말고
                 FixedList(start_Hour, end_Hour, position);
+                //NotifyAdaptter();
             }
 
     }
