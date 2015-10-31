@@ -108,15 +108,16 @@ public class PlanListTabActivity  extends ActionBarActivity{
         setupToolbar();
         setupTabTextColor();
         setupViewPager();
+        ChangeViewPagerIdToText(0);
     }
     public void GetContentValue()
     {
         mDB = new UseDB(mContext);
         ContentValues mValue = mDB.Read(index);
-        textName = String.valueOf(mValue.get("dbTextName"));
+        String temp1 = String.valueOf(mValue.get("index_id"));
+        String temp2 = String.valueOf(mValue.get("dbTextName"));
+        textName = temp1 + temp2;
         duration = Integer.valueOf(String.valueOf(mValue.get("duration")));
-
-
     }
 
 
@@ -130,10 +131,9 @@ public class PlanListTabActivity  extends ActionBarActivity{
         }
 
         file = new File(path + File.separator + textName + ".txt");
-        try {
-
-            BufferedReader bur = new BufferedReader(new FileReader(file));
-            if(bur == null) {
+        if(!file.exists())
+        {
+            try {
                 BufferedWriter buw = new BufferedWriter(new FileWriter(file));
                 buw.write(String.valueOf(duration));
                 buw.newLine();
@@ -146,10 +146,9 @@ public class PlanListTabActivity  extends ActionBarActivity{
                     }
                 }
                 buw.close();
-            }
-            bur.close();
-        } catch (IOException e) {
+            } catch (IOException e) {
 
+            }
         }
     }
 
@@ -179,7 +178,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
         if (!file.exists()) {
             file.mkdirs();
         }
-        file = new File(path + File.separator + "temp" + ".txt");
+        file = new File(path + File.separator + "view_Pager" + ".txt");
         try {
             BufferedWriter buw = new BufferedWriter(new FileWriter(file));
             buw.write(String.valueOf(position));
@@ -205,7 +204,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       // return super.onCreateOptionsMenu(menu);
+        // return super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -249,7 +248,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
         int tabTextColor = getResources().getColor(R.color.titleTextColor);
         mTabLayout.setTabTextColors(tabTextColor, tabTextColor);
     }
-//TOdo: asdasd
+    //TOdo: asdasd
     private void setupViewPager() {
         //You could use the normal supportFragmentManger if you like
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getApplicationContext(),index);
