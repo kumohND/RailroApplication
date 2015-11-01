@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -57,8 +59,8 @@ public class PlanListTabActivity  extends ActionBarActivity{
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
 
-    @InjectView(R.id.tab_weather)
-    ImageView mTabWeather;
+    @InjectView(R.id.linear_tab_weather)
+    LinearLayout mTabWeather;
 
     @InjectView(R.id.share_menu_item)
     FloatingActionButton mFab;
@@ -75,6 +77,9 @@ public class PlanListTabActivity  extends ActionBarActivity{
     LatLng mTempLocation;
     Calendar mCal;
 
+    TextView tv_temparature;
+    TextView tv_WeatherName;
+    ImageView iv_Picture;
     WeatherCheck mCheck;
     ContentValues mWeather_Data;
     int index;
@@ -107,6 +112,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
         setupToolbar();
         setupTabTextColor();
         setupViewPager();
+        SetUpWeatherToolBar();
         ChangeViewPagerIdToText(0);
     }
     public void GetContentValue()
@@ -169,6 +175,13 @@ public class PlanListTabActivity  extends ActionBarActivity{
 
         }
     }
+
+    public void SetUpWeatherToolBar()
+    {
+        tv_WeatherName = (TextView)findViewById(R.id.tv_weather_Name);
+        tv_temparature = (TextView)findViewById(R.id.tv_tab_temprature);
+        iv_Picture = (ImageView)findViewById(R.id.iv_tab_wather_picture);
+    }
     private void ChangeViewPagerIdToText(int position)
     {
         File file;
@@ -224,7 +237,9 @@ public class PlanListTabActivity  extends ActionBarActivity{
 //                                        String.valueOf(mCal.get(Calendar.DAY_OF_MONTH)));
                     mWeather_Data = cast.getStart_Weather();
                     mCheck = new WeatherCheck(mWeather_Data);
-                    mTabWeather.setImageResource(mCheck.WeatherToPicture());
+                    iv_Picture.setImageResource(mCheck.WeatherToPicture());
+                    tv_temparature.setText(mCheck.getTemparature() + "℃");
+                    tv_WeatherName.setText(mCheck.getWeatherName());
                     //img.setBackgroundResource(mCheck.WeatherToPicture());
                     mTabWeather.setVisibility(View.VISIBLE);
                     isOpen = true;
@@ -236,7 +251,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
                 return true;
 
             case R.id.menu_realTime_GPS:
-                StartLocationService();
+                //StartLocationService();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -281,14 +296,6 @@ public class PlanListTabActivity  extends ActionBarActivity{
             mTempLocation = new LatLng(mRTLocation.getLatitude(),mRTLocation.getLongitude());
             mStartInform.latlng = mTempLocation;
         }
-//        long minTime = 1000;
-//        float minDistance = 0;
-//
-////        isGPSEnabled = mManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-////        if(isGPSEnabled != false) {
-//            mManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-//            mManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, mRTLocation);
-//        //}
     }
 
     public void StopLocationService() {

@@ -188,7 +188,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     WeatherInfo mEndRegionWeather;
     WeatherInfo mMealWeather;
     WeatherInfo mSleepWeather;
-
+    WeatherConditionList mCondition = new WeatherConditionList();
     ContentValues start_Weather;
     ContentValues end_Weather;
     String year; String month; String day;
@@ -617,74 +617,88 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
     public void onDetailChangeTrain()
     {
+        String weatherNumber = mStartTrainWeather.getWeather_Number();
+
         iv_Station_Start_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
-        tv_Station_Start_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+//        tv_Station_Start_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Station_Start_Weather_Name.setText(Hangeul_Weather(weatherNumber));
         tv_Station_Start_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
         tv_Station_Start_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Station_Start_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
-        tv_Station_Start_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+        tv_Station_Start_Clouds.setText(CloudsToHangeul(mStartTrainWeather.getClouds_Sort()) +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
-        tv_Station_Start_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+        tv_Station_Start_Winds.setText(WindToHangeul(mStartTrainWeather.getWind_Name()) + " : " +
                 mStartTrainWeather.getWind_Speed() + "mps");
 
         //////////////////////
+
+        String weatherNumber2 = mEndTrainWeather.getWeather_Number();
         iv_Station_End_Weather.setImageResource(mEndTrainWeather.getPicture_ID());
-        tv_Station_End_Weather_Name.setText(mEndTrainWeather.getWeather_Name());
+//        tv_Station_End_Weather_Name.setText(mEndTrainWeather.getWeather_Name());
+        tv_Station_End_Weather_Name.setText(Hangeul_Weather(weatherNumber2));
         tv_Station_End_Max_Temp.setText(mEndTrainWeather.getTemp_Max() + "℃");
         tv_Station_End_Min_Temp.setText(mEndTrainWeather.getTemp_Min() + "℃");
         tv_Station_End_Humi.setText("습도:" + mEndTrainWeather.getHumidity() + "%");
-        tv_Station_End_Clouds.setText(mEndTrainWeather.getClouds_Sort() +
+        tv_Station_End_Clouds.setText(CloudsToHangeul(mEndTrainWeather.getClouds_Sort()) +
                 " : " + mEndTrainWeather.getClouds_Value() + "%");
-        tv_Station_End_Winds.setText(mEndTrainWeather.getWind_Name() + " : " +
+        tv_Station_End_Winds.setText(WindToHangeul(mEndTrainWeather.getWind_Name()) + " : " +
                 mEndTrainWeather.getWind_Speed() + "mps");
     }
     public void onDetailChangeRegion()
     {
+        String weatherNumber = mStartTrainWeather.getWeather_Number();
+        String windName = mStartTrainWeather.getWind_Name();
         iv_Region_Start_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
-        tv_Region_Start_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Region_Start_Weather_Name.setText(Hangeul_Weather(weatherNumber));
         tv_Region_Start_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
         tv_Region_Start_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Region_Start_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
-        tv_Region_Start_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+        tv_Region_Start_Clouds.setText(CloudsToHangeul(mStartTrainWeather.getClouds_Sort()) +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
-        tv_Region_Start_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+        tv_Region_Start_Winds.setText(WindToHangeul(mStartTrainWeather.getWind_Name()) + " : " +
                 mStartTrainWeather.getWind_Speed() + "mps");
 
         //////////////////////
+        String weatherNumber2 = mEndTrainWeather.getWeather_Number();
+        String windName2 = mEndTrainWeather.getWind_Name();
         iv_Region_End_Weather.setImageResource(mEndTrainWeather.getPicture_ID());
-        tv_Region_End_Weather_Name.setText(mEndTrainWeather.getWeather_Name());
+        tv_Region_End_Weather_Name.setText(Hangeul_Weather(weatherNumber2));
         tv_Region_End_Max_Temp.setText(mEndTrainWeather.getTemp_Max() + "℃");
         tv_Region_End_Min_Temp.setText(mEndTrainWeather.getTemp_Min() + "℃");
         tv_Region_End_Humi.setText("습도:" + mEndTrainWeather.getHumidity() + "%");
-        tv_Region_End_Clouds.setText(mEndTrainWeather.getClouds_Sort() +
+        tv_Region_End_Clouds.setText(CloudsToHangeul(mEndTrainWeather.getClouds_Sort()) +
                 " : " + mEndTrainWeather.getClouds_Value() + "%");
-        tv_Region_End_Winds.setText(mEndTrainWeather.getWind_Name() + " : " +
+        tv_Region_End_Winds.setText(WindToHangeul(mEndTrainWeather.getWind_Name()) + " : " +
                 mEndTrainWeather.getWind_Speed() + "mps");
     }
     public void onDetailChangeMeal()
     {
+        String weatherNumber = mStartTrainWeather.getWeather_Number();
+        String windName = mStartTrainWeather.getWind_Name();
         iv_Meal_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
-        tv_Meal_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Meal_Weather_Name.setText(Hangeul_Weather(weatherNumber));
         tv_Meal_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
         tv_Meal_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Meal_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
-        tv_Meal_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+        tv_Meal_Clouds.setText(CloudsToHangeul(mStartTrainWeather.getClouds_Sort()) +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
-        tv_Meal_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+        tv_Meal_Winds.setText(WindToHangeul(mStartTrainWeather.getWind_Name()) + " : " +
                 mStartTrainWeather.getWind_Speed() + "mps");
 
     }
 
     public void onDetailChangeSleep()
     {
+        String weatherNumber = mStartTrainWeather.getWeather_Number();
+        String winName = mStartTrainWeather.getWind_Name();
         iv_Sleep_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
-        tv_Sleep_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Sleep_Weather_Name.setText(Hangeul_Weather(weatherNumber));
         tv_Sleep_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
         tv_Sleep_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Sleep_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
-        tv_Sleep_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+        tv_Sleep_Clouds.setText(CloudsToHangeul(mStartTrainWeather.getClouds_Sort()) +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
-        tv_Sleep_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+        tv_Sleep_Winds.setText(WindToHangeul(mStartTrainWeather.getWind_Name()) + " : " +
                 mStartTrainWeather.getWind_Speed() + "mps");
     }
     // 이부분은 Train 에만 해당, 4가지 다 되게 바꿔야함
@@ -720,8 +734,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
         sleep_Weather.setBackgroundResource(mSleepWeather.getPicture_ID());
     }
-    public void  MealLocateAndWeather()
-    {
+    public void  MealLocateAndWeather() {
         mLocationData.initControl(TokenForLocation(String.valueOf(wEat.getText())),
                 "", this);
 
@@ -855,7 +868,59 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
 
     }
-    WeatherConditionList mCondition = new WeatherConditionList();
+    public String CloudsToHangeul(String cloudSort)
+    {
+        String cloud="";
+
+        for(int i = 0;  i < mCondition.mListBroken_Clouds.size(); i++)
+        {
+            if(mCondition.mListBroken_Clouds.get(i).getMeaning().equals(cloudSort.toLowerCase()))
+                return mCondition.mListBroken_CloudsToHangeul.get(i).getMeaning();
+        }
+
+        for(int i = 0; i < mCondition.mListScattered_Clouds.size(); i++)
+        {
+            if(mCondition.mListScattered_Clouds.get(i).getMeaning().equals(cloudSort.toLowerCase()))
+                return mCondition.mListScattered_CloudsToHangeul.get(i).getMeaning();
+        }
+
+        for(int i = 0; i < mCondition.mListFew_Clouds.size(); i++)
+        {
+            if(mCondition.mListFew_Clouds.get(i).getMeaning().equals(cloudSort.toLowerCase()))
+                return mCondition.mListFew_CloudsToHangeul.get(i).getMeaning();
+        }
+
+
+        return "";
+    }
+
+
+
+    public String Hangeul_Weather(String weatherName)
+    {
+        String snow = SnowToHangeul(weatherName);
+        String clear = ClearToHangeul(weatherName);
+        String broken_Cloud = BrokenCloudsToHangeul(weatherName);
+        String few_Cloud = FewCloudsToHangeul(weatherName);
+        String scatter = ScatteredCloudsToHangeul(weatherName);
+        String Rain = RainToHangeul(weatherName);
+        String shower = ShowerRainToHanGeul(weatherName);
+        String thunder = ThunderStromToHangeul(weatherName);
+        String mist = MistToHangeul(weatherName);
+
+        if(!snow.equals("")) return snow;
+        else if(!clear.equals("")) return clear;
+        else if(!broken_Cloud.equals("")) return broken_Cloud;
+        else if(!few_Cloud.equals("")) return few_Cloud;
+        else if(!scatter.equals("")) return scatter;
+        else if(!Rain.equals("")) return Rain;
+        else if(!shower.equals("")) return shower;
+        else if(!thunder.equals("")) return thunder;
+        else if(!mist.equals("")) return mist;
+
+        return "";
+    }
+
 
     public int Calculator_Weather(String weatherNumber)
     {
@@ -886,8 +951,97 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         else
             return 0;
     }
+    public String SnowToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListSnow.size() ; i++)
+        {
+            if(mCondition.mListSnow.get(i).equals(weatherNumber))
+                return mCondition.mListSnowToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ClearToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListClearSky.size() ; i++)
+        {
+            if(mCondition.mListClearSky.get(i).getId().equals(weatherNumber))
+                return mCondition.mListClearSkyToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String BrokenCloudsToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListBroken_Clouds.size() ; i++)
+        {
+            if(mCondition.mListBroken_Clouds.get(i).getId().equals(weatherNumber))
+                return mCondition.mListBroken_CloudsToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String FewCloudsToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListFew_Clouds.size() ; i++)
+        {
+            if(mCondition.mListFew_Clouds.get(i).getId().equals(weatherNumber))
+                return mCondition.mListFew_CloudsToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ScatteredCloudsToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListScattered_Clouds.size() ; i++)
+        {
+            if(mCondition.mListScattered_Clouds.get(i).getId().equals(weatherNumber))
+                return mCondition.mListScattered_CloudsToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String RainToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListRain.size() ; i++)
+        {
+            if(mCondition.mListRain.get(i).getId().equals(weatherNumber))
+                return mCondition.mListRainToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ShowerRainToHanGeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListShower_Rain.size() ; i++)
+        {
+            if(mCondition.mListShower_Rain.get(i).getId().equals(weatherNumber))
+                return mCondition.mListShower_RainToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ThunderStromToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListThunderStorm.size() ; i++)
+        {
+            if(mCondition.mListThunderStorm.get(i).getId().equals(weatherNumber))
+                return mCondition.mListThunderStormToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String MistToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListMist.size() ; i++)
+        {
+            if(mCondition.mListMist.get(i).getId().equals(weatherNumber))
+                return mCondition.mListMistToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
 
-
+    public String WindToHangeul(String windName)
+    {
+        for(int i = 0; i < mCondition.mListWind.size() ; i++) {
+            if(mCondition.mListWind.get(i).getMeaning().equals(windName.toLowerCase()))
+                return mCondition.mListWindToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+/////////////////////
     public boolean isSnow(String weatherNumber)
     {
         for(int i = 0; i < mCondition.mListSnow.size() ; i++)
@@ -968,7 +1122,6 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 return true;
         }
         return false;
-
     }
 
     public Intent InputData(int index)
@@ -996,6 +1149,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         }
         return null;
     }
+
     public String cutTail(double number, int n){//소수점  n자리 밑으로 자르기
         String cuttedNumber = Double.toString(number);
         int idxPoint = cuttedNumber.indexOf(".");

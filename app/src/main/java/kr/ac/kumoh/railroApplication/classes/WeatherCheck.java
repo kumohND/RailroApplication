@@ -14,6 +14,16 @@ public class WeatherCheck {
     final int CLEAR_SKY = 1; final int FEW_CLOUDS = 2; final int SCATTERED_CLOUDS = 3;
     final int BROKEN_CLOUDS = 4; final int SHOWER_RAIN = 5; final int RAIN = 6;
     final int THUNDERSTORM = 7; final int SNOW = 8; final int MIST = 9;
+    String temparature;
+    String weatherName;
+
+    public String getWeatherName() {
+        return weatherName;
+    }
+
+    public String getTemparature() {
+        return temparature;
+    }
 
     public WeatherCheck(ContentValues tData)
     {
@@ -28,6 +38,8 @@ public class WeatherCheck {
                 String.valueOf(mData.get("Clouds_Value")),  String.valueOf(mData.get("Clouds_Sort")), String.valueOf(mData.get("Clouds_Per"))
         );
 
+        weatherName = Hangeul_Weather(mWeatherInfo.getWeather_Number());
+        temparature = mWeatherInfo.getTemp_Max();
 
     }
     public int Calculator_Weather()
@@ -141,6 +153,122 @@ public class WeatherCheck {
         }
         return false;
 
+    }
+
+    public String SnowToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListSnow.size() ; i++)
+        {
+            if(mCondition.mListSnow.get(i).equals(weatherNumber))
+                return mCondition.mListSnowToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ClearToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListClearSky.size() ; i++)
+        {
+            if(mCondition.mListClearSky.get(i).getId().equals(weatherNumber))
+                return mCondition.mListClearSkyToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String BrokenCloudsToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListBroken_Clouds.size() ; i++)
+        {
+            if(mCondition.mListBroken_Clouds.get(i).getId().equals(weatherNumber))
+                return mCondition.mListBroken_CloudsToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String FewCloudsToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListFew_Clouds.size() ; i++)
+        {
+            if(mCondition.mListFew_Clouds.get(i).getId().equals(weatherNumber))
+                return mCondition.mListFew_CloudsToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ScatteredCloudsToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListScattered_Clouds.size() ; i++)
+        {
+            if(mCondition.mListScattered_Clouds.get(i).getId().equals(weatherNumber))
+                return mCondition.mListScattered_CloudsToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String RainToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListRain.size() ; i++)
+        {
+            if(mCondition.mListRain.get(i).getId().equals(weatherNumber))
+                return mCondition.mListRainToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ShowerRainToHanGeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListShower_Rain.size() ; i++)
+        {
+            if(mCondition.mListShower_Rain.get(i).getId().equals(weatherNumber))
+                return mCondition.mListShower_RainToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ThunderStromToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListThunderStorm.size() ; i++)
+        {
+            if(mCondition.mListThunderStorm.get(i).getId().equals(weatherNumber))
+                return mCondition.mListThunderStormToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String MistToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListMist.size() ; i++)
+        {
+            if(mCondition.mListMist.get(i).getId().equals(weatherNumber))
+                return mCondition.mListMistToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+
+    public String WindToHangeul(String windName)
+    {
+        for(int i = 0; i < mCondition.mListWind.size() ; i++) {
+            if(mCondition.mListWind.get(i).getMeaning().equals(windName.toLowerCase()))
+                return mCondition.mListWindToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+
+    public String Hangeul_Weather(String weatherName)
+    {
+        String snow = SnowToHangeul(weatherName);
+        String clear = ClearToHangeul(weatherName);
+        String broken_Cloud = BrokenCloudsToHangeul(weatherName);
+        String few_Cloud = FewCloudsToHangeul(weatherName);
+        String scatter = ScatteredCloudsToHangeul(weatherName);
+        String Rain = RainToHangeul(weatherName);
+        String shower = ShowerRainToHanGeul(weatherName);
+        String thunder = ThunderStromToHangeul(weatherName);
+        String mist = MistToHangeul(weatherName);
+
+        if(!snow.equals("")) return snow;
+        else if(!clear.equals("")) return clear;
+        else if(!broken_Cloud.equals("")) return broken_Cloud;
+        else if(!few_Cloud.equals("")) return few_Cloud;
+        else if(!scatter.equals("")) return scatter;
+        else if(!Rain.equals("")) return Rain;
+        else if(!shower.equals("")) return shower;
+        else if(!thunder.equals("")) return thunder;
+        else if(!mist.equals("")) return mist;
+
+        return "";
     }
 }
 
