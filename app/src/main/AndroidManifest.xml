@@ -22,13 +22,28 @@
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+<<<<<<< HEAD
+        android:largeHeap="true"
+        android:theme="@style/AppTheme"
+        >
+||||||| merged common ancestors
+<<<<<<< HEAD
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
+||||||| merged common ancestors
+        android:theme="@style/AppTheme">
+=======
+        android:theme="@style/AppTheme"
+        android:hardwareAccelerated="false" android:largeHeap="true">
+>>>>>>> 2db914080b592f0867a36b2ad7962a3540c3aa37
+=======
+        android:theme="@style/AppTheme">
+>>>>>>> master
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -36,6 +51,14 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+<<<<<<< HEAD
+                <data android:host="route" android:scheme="daummaps" />
+                <data
+                    android:host="@string/kakaolink_host"
+                    android:scheme="@string/kakao_scheme" />
+||||||| merged common ancestors
+                <data android:host="route" android:scheme="daummaps" />
+=======
 
                 <data
                     android:host="@string/kakaolink_host"
@@ -43,6 +66,7 @@
                 <data
                     android:host="route"
                     android:scheme="daummaps" />
+>>>>>>> master
             </intent-filter>
         </activity>
         <meta-data
@@ -59,12 +83,30 @@
         <activity android:name=".classes.WebViewActivity" />
         <activity android:name=".fragments.tabs.PlanListTabActivity" />
         <activity android:name=".fragments.tabs.SearchPlaceActivity" />
+<<<<<<< HEAD
+||||||| merged common ancestors
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
         <activity
             android:name=".fragments.tabs.TripInfoActivity"
             android:label="@string/title_activity_trip_info"></activity>
-
+<<<<<<< HEAD
         <activity android:name=".classes.PrintPlaceinfoActivity" />
+||||||| merged common ancestors
+||||||| merged common ancestors
+=======
+        <activity android:name=".classes.PrintPlaceinfoActivity" />
+=======
+>>>>>>> master
+
+<<<<<<< HEAD
+||||||| merged common ancestors
+>>>>>>> 2db914080b592f0867a36b2ad7962a3540c3aa37
+=======
+        <activity android:name=".classes.PrintPlaceinfoActivity" />
+>>>>>>> master
     </application>
 
 </manifest>

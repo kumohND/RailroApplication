@@ -71,7 +71,7 @@ public class RealTimeLocationListener extends Service implements LocationListene
             isNetworkEnabled = mManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
 
-            if(!isGPSEnabled && !isNetworkEnabled)
+            if(!isGPSEnabled ) //&& !isNetworkEnabled
             {
                 //GPS , NETWORK 둘다 불가
                 showSettingAlert();
@@ -80,20 +80,20 @@ public class RealTimeLocationListener extends Service implements LocationListene
 
                 this.isGetLocation = true;
                 //네트워크 정보로부터 위치값 가져오기
-                if(isNetworkEnabled){
-                    mManager.requestLocationUpdates(mManager.NETWORK_PROVIDER,
-                            minTime,minDistance,this);
-
-                    if(mManager !=null)
-                    {
-                        location = mManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        if(location !=null)
-                        {
-                            lat = location.getLatitude();
-                            lon = location.getLongitude();
-                        }
-                    }
-                }
+//                if(isNetworkEnabled){
+//                    mManager.requestLocationUpdates(mManager.NETWORK_PROVIDER,
+//                            minTime,minDistance,this);
+//
+//                    if(mManager !=null)
+//                    {
+//                        location = mManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//                        if(location !=null)
+//                        {
+//                            lat = location.getLatitude();
+//                            lon = location.getLongitude();
+//                        }
+//                    }
+//                }
 
                 if(isGPSEnabled)
                 {
@@ -146,7 +146,9 @@ public class RealTimeLocationListener extends Service implements LocationListene
         alertDialog.show();
     }
 
+    public void OffGpsService(){
 
+    }
 
     @Override
     public void onLocationChanged(Location location) {
