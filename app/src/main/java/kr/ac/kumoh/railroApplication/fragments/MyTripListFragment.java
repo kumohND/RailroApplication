@@ -101,32 +101,8 @@ public class MyTripListFragment extends BaseFragment  {
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity(), new RecyclerClickListener.OnItemClickListener() {
           @Override
             public void onItemClick(View view, int position) {
-<<<<<<< HEAD
-||||||| merged common ancestors
-                // do whatever
 
-                // 수정 부분
-<<<<<<< HEAD
-           //     Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
-||||||| merged common ancestors
-                Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
-=======
-                //    Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
->>>>>>> master
-//                FragmentManager fragmentManager = getFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.container, TabFragment.newInstance(0));
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//                Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
-//                getParentFragment().startActivityForResult(intent, 0);
-=======
-                // do whatever
-
-                // 수정 부분
-           //     Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
-
-                Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+           Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
 
                 //    Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
 
@@ -137,8 +113,6 @@ public class MyTripListFragment extends BaseFragment  {
 //                fragmentTransaction.commit();
 //                Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
 //                getParentFragment().startActivityForResult(intent, 0);
->>>>>>> 651d29e24a99e58c1f38d2c67310c4d0ff7a5a94
-
 
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), PlanListTabActivity.class);

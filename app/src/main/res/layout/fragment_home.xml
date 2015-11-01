@@ -29,7 +29,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:minHeight="250dp"
+                android:minHeight="400dp"
                 app:layout_collapseMode="parallax">>
 
                 <ViewFlipper
@@ -152,14 +152,14 @@
                   android:layout_height="match_parent"
                   app:leftIcon="@drawable/ads" /> -->
 
-            <com.kakao.usermgmt.LoginButton
+       <!--     <com.kakao.usermgmt.LoginButton
                 android:id="@+id/com_kakao_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_weight="1" />
+                android:layout_weight="1" />-->
 
             <ImageView
                 android:layout_width="match_parent"
@@ -179,13 +179,12 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@drawable/home_tab2"
-                android:scaleType="centerCrop" />
+                android:background="@drawable/home_4" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@drawable/ic_android" />
+                android:background="@drawable/home_5" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

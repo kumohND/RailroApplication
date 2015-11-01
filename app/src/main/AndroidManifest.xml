@@ -17,17 +17,6 @@
 
 
     <application
-<<<<<<< HEAD
-||||||| merged common ancestors
-<<<<<<< HEAD
-        android:hardwareAccelerated="false"
-        android:largeHeap="true"
-||||||| merged common ancestors
-=======
-=======
-        android:hardwareAccelerated="false"
-        android:largeHeap="true"
->>>>>>> 651d29e24a99e58c1f38d2c67310c4d0ff7a5a94
         android:name="kr.ac.kumoh.railroApplication.util.GlobalApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -55,7 +44,7 @@
 
         <activity android:name=".KakaoService.LoginService" />
         <activity android:name=".SplashActivity" />
-        <activity android:name=".KakaoService.RegisterAppActivity"/>
+        <activity android:name=".KakaoService.RegisterAppActivity" />
         <activity android:name=".KakaoService.SignUpService" />
         <activity android:name=".fragments.tabs.SetTripPlanActivity" />
         <activity android:name=".classes.ReadTrainInfoSetActivity" />
