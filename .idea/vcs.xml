@@ -5,6 +5,14 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
 =======
     <mapping directory="" vcs="" />
+<<<<<<< HEAD
+<<<<<<< HEAD
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+=======
+>>>>>>> master
+||||||| merged common ancestors
+=======
+>>>>>>> master
 >>>>>>> master
   </component>
 </project>

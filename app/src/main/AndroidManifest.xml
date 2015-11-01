@@ -23,13 +23,66 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        android:largeHeap="true"
+||||||| merged common ancestors
+<<<<<<< HEAD
+        android:largeHeap="true"
+=======
+>>>>>>> master
+||||||| merged common ancestors
+=======
+<<<<<<< HEAD
         android:largeHeap="true"
         android:theme="@style/AppTheme"
         >
 ||||||| merged common ancestors
 <<<<<<< HEAD
         android:largeHeap="true"
+>>>>>>> master
         android:theme="@style/AppTheme">
+<<<<<<< HEAD
+<<<<<<< HEAD
+||||||| merged common ancestors
+        android:theme="@style/AppTheme">
+||||||| merged common ancestors
+<<<<<<< Temporary merge branch 1
+        android:theme="@style/AppTheme"
+        android:hardwareAccelerated="false" android:largeHeap="true">
+||||||| merged common ancestors
+        android:theme="@style/AppTheme">
+=======
+<<<<<<< HEAD
+        android:theme="@style/AppTheme"
+        android:hardwareAccelerated="false" android:largeHeap="true">
+>>>>>>> dce24f8fbda572770c3ba35439c5beaf9fff27b2
+=======
+<<<<<<< HEAD
+        android:theme="@style/AppTheme"
+        android:hardwareAccelerated="false" android:largeHeap="true">
+>>>>>>> 2db914080b592f0867a36b2ad7962a3540c3aa37
+||||||| merged common ancestors
+        android:largeHeap="true"
+        android:theme="@style/AppTheme">
+>>>>>>> Temporary merge branch 2
+=======
+        android:largeHeap="true"
+        android:theme="@style/AppTheme">
+>>>>>>> master
+>>>>>>> dce24f8fbda572770c3ba35439c5beaf9fff27b2
+||||||| merged common ancestors
+||||||| merged common ancestors
+        android:theme="@style/AppTheme">
+=======
+        android:theme="@style/AppTheme"
+        android:hardwareAccelerated="false" android:largeHeap="true">
+>>>>>>> 2db914080b592f0867a36b2ad7962a3540c3aa37
+=======
+>>>>>>> master
+||||||| merged common ancestors
+=======
 ||||||| merged common ancestors
         android:theme="@style/AppTheme">
 =======
@@ -38,6 +91,7 @@
 >>>>>>> 2db914080b592f0867a36b2ad7962a3540c3aa37
 =======
         android:theme="@style/AppTheme">
+>>>>>>> master
 >>>>>>> master
         <activity
             android:name=".MainActivity"
@@ -84,15 +138,46 @@
         <activity android:name=".fragments.tabs.PlanListTabActivity" />
         <activity android:name=".fragments.tabs.SearchPlaceActivity" />
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+||||||| merged common ancestors
+<<<<<<< Temporary merge branch 1
+        <activity android:name=".classes.PrintPlaceinfoActivity" />
+||||||| merged common ancestors
+=======
+<<<<<<< HEAD
+||||||| merged common ancestors
+<<<<<<< HEAD
+=======
+>>>>>>> master
+
+<<<<<<< HEAD
+||||||| merged common ancestors
+=======
+=======
+<<<<<<< HEAD
+        <activity android:name=".classes.PrintPlaceinfoActivity" />
+
+=======
+>>>>>>> dce24f8fbda572770c3ba35439c5beaf9fff27b2
 ||||||| merged common ancestors
 <<<<<<< HEAD
 =======
 
+>>>>>>> master
+||||||| merged common ancestors
+=======
+>>>>>>> master
 >>>>>>> master
         <activity
             android:name=".fragments.tabs.TripInfoActivity"
             android:label="@string/title_activity_trip_info"></activity>
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+||||||| merged common ancestors
+=======
         <activity android:name=".classes.PrintPlaceinfoActivity" />
 ||||||| merged common ancestors
 ||||||| merged common ancestors
@@ -100,11 +185,36 @@
         <activity android:name=".classes.PrintPlaceinfoActivity" />
 =======
 >>>>>>> master
+||||||| merged common ancestors
+=======
+<<<<<<< HEAD
+        <activity android:name=".classes.PrintPlaceinfoActivity" />
+||||||| merged common ancestors
+||||||| merged common ancestors
+=======
+        <activity android:name=".classes.PrintPlaceinfoActivity" />
+=======
+>>>>>>> master
+>>>>>>> master
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 2db914080b592f0867a36b2ad7962a3540c3aa37
+||||||| merged common ancestors
+>>>>>>> Temporary merge branch 2
+=======
+>>>>>>> master
+>>>>>>> dce24f8fbda572770c3ba35439c5beaf9fff27b2
+||||||| merged common ancestors
+>>>>>>> 2db914080b592f0867a36b2ad7962a3540c3aa37
+=======
+||||||| merged common ancestors
+=======
 <<<<<<< HEAD
 ||||||| merged common ancestors
 >>>>>>> 2db914080b592f0867a36b2ad7962a3540c3aa37
 =======
+>>>>>>> master
         <activity android:name=".classes.PrintPlaceinfoActivity" />
 >>>>>>> master
     </application>
