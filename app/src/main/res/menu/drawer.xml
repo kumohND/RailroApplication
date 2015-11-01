@@ -43,7 +43,6 @@
                 android:id="@+id/drawer_notice"
                 android:checked="true"
                 android:icon="@drawable/ic_home_white_2x"
-
                 android:title="공지사항" />
 
             <item
