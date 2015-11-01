@@ -99,17 +99,10 @@ public class MyTripListFragment extends BaseFragment  {
         recyclerView = ButterKnife.findById(getActivity(), R.id.simpleList);
 
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity(), new RecyclerClickListener.OnItemClickListener() {
-
-
-
-            @Override
+          @Override
             public void onItemClick(View view, int position) {
-                // do whatever
 
-                // 수정 부분
-           //     Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
-
-                Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
+           Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
 
                 //    Toast.makeText(getActivity(), position + "I'm Clicked~~", Toast.LENGTH_SHORT).show();
 
@@ -120,7 +113,6 @@ public class MyTripListFragment extends BaseFragment  {
 //                fragmentTransaction.commit();
 //                Intent intent = new Intent(getActivity(), PlanListTabActivity.class);
 //                getParentFragment().startActivityForResult(intent, 0);
-
 
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), PlanListTabActivity.class);

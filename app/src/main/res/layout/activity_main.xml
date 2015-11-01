@@ -26,10 +26,10 @@
         app:headerLayout="@layout/drawer_header"
         app:menu="@menu/drawer" />
 
-    <com.google.android.gms.ads.AdView android:id="@+id/adView"
+ <!--   <com.google.android.gms.ads.AdView android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ads:adUnitId="ca-app-pub-3628724692863358/9171692422"
-        ads:adSize="BANNER"/>
+        ads:adSize="BANNER"/>-->
 
 </android.support.v4.widget.DrawerLayout>

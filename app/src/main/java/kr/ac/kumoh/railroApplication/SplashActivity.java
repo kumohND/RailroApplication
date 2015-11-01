@@ -3,9 +3,8 @@ package kr.ac.kumoh.railroApplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 
-import kr.ac.kumoh.railroApplication.widget.LoginService;
+import kr.ac.kumoh.railroApplication.KakaoService.LoginService;
 
 /**
  * Created by sj on 2015-10-30.
