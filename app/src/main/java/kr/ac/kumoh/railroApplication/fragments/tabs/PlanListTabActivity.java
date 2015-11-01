@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -57,8 +59,8 @@ public class PlanListTabActivity  extends ActionBarActivity{
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
 
-    @InjectView(R.id.tab_weather)
-    ImageView mTabWeather;
+    @InjectView(R.id.linear_tab_weather)
+    LinearLayout mTabWeather;
 
     @InjectView(R.id.share_menu_item)
     FloatingActionButton mFab;
@@ -75,6 +77,9 @@ public class PlanListTabActivity  extends ActionBarActivity{
     LatLng mTempLocation;
     Calendar mCal;
 
+    TextView tv_temparature;
+    TextView tv_WeatherName;
+    ImageView iv_Picture;
     WeatherCheck mCheck;
     ContentValues mWeather_Data;
     int index;
@@ -92,8 +97,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
         mCal = Calendar.getInstance();
 
         Intent intent = getIntent();
-        index = intent.getIntExtra("index",0);
-        index++;
+        index = intent.getIntExtra("index",0); //db 저장된 값을 받아옴
         onIntTripList();
         GetContentValue();
         isFirstTextRead();
@@ -108,15 +112,17 @@ public class PlanListTabActivity  extends ActionBarActivity{
         setupToolbar();
         setupTabTextColor();
         setupViewPager();
+        SetUpWeatherToolBar();
+        ChangeViewPagerIdToText(0);
     }
     public void GetContentValue()
     {
         mDB = new UseDB(mContext);
         ContentValues mValue = mDB.Read(index);
-        textName = String.valueOf(mValue.get("dbTextName"));
+        String temp1 = String.valueOf(mValue.get("index_id"));
+        String temp2 = String.valueOf(mValue.get("dbTextName"));
+        textName = temp1 + temp2;
         duration = Integer.valueOf(String.valueOf(mValue.get("duration")));
-
-
     }
 
 
@@ -130,10 +136,9 @@ public class PlanListTabActivity  extends ActionBarActivity{
         }
 
         file = new File(path + File.separator + textName + ".txt");
-        try {
-
-            BufferedReader bur = new BufferedReader(new FileReader(file));
-            if(bur == null) {
+        if(!file.exists())
+        {
+            try {
                 BufferedWriter buw = new BufferedWriter(new FileWriter(file));
                 buw.write(String.valueOf(duration));
                 buw.newLine();
@@ -146,10 +151,9 @@ public class PlanListTabActivity  extends ActionBarActivity{
                     }
                 }
                 buw.close();
-            }
-            bur.close();
-        } catch (IOException e) {
+            } catch (IOException e) {
 
+            }
         }
     }
 
@@ -171,6 +175,13 @@ public class PlanListTabActivity  extends ActionBarActivity{
 
         }
     }
+
+    public void SetUpWeatherToolBar()
+    {
+        tv_WeatherName = (TextView)findViewById(R.id.tv_weather_Name);
+        tv_temparature = (TextView)findViewById(R.id.tv_tab_temprature);
+        iv_Picture = (ImageView)findViewById(R.id.iv_tab_wather_picture);
+    }
     private void ChangeViewPagerIdToText(int position)
     {
         File file;
@@ -179,7 +190,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
         if (!file.exists()) {
             file.mkdirs();
         }
-        file = new File(path + File.separator + "temp" + ".txt");
+        file = new File(path + File.separator + "view_Pager" + ".txt");
         try {
             BufferedWriter buw = new BufferedWriter(new FileWriter(file));
             buw.write(String.valueOf(position));
@@ -205,7 +216,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       // return super.onCreateOptionsMenu(menu);
+        // return super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -226,19 +237,20 @@ public class PlanListTabActivity  extends ActionBarActivity{
 //                                        String.valueOf(mCal.get(Calendar.DAY_OF_MONTH)));
                     mWeather_Data = cast.getStart_Weather();
                     mCheck = new WeatherCheck(mWeather_Data);
-                    mTabWeather.setImageResource(mCheck.WeatherToPicture());
+                    iv_Picture.setImageResource(mCheck.WeatherToPicture());
+                    tv_temparature.setText(mCheck.getTemparature() + "℃");
+                    tv_WeatherName.setText(mCheck.getWeatherName());
                     //img.setBackgroundResource(mCheck.WeatherToPicture());
                     mTabWeather.setVisibility(View.VISIBLE);
                     isOpen = true;
                 } else {
-                    //StopLocationService();
                     mTabWeather.setVisibility(View.GONE);
                     isOpen = false;
                 }
                 return true;
 
             case R.id.menu_realTime_GPS:
-                StartLocationService();
+                //StartLocationService();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -249,11 +261,12 @@ public class PlanListTabActivity  extends ActionBarActivity{
         int tabTextColor = getResources().getColor(R.color.titleTextColor);
         mTabLayout.setTabTextColors(tabTextColor, tabTextColor);
     }
-//TOdo: asdasd
+
     private void setupViewPager() {
         //You could use the normal supportFragmentManger if you like
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getApplicationContext(),index);
         mViewPager.setAdapter(pagerAdapter);
+
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -264,6 +277,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
             public void onPageSelected(int position) {
                 // 여기서 변경점 저장
                 ChangeViewPagerIdToText(position);
+
             }
 
             @Override
@@ -271,6 +285,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
 
             }
         });
+
         mTabLayout.setupWithViewPager(mViewPager);//this is the new nice thing ;D
     }
 
@@ -281,14 +296,6 @@ public class PlanListTabActivity  extends ActionBarActivity{
             mTempLocation = new LatLng(mRTLocation.getLatitude(),mRTLocation.getLongitude());
             mStartInform.latlng = mTempLocation;
         }
-//        long minTime = 1000;
-//        float minDistance = 0;
-//
-////        isGPSEnabled = mManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-////        if(isGPSEnabled != false) {
-//            mManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-//            mManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, mRTLocation);
-//        //}
     }
 
     public void StopLocationService() {

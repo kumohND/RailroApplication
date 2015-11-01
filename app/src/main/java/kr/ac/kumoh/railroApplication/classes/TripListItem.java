@@ -7,14 +7,23 @@ public class TripListItem {
     String TripTitle;
     String TripDate;
     int iconId;
-
+    int mDB_Position;
     public TripListItem(){
         super();
     }
-    public TripListItem(String tripTitle, String tripDate, int iconId) {
+    public TripListItem(String tripTitle, String tripDate, int iconId,int position) {
         TripTitle = tripTitle;
         TripDate = tripDate;
         this.iconId = iconId;
+        this.mDB_Position = position;
+    }
+
+    public int getmDB_Position() {
+        return mDB_Position;
+    }
+
+    public void setmDB_Position(int mDB_Position) {
+        this.mDB_Position = mDB_Position;
     }
 
     public String getTripTitle() {

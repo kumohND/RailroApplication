@@ -1,38 +1,80 @@
 package kr.ac.kumoh.railroApplication;
 
 import android.content.Intent;
-import android.content.pm.PackageInstaller;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.kakao.auth.KakaoAdapter;
-import com.kakao.auth.KakaoSDK;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+import com.kakao.auth.ErrorResult;
 import com.kakao.auth.Session;
 import com.kakao.auth.ISessionCallback;
+import com.kakao.kakaostory.KakaoStoryService;
+import com.kakao.kakaostory.callback.StoryResponseCallback;
+import com.kakao.kakaostory.response.ProfileResponse;
+import com.kakao.usermgmt.LoginButton;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.BufferedHttpEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import kr.ac.kumoh.railroApplication.AdditionalService.NoticeActivity;
+import kr.ac.kumoh.railroApplication.KakaoService.RegisterAppActivity;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
+import kr.ac.kumoh.railroApplication.classes.UseDB;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 import kr.ac.kumoh.railroApplication.fragments.DigitalFootprintFragment;
 import kr.ac.kumoh.railroApplication.fragments.FloatingActionButtonFragment;
 import kr.ac.kumoh.railroApplication.fragments.HomeFragment;
 import kr.ac.kumoh.railroApplication.fragments.MyTripListFragment;
 import kr.ac.kumoh.railroApplication.fragments.TripInfoFragment;
-import kr.ac.kumoh.railroApplication.fragments.tabs.PlanListTabFragment;
+import kr.ac.kumoh.railroApplication.util.GlobalApplication;
 import kr.ac.kumoh.railroApplication.util.LogUtils;
 import kr.ac.kumoh.railroApplication.util.Navigator;
 
@@ -44,100 +86,108 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @InjectView(R.id.navigation_view)
     NavigationView mNavigationView;
+
+    @InjectView(R.id.drawer_header)
+    RelativeLayout mDrawerHeader;
+
+
     static LocationManager mManager;
     static RealTimeLocationListener mRTLocation;
     private static Navigator mNavigator;
     private Toolbar mToolbar;
+
+    LoginButton mLoginButton;
+    TextView mUserID;
+    ImageView mUserImg;
+    ImageView mSetting;
+    String mUserProfileImage;
+
+
     private
     @IdRes
     int mCurrentMenuItem;
-    //TODO : 어쩌꼬 저쩌꼬
 
-    //  private KakaoLink kakaoLink;
-    //  private KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder;
-
-//    private LoginButton loginButton;
-
-    //  private SessionCallback callback;
+    private SessionCallback mCallback;
 
 
-    private ISessionCallback callback;
+    private void getHas(){
+        try
+        {
+            PackageInfo Info = getPackageManager().getPackageInfo(this.getPackageName(), PackageManager.GET_SIGNATURES);
+            for(Signature signature : Info.signatures)
+            {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("MY KEY HASH", Base64.encodeToString(md.digest(),Base64.DEFAULT));
+            }
+        }catch(PackageManager.NameNotFoundException e){
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // 세션을 초기화 한다
-     //   if(Session.initializeSession(this, mySessionCallback)){
-            // 1. 세션을 갱신 중이면, 프로그레스바를 보이거나 버튼을 숨기는 등의 액션을 취한다
-     //       loginButton.setVisibility(View.GONE);
-     //   } else if (Session.getCurrentSession().isOpened()){
-            // 2. 세션이 오픈된된 상태이면, 다음 activity로 이동한다.
-       //     onSessionOpened();
-      //  }
-        // 3. else 로그인 창이 보인다.
+        }catch(NoSuchAlgorithmException e)
+        {
+
+        }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
+        //getHas();
+      /*  AdView adView = (AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("3AB81DDBDEC96ABB")
+                .addTestDevice("3D04B52E387484C9")
+                .addTestDevice("3A8318B9B9390A6A")
+                .build();
 
-/*
-        callback = new ISessionCallback() {
-            @Override
-            public void onSessionOpened() {
+ //       adView.loadAd(adRequest);*/
 
-            }
-
-            @Override
-            public void onSessionOpenFailed(KakaoException e) {
-
-            }
-        };
-        Session.getCurrentSession().addCallback(callback);
+        mCallback = new SessionCallback();
+        UseDB mDB = new UseDB(this);
+//        mDB.DeleteTable();
+        Session.getCurrentSession().addCallback(mCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
 
 
-
-/*
-        try {
-
-           kakaoLink = KakaoLink.getKakaoLink(getApplicationContext());
-            kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
-            kakaoTalkLinkMessageBuilder.addText("test");
-            kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder.build(), this);
-            kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
-        } catch (KakaoParameterException e) {
-            Log.e("error", e.getMessage());
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
         }
-*/
-
 
         setupToolbar();
         setupNavDrawer();
         initNavigator();
-        // mCurrentMenuItem = R.id.standard_app_bar_menu_item;
+        // mCurrentMenuItem = R.id.standard_app_bar_menu_item;32
         mCurrentMenuItem = R.id.toolbar_flexible_space_with_image;
         // setNewRootFragment(dddndardAppBarFragment.newInstance());
         setNewRootFragment(HomeFragment.newInstance());
-        //TODO : 전지연 세젤예
+
+        mSetting = ButterKnife.findById(this, R.id.navigation_settings);
+        mSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "IMG CLICK", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mLoginButton = (LoginButton) ButterKnife.findById(this, R.id.com_kakao_login);
+
+        mDrawerHeader.setBackgroundColor(R.drawable.ic_cast_dark);
+        mUserID = ButterKnife.findById(this, R.id.drawer_user_name);
+        mUserImg = ButterKnife.findById(this, R.id.profile_image);
+
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-      //  Session.getCurrentSession().removeCallback(callback);
-    }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
-            return;
-        }
+    protected void onResume() {
+        super.onResume();
 
-        super.onActivityResult(requestCode, resultCode, data);
+        GlobalApplication.setCurrentActivity(this);
+
+
     }
 
     private class SessionCallback implements ISessionCallback {
@@ -149,16 +199,163 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
-            if(exception != null) {
+            if (exception != null) {
                 Logger.e(exception);
             }
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Session.getCurrentSession().removeCallback(mCallback);
+    }
+
+
     protected void redirectSignupActivity() {
-        final Intent intent = new Intent(this, SampleSignupActivity.class);
-        startActivity(intent);
-        finish();
+
+        if (Session.getCurrentSession().isOpened()) {
+            final Intent intent = new Intent(this, RegisterAppActivity.class);
+            startActivity(intent);
+            requestMe();
+            readProfile();
+            // mLoginButton.setAlpha(0);
+        }
+
+        //finish();
+
+
+        // Session.getCurrentSession().open(AuthType.KAKAO_ACCOUNT, this);
+
+    }
+
+    private void requestMe() {
+        UserManagement.requestMe(new MeResponseCallback() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                String message = "failed to get user info. msg=" + errorResult;
+                Logger.d(message);
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSessionClosed(ErrorResult errorResult) {
+                // redirectLoginActivity();
+                Toast.makeText(getApplicationContext(), "세션이 종료되었습니다.\n다시 로그인해주세요", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(UserProfile userProfile) {
+                Logger.d("UserProfile : " + userProfile);
+                //     redirectMainActivity();
+
+                mLoginButton.setVisibility(View.GONE);
+                mUserProfileImage = userProfile.getProfileImagePath();
+                mUserImg.setImageDrawable(LoadImageFromWebOperations(mUserProfileImage));
+                mUserID.setTextSize(20);
+                mUserID.setText(userProfile.getNickname());
+            }
+
+            @Override
+            public void onNotSignedUp() {
+                //   showSignup();
+            }
+        });
+    }
+
+    public void readProfile() {
+        KakaoStoryService.requestProfile(new KakaoStoryResponseCallback<ProfileResponse>() {
+            @Override
+            public void onSuccess(ProfileResponse profile) {
+                Logger.d("succeeded to get story profile");
+                String mUserthumbnailImagePath = profile.getBgImageURL();
+                mDrawerHeader.setBackground(LoadImageFromWebOperations(mUserthumbnailImagePath));
+
+            }
+        });
+    }
+
+    private abstract class KakaoStoryResponseCallback<T> extends StoryResponseCallback<T> {
+
+        @Override
+        public void onNotKakaoStoryUser() {
+            Logger.d("not KakaoStory user");
+            mDrawerHeader.setBackground(LoadImageFromWebOperations(mUserProfileImage));
+        }
+
+        @Override
+        public void onFailure(ErrorResult errorResult) {
+            String error ="KakaoStoryResponseCallback : failure : " + errorResult;
+            Logger.e(error);
+            Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onSessionClosed(ErrorResult errorResult) {
+            // redirectLoginActivity();
+            Toast.makeText(getApplicationContext(), "세션이 종료되었습니다.\n다시 로그인해주세요", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onNotSignedUp() {
+            //  redirectSignupActivity();
+        }
+    }
+
+
+    public static Drawable LoadImageFromWebOperations(String url) {
+        Drawable drawable = null;
+
+        try {
+            InputStream inputStream = new URL(url).openStream();
+            drawable = Drawable.createFromStream(inputStream, null);
+            inputStream.close();
+        } catch (MalformedURLException ex) {
+        } catch (IOException ex) {
+        }
+
+        return drawable;
+
+    }
+
+
+    //html 주소 string을 받아 해당 주소의 이미지를 화면에 띄움
+    BitmapDrawable downloadFile(String fileUrl) {
+        URL myFileUrl = null; // URL 타입의 myFileUrl을  NULL로 초기화 시켜줍니다.
+        Bitmap mBitmap = null;
+
+        try {
+            myFileUrl = new URL(fileUrl); //  파라미터로 넘어온 Url을 myFileUrl에 대입합니다.
+        } catch (MalformedURLException e) // 예외처리를 해줍니다.
+        {
+            // Todo Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            if (fileUrl.equals("")) return null;
+
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+            conn.setDoInput(true);
+            conn.connect();
+            int length = conn.getContentLength(); // 받아온 컨텐츠의 길이를 length 변수에 저장합니다.
+            InputStream is = conn.getInputStream(); // InputStream is 변수에 받아온 InputStream을 저장합니다.
+
+            mBitmap = BitmapFactory.decodeStream(is); // 받아온 이미지를 bmImg에 넣어둡니다.
+        } catch (IOException e) // 예외처리를 해줍니다.
+        {
+            e.printStackTrace();
+        }
+
+
+        return new BitmapDrawable(mBitmap);
     }
 
 
@@ -168,6 +365,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     /*
         @Override
@@ -184,7 +382,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             return super.onOptionsItemSelected(item);
         }*/
-//TODO : 이졸미 수정
     private void initNavigator() {
         if (mNavigator != null) return;
         mNavigator = new Navigator(getSupportFragmentManager(), R.id.container);
@@ -270,6 +467,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.share_menu_item:
                 setNewRootFragment(FloatingActionButtonFragment.newInstance());
                 break;
+
+            case R.id.drawer_notice:
+                Intent intent = new Intent(this, NoticeActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.drawer_service:
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", "rachel0211s@gmail.com", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "불만사항 메일입니다.");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "기종 :"+"\n"+ "오류사항(자세히 기재 해주세요) :"+"\n");
+                startActivity(Intent.createChooser(emailIntent, "내일이 고객센터 메일"));
+                break;
+
 
         }
         mCurrentMenuItem = id;

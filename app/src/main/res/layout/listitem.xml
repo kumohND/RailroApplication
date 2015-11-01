@@ -53,7 +53,7 @@
                 android:layout_width="150dp"
                 android:layout_height="80dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/beach_with_hair" />
+                android:src="@drawable/home_3" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

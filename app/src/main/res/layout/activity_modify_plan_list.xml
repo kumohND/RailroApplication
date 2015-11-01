@@ -1059,26 +1059,73 @@
                     android:src="@drawable/ic_find_in_page_black_36dp" />
 
                 <Button
-                    android:id="@+id/tv_DoSomething"
-                    android:layout_width="match_parent"
+                    android:id="@+id/btn_DoSomething"
+                    android:layout_width="250dp"
                     android:layout_height="50dp"
                     android:background="#0000FFFF"
-                    android:gravity="center_vertical"
-                    android:text="설명" />
+                    android:gravity="left|center_vertical"
+                    android:text="메모" />
+
+                <Button
+
+                    android:id="@+id/btn_DoSomething_Check"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/button_down"
+                    android:gravity="right|center_vertical" />
+
 
             </LinearLayout>
 
-
-            <Button
-                android:id="@+id/btn_success_plan"
+            <LinearLayout
+                android:id="@+id/layout_DoSomthing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
                 android:background="@color/button_material_light"
-                android:text="완료" />
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/do_Somthing_Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nothing" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_success_plan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:background="@color/button_material_light"
+                    android:text="완료" />
+
+                <Button
+                    android:id="@+id/btn_cancel_plan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:background="@color/button_material_light"
+                    android:text="취소" />
+
+            </LinearLayout>
 
         </LinearLayout>
+
 
     </ScrollView>
 
