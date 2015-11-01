@@ -92,6 +92,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     Button movingTime; Button movingTime2; Button sStation;
     Button eStation;
     Button plan_Success;
+    Button plan_Cancel;
     Button start_Train_Weather;
     Button end_Train_Weather;
     Button start_Region_Weather;
@@ -388,7 +389,10 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
         plan_Success = (Button)findViewById(R.id.btn_success_plan);
         plan_Success.setOnClickListener(this);
-//        plan_Cancel.setOnClickListener(this);
+
+        plan_Cancel = (Button)findViewById(R.id.btn_cancel_plan);
+        plan_Cancel.setOnClickListener(this);
+
         doSomething.setOnClickListener(this);
         sTimeFix.setOnClickListener(this);
         eTimeFix.setOnClickListener(this);
@@ -482,6 +486,11 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                     setResult(RESULT_OK, intent_Finish);
                     finish();
                 }
+                break;
+            case R.id.btn_cancel_plan:
+                Intent intent_cancel = getIntent();
+                setResult(RESULT_CANCELED, intent_cancel);
+                finish();
                 break;
             case R.id.btn_moving_time:
                 intent = InputData(1);

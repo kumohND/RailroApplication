@@ -24,7 +24,7 @@
         android:fitsSystemWindows="true"
         android:background="@color/button_material_light"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer" />
+        app:menu="@menu/drawer"/>
 
  <!--   <com.google.android.gms.ads.AdView android:id="@+id/adView"
         android:layout_width="match_parent"
