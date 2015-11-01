@@ -3,6 +3,7 @@ package kr.ac.kumoh.railroApplication.fragments.tabs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.classes.Item;
 import kr.ac.kumoh.railroApplication.classes.MapApiConst;
 import kr.ac.kumoh.railroApplication.classes.OnFinishSearchListener;
+import kr.ac.kumoh.railroApplication.classes.PrintPlaceinfoActivity;
 import kr.ac.kumoh.railroApplication.classes.Searcher;
 
 public class SearchPlaceActivity extends Activity implements MapView.MapViewEventListener, MapView.POIItemEventListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
@@ -400,7 +402,7 @@ public class SearchPlaceActivity extends Activity implements MapView.MapViewEven
 
     public void onMapViewInitialized(MapView mapView) {
 
-        mMapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(37.537229,126.005515), 2, true);
+        //mMapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(37.537229,126.005515), 2, true);
 
         mMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
 
@@ -454,7 +456,7 @@ public class SearchPlaceActivity extends Activity implements MapView.MapViewEven
             poiItem.setCustomImageResourceId(R.drawable.map_pin_blue);
             poiItem.setSelectedMarkerType(MapPOIItem.MarkerType.CustomImage);
             poiItem.setCustomSelectedImageResourceId(R.drawable.map_pin_red);
-            poiItem.setCustomImageAutoscale(false);
+            poiItem.setCustomImageAutoscale(true);
             poiItem.setCustomImageAnchor(0.5f, 1.0f);
 
             mMapView.addPOIItem(poiItem);
@@ -504,7 +506,22 @@ public class SearchPlaceActivity extends Activity implements MapView.MapViewEven
         sb.append("latitude=").append(item.latitude).append("\n");
         sb.append("distance=").append(item.distance).append("\n");
         sb.append("direction=").append(item.direction).append("\n");
-        Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
+
+        MapPoint.GeoCoordinate geoCoordinate = mMapView.getMapCenterPoint().getMapPointGeoCoord();
+
+        Intent intent = new Intent(getApplicationContext(), PrintPlaceinfoActivity.class);
+        intent.putExtra("ImageURL", item.imageUrl);
+        intent.putExtra("Category", item.category);
+        intent.putExtra("Title", item.title);
+        intent.putExtra("Address", item.address);
+        intent.putExtra("Phone", item.phone);
+        intent.putExtra("cLongitude", geoCoordinate.longitude);
+        intent.putExtra("cLatitude", geoCoordinate.latitude);
+        intent.putExtra("bLongitude", item.longitude);
+        intent.putExtra("bLatitude", item.latitude);
+        startActivity(intent);
+
     }
 
     @Override
