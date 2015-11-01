@@ -1,15 +1,6 @@
 package kr.ac.kumoh.railroApplication.classes;
 
-import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-
-import com.kakao.auth.ApprovalType;
-import com.kakao.auth.AuthType;
-import com.kakao.auth.IApplicationConfig;
-import com.kakao.auth.ISessionConfig;
-import com.kakao.auth.KakaoAdapter;
-import com.kakao.auth.KakaoSDK;
 
 /**
  * Created by sj on 2015-10-26.
@@ -18,16 +9,14 @@ import com.kakao.auth.KakaoSDK;
 
 
 public class GlobalApplication extends Application{
-
-    static Activity currentActivity;
-
+/*
     private static class KakaoSDKAdapter extends KakaoAdapter {
         /**
          * Session Config에 대해서는 default값들이 존재한다.
          * 필요한 상황에서만 override해서 사용하면 됨.
          * @return Session의 설정값.
 
-*/
+
         @Override
         public ISessionConfig getSessionConfig() {
             return new ISessionConfig() {
@@ -73,10 +62,6 @@ public class GlobalApplication extends Application{
         return currentActivity;
     }
 
-    public static Context getGlobalApplicationContext() {
-        return currentActivity;
-    }
-
     // Activity가 올라올때마다 Activity의 onCreate에서 호출해줘야한다.
     public static void setCurrentActivity(Activity currentActivity) {
         GlobalApplication.currentActivity = currentActivity;
@@ -90,6 +75,6 @@ public class GlobalApplication extends Application{
 
 
     }
-
+*/
 
 }
