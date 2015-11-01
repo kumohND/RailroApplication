@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/placeImage"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_android"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/showRouteCAR"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="경로 탐색(다음 지도, 자동차)" />
+
+    <Button
+        android:id="@+id/showRoutePTRANSIT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="경로 탐색(다음 지도, 대중교통)" />
+
+    <Button
+        android:id="@+id/showRouteWALK"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="경로 탐색(다음 지도, 도보)" />
+
+
+    <ListView
+        android:id="@+id/placeInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
+</LinearLayout>

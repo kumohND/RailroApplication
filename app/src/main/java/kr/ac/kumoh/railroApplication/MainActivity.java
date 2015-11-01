@@ -1,11 +1,15 @@
 package kr.ac.kumoh.railroApplication;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.IdRes;
@@ -14,6 +18,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -52,11 +57,14 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import kr.ac.kumoh.railroApplication.AdditionalService.NoticeActivity;
 import kr.ac.kumoh.railroApplication.KakaoService.RegisterAppActivity;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
 import kr.ac.kumoh.railroApplication.classes.UseDB;
@@ -102,6 +110,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SessionCallback mCallback;
 
 
+    private void getHas(){
+        try
+        {
+            PackageInfo Info = getPackageManager().getPackageInfo(this.getPackageName(), PackageManager.GET_SIGNATURES);
+            for(Signature signature : Info.signatures)
+            {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("MY KEY HASH", Base64.encodeToString(md.digest(),Base64.DEFAULT));
+            }
+        }catch(PackageManager.NameNotFoundException e){
+
+        }catch(NoSuchAlgorithmException e)
+        {
+
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-
+        //getHas();
       /*  AdView adView = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("3AB81DDBDEC96ABB")
@@ -223,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onSessionClosed(ErrorResult errorResult) {
-               // redirectLoginActivity();
+                // redirectLoginActivity();
                 Toast.makeText(getApplicationContext(), "세션이 종료되었습니다.\n다시 로그인해주세요", Toast.LENGTH_LONG).show();
             }
 
@@ -442,6 +467,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.share_menu_item:
                 setNewRootFragment(FloatingActionButtonFragment.newInstance());
                 break;
+
+            case R.id.drawer_notice:
+                Intent intent = new Intent(this, NoticeActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.drawer_service:
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", "rachel0211s@gmail.com", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "불만사항 메일입니다.");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "기종 :"+"\n"+ "오류사항(자세히 기재 해주세요) :"+"\n");
+                startActivity(Intent.createChooser(emailIntent, "내일이 고객센터 메일"));
+                break;
+
 
         }
         mCurrentMenuItem = id;
