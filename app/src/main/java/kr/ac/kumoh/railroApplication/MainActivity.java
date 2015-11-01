@@ -1,7 +1,6 @@
 package kr.ac.kumoh.railroApplication;
 
 import android.content.Intent;
-import android.content.pm.PackageInstaller;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -10,29 +9,46 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+<<<<<<< HEAD
+import com.kakao.auth.AuthType;
+import com.kakao.auth.ErrorResult;
+||||||| merged common ancestors
 import com.kakao.auth.KakaoAdapter;
 import com.kakao.auth.KakaoSDK;
+=======
+>>>>>>> origin/newWoocha
+=======
+import com.kakao.auth.KakaoAdapter;
+import com.kakao.auth.KakaoSDK;
+>>>>>>> 651d29e24a99e58c1f38d2c67310c4d0ff7a5a94
 import com.kakao.auth.Session;
 import com.kakao.auth.ISessionCallback;
+import com.kakao.usermgmt.UserManagement;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import kr.ac.kumoh.railroApplication.KakaoService.RegisterAppActivity;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
+import kr.ac.kumoh.railroApplication.classes.UseDB;
 import kr.ac.kumoh.railroApplication.fragments.BaseFragment;
 import kr.ac.kumoh.railroApplication.fragments.DigitalFootprintFragment;
 import kr.ac.kumoh.railroApplication.fragments.FloatingActionButtonFragment;
 import kr.ac.kumoh.railroApplication.fragments.HomeFragment;
 import kr.ac.kumoh.railroApplication.fragments.MyTripListFragment;
 import kr.ac.kumoh.railroApplication.fragments.TripInfoFragment;
-import kr.ac.kumoh.railroApplication.fragments.tabs.PlanListTabFragment;
+import kr.ac.kumoh.railroApplication.util.GlobalApplication;
 import kr.ac.kumoh.railroApplication.util.LogUtils;
 import kr.ac.kumoh.railroApplication.util.Navigator;
 
@@ -44,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @InjectView(R.id.navigation_view)
     NavigationView mNavigationView;
+
+
+
     static LocationManager mManager;
     static RealTimeLocationListener mRTLocation;
     private static Navigator mNavigator;
@@ -53,66 +72,60 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int mCurrentMenuItem;
     //TODO : 어쩌꼬 저쩌꼬
 
-    //  private KakaoLink kakaoLink;
-    //  private KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder;
+    private SessionCallback mCallback;
 
-//    private LoginButton loginButton;
-
-    //  private SessionCallback callback;
-
-
-    private ISessionCallback callback;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // 세션을 초기화 한다
-     //   if(Session.initializeSession(this, mySessionCallback)){
-            // 1. 세션을 갱신 중이면, 프로그레스바를 보이거나 버튼을 숨기는 등의 액션을 취한다
-     //       loginButton.setVisibility(View.GONE);
-     //   } else if (Session.getCurrentSession().isOpened()){
-            // 2. 세션이 오픈된된 상태이면, 다음 activity로 이동한다.
-       //     onSessionOpened();
-      //  }
-        // 3. else 로그인 창이 보인다.
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+<<<<<<< HEAD
 
 
-/*
-        callback = new ISessionCallback() {
-            @Override
-            public void onSessionOpened() {
+      /*  AdView adView = (AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("3AB81DDBDEC96ABB")
+                .addTestDevice("3D04B52E387484C9")
+                .addTestDevice("3A8318B9B9390A6A")
+                .build();
+||||||| merged common ancestors
+<<<<<<< HEAD
+        AdView adView = (AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("3AB81DDBDEC96ABB")
+                .addTestDevice("3D04B52E387484C9")
+                .addTestDevice("3A8318B9B9390A6A")
+                .build();
+=======
+>>>>>>> 651d29e24a99e58c1f38d2c67310c4d0ff7a5a94
 
-            }
+<<<<<<< HEAD
+        adView.loadAd(adRequest);*/
+||||||| merged common ancestors
+        adView.loadAd(adRequest);
+=======
 
-            @Override
-            public void onSessionOpenFailed(KakaoException e) {
+        mCallback = new SessionCallback();
+>>>>>>> origin/newWoocha
+=======
+        UseDB mDB = new UseDB(this);
+//        mDB.DeleteTable();
+//        AdView adView = (AdView)findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder()
+//                .addTestDevice("3AB81DDBDEC96ABB")
+//                .addTestDevice("3D04B52E387484C9")
+//                .addTestDevice("3A8318B9B9390A6A")
+//                .build();
 
-            }
-        };
-        Session.getCurrentSession().addCallback(callback);
+//        adView.loadAd(adRequest);
+        mCallback = new SessionCallback();
+>>>>>>> 651d29e24a99e58c1f38d2c67310c4d0ff7a5a94
+
+
+        mCallback = new SessionCallback();
+        Session.getCurrentSession().addCallback(mCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
-
-
-
-/*
-        try {
-
-           kakaoLink = KakaoLink.getKakaoLink(getApplicationContext());
-            kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
-            kakaoTalkLinkMessageBuilder.addText("test");
-            kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder.build(), this);
-            kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
-        } catch (KakaoParameterException e) {
-            Log.e("error", e.getMessage());
-        }
-*/
 
 
         setupToolbar();
@@ -125,19 +138,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //TODO : 전지연 세젤예
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-      //  Session.getCurrentSession().removeCallback(callback);
-    }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
-            return;
-        }
+    protected void onResume() {
+        super.onResume();
 
-        super.onActivityResult(requestCode, resultCode, data);
+        GlobalApplication.setCurrentActivity(this);
+
+
     }
 
     private class SessionCallback implements ISessionCallback {
@@ -149,18 +157,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
-            if(exception != null) {
+            if (exception != null) {
                 Logger.e(exception);
             }
         }
     }
 
-    protected void redirectSignupActivity() {
-        final Intent intent = new Intent(this, SampleSignupActivity.class);
-        startActivity(intent);
-        finish();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Session.getCurrentSession().removeCallback(mCallback);
+    }
+
+
+    protected void redirectSignupActivity() {
+
+        if (Session.getCurrentSession().isOpened()) {
+            final Intent intent = new Intent(this, RegisterAppActivity.class);
+            startActivity(intent);
+        }
+        //finish();
+
+
+       // Session.getCurrentSession().open(AuthType.KAKAO_ACCOUNT, this);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -184,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             return super.onOptionsItemSelected(item);
         }*/
-//TODO : 이졸미 수정
     private void initNavigator() {
         if (mNavigator != null) return;
         mNavigator = new Navigator(getSupportFragmentManager(), R.id.container);

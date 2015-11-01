@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.ViewGroup;
 
@@ -53,7 +54,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 compare.set(Calendar.DAY_OF_MONTH, Integer.valueOf(day));
                 mDate.add(month + "/" + day);
                 for (int i = 0; i < (Integer.valueOf(duration) - 1); i++) { // 날자증가
-                    compare.add(Calendar.DAY_OF_MONTH, 1);
+                    compare.add(Calendar.DATE, 1);
                     month = String.valueOf(compare.get(Calendar.MONTH));
                     day = String.valueOf(compare.get(Calendar.DAY_OF_MONTH));
 
@@ -102,7 +103,10 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getItemPosition(Object object) {
-        return PagerAdapter.POSITION_NONE;
+        //return PagerAdapter.POSITION_NONE;
+
+            return POSITION_NONE;
+
     }
 
     @Override

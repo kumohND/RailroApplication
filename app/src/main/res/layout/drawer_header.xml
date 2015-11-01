@@ -3,24 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/drawer_header_height"
+    android:background="@drawable/ic_android">
 
-    android:background="@drawable/default_bg">
-
-
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/navigation_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/linearLayout"
-        android:padding="16dp">
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical">
 
         <ImageView
-            android:id="@+id/profile_image"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/contact" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_email" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="5"
+            android:text="내일이 - 오늘의 여행날씨 맑음"
+            android:textColor="@color/mdtp_white"
+            android:textSize="15sp" />
 
 
-    </FrameLayout>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00ff0000"
+            android:src="@drawable/ic_android" />
+    </LinearLayout>
 
 
     <View
@@ -30,27 +47,39 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/gradient" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/navigation_title"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:orientation="vertical">
+        android:gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageViewu
+            android:id="@+id/profile_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/contact"
+            app:border_color="@android:color/white"
+            app:border_width="1dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignEnd="@+id/drawer_user_name" />
 
         <TextView
             android:id="@+id/drawer_user_name"
             style="@style/DrawerNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sample_name" />
+            android:layout_below="@+id/profile_image"
+            android:layout_marginTop="8dp"
+            android:text="로그인이 필요합니다." />
 
-        <TextView
-            android:id="@+id/drawer_user_email"
-            style="@style/ViewText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sample_email" />
-    </LinearLayout>
+        <com.kakao.usermgmt.LoginButton
+            android:layout_marginTop="8dp"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/profile_image" />
+
+
+    </RelativeLayout>
 </RelativeLayout>

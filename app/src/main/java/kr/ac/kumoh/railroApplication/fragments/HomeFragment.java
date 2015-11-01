@@ -27,6 +27,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
@@ -102,6 +104,15 @@ public class HomeFragment extends BaseFragment implements DatePickerDialog.OnDat
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        AdView adView = (AdView)ButterKnife.findById(getActivity(),R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("3AB81DDBDEC96ABB")
+                .addTestDevice("3D04B52E387484C9")
+                .addTestDevice("3A8318B9B9390A6A")
+                .build();
+
+        adView.loadAd(adRequest);
 
         mContext = getActivity().getApplicationContext();
         // mCollapsingToolbar.setTitle(getString(getTitle()));

@@ -82,10 +82,7 @@ public class PlanListRVArrayAdapter extends RecyclerView.Adapter<PlanListRVArray
         this.mPlanList = mPlanList;
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {

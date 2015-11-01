@@ -44,6 +44,7 @@ public class UseDB {
                 String year = c.getString(c.getColumnIndex("year"));
                 String month = c.getString(c.getColumnIndex("month"));
                 String day = c.getString(c.getColumnIndex("day"));
+                values.put("index_id",getIndex);
                 values.put("dbTextName",dbName);
                 values.put("dbTitleName",tName);
                 values.put("startDate", date);
@@ -92,12 +93,18 @@ public class UseDB {
         tDb.close();
     } // 같은 이름 예외처리
 
-    public void Delete(String deleteString)
+    public void Delete(int id)
     {
+        String str_ID = String.valueOf(id);
         tDb = helper.getWritableDatabase();
-        tDb.delete("railo","dbTextName=?",new String[]{deleteString});
+        tDb.delete("railo","_id=?",new String[]{str_ID});
         tDb.close();
     }
 
+    public void DeleteTable()
+    {
+        tDb = helper.getWritableDatabase();
+        helper.onUpgrade(tDb,0,0);
+    }
 
 }

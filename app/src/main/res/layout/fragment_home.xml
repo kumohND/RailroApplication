@@ -1,4 +1,5 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
@@ -151,6 +152,15 @@
                   android:layout_height="match_parent"
                   app:leftIcon="@drawable/ads" /> -->
 
+            <com.kakao.usermgmt.LoginButton
+                android:id="@+id/com_kakao_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1" />
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
@@ -169,7 +179,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@drawable/ic_android" />
+                android:background="@drawable/home_tab2"
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -189,5 +200,19 @@
         app:borderWidth="0dp"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-3628724692863358/9171692422" />
+    </RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>
 
