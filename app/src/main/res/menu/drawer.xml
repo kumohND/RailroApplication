@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/home_menu_item"
@@ -11,11 +12,11 @@
             android:id="@+id/my_trip_menu_item"
             android:icon="@drawable/ic_format_list_bulleted_white_2x"
             android:title="@string/my_plan_list" />
-   <!--     <item
+        <!--     <item
 
-            android:id="@+id/plan_list_menu_item"
-            android:icon="@drawable/ic_android"
-            android:title="@string/plan_list" />-->
+                 android:id="@+id/plan_list_menu_item"
+                 android:icon="@drawable/ic_android"
+                 android:title="@string/plan_list" />-->
 
         <item
             android:id="@+id/plan_info_menu_item"
@@ -31,5 +32,31 @@
             android:id="@+id/share_menu_item"
             android:icon="@drawable/abc_ic_menu_share_mtrl_alpha"
             android:title="@string/share" />
+
     </group>
+
+    <item
+        android:title="부가서비스"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/drawer_notice"
+                android:checked="true"
+                android:icon="@drawable/ic_home_white_2x"
+
+                android:title="공지사항" />
+
+            <item
+                android:id="@+id/drawer_service"
+                android:icon="@drawable/ic_format_list_bulleted_white_2x"
+                android:title="고객센터" />
+
+            <item
+                android:id="@+id/drawer_partnership"
+                android:icon="@drawable/ic_format_list_bulleted_white_2x"
+                android:title="제휴/가맹" />
+        </menu>
+    </item>
+
+
 </menu>

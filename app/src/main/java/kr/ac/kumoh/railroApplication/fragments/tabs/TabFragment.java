@@ -153,6 +153,7 @@ public class TabFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        //ReadSetRecyclerView();
     }
 
     public TabFragment() {
@@ -165,19 +166,6 @@ public class TabFragment extends BaseFragment {
         if (getArguments() != null) {
             mStart = getArguments().getInt(ARG_START);
         }
-
-
-    }
-
-    public void GetContentValue() {
-        mDB = new UseDB(mContext);
-        ContentValues mValue = mDB.Read(index);
-        String temp1 = String.valueOf(mValue.get("index_id"));
-        String temp2 = String.valueOf(mValue.get("dbTextName"));
-        textName = temp1 + temp2;
-        duration = Integer.valueOf(String.valueOf(mValue.get("duration")));
-        //Collections.sort(mPlanList,new NoAscCompare());
-
     }
 
 
@@ -200,6 +188,17 @@ public class TabFragment extends BaseFragment {
         } catch (IOException e) {
 
         }
+    }
+
+    public void GetContentValue() {
+        mDB = new UseDB(mContext);
+        ContentValues mValue = mDB.Read(index);
+        String temp1 = String.valueOf(mValue.get("index_id"));
+        String temp2 = String.valueOf(mValue.get("dbTextName"));
+        textName = temp1 + temp2;
+        duration = Integer.valueOf(String.valueOf(mValue.get("duration")));
+        //Collections.sort(mPlanList,new NoAscCompare());
+
     }
 
     public void ReadViewPagerIdFromText() {
@@ -234,24 +233,34 @@ public class TabFragment extends BaseFragment {
         }
         file = new File(path + File.separator + textName + ".txt");
 
+        //for (int i = USER_SET_START_TIME; i <= USER_SET_END_TIME; i++) {
+//            // mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, i ));
+//        }
 
         try {
 
             BufferedReader buw = new BufferedReader(new FileReader(file));
 
             int duration = Integer.valueOf(buw.readLine());
+           // Log.d("d", "!!!!!!!!!!!!!!!duragion::" + duration);
             for (int i = 0; i < duration; i++) {
                 String test_Check = buw.readLine();
                 if (test_Check.equals(viewPagerState)) // 해당 뷰페이저 인덱스 List
                 {
+                    Log.d("d", "!!!!!!!!!!!!!!!viewPager::" + viewPagerState);
+
                     for (int j = 1; j < 25; j++) {
                         String check = buw.readLine();
                         if (check.length() > 10) { // 데이터 존재
 
                             String value[] = check.split("%&#");
 
-                            if (value[1].equals(String.valueOf(MOVE_TRAIN))
-                                    || value[1].equals(String.valueOf(MOVE_BUS))) {
+                            Log.d("d", value[0]);
+                            Log.d("d", value[1]);
+                            Log.d("d", value[2]);
+                            Log.d("d", value[3]);
+
+                            if (value[1].equals(String.valueOf(MOVE_TRAIN)) || value[1].equals(String.valueOf(MOVE_BUS))) {
                                 mPlanList.add(new PlanListItem(
                                         Integer.valueOf(value[1]), // category
                                         Integer.valueOf(value[2]), // 출발 시간
@@ -260,7 +269,6 @@ public class TabFragment extends BaseFragment {
                                         value[5],                  // 출발 장소
                                         value[6],                  // 도착 장소
                                         ""));                      // 타이틀
-
                             } else if (value[1].equals(String.valueOf(EAT)) || value[1].equals(String.valueOf(SLEEP))) {
                                 mPlanList.add(new PlanListItem(
                                         Integer.valueOf(value[1]), // category
@@ -285,34 +293,6 @@ public class TabFragment extends BaseFragment {
 
     }
 
-    //    void TestRead()
-//    {
-//        BufferedReader buw;
-//        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
-//        File file;
-//        file = new File(path);
-//        String rawString = "";
-//        if (!file.exists()) {
-//            file.mkdirs();
-//        }
-//        file = new File(path + File.separator + textName + ".txt");
-//
-//
-//        try{
-//            int check;
-//
-//            String rawData = "";
-//            buw =  new BufferedReader(new FileReader(file));
-//            int duration = Integer.valueOf(buw.readLine());
-//            Log.d("READ", rawData);
-//
-//
-//            buw.close();
-//        }catch(IOException e)
-//        {
-//        }
-//
-//    }
     View test;
 
     @Override
@@ -320,9 +300,14 @@ public class TabFragment extends BaseFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         test = view;
         mContext = view.getContext();
+        // DB Index를 읽어온다.
         ReadIndex();
+        // DB Content 값을 읽어온다.
         GetContentValue();
-        setupRecyclerView(view); // List초기화
+
+        setupRecyclerView(view);
+
+        // List초기화
 
 //        mRTLocation = new RealTimeLocationListener(view.getContext());
 //        long minTime = 1000;
@@ -417,6 +402,7 @@ public class TabFragment extends BaseFragment {
                     startActivityForResult(intent, REQUEST_PLAN);
                 }
 
+
                 //getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
                 //              getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
                 //TODO : 선정 완성된 정보 보여주기 + 수정 버튼 포함
@@ -437,6 +423,16 @@ public class TabFragment extends BaseFragment {
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
 
+        intent = getActivity().getIntent();
+
+        switch (requestCode) {
+            case REQUEST_PLAN:
+
+              //  mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
+                break;
+            default:
+                return;
+        }
 //        int position = intent.getIntExtra("position",-1);
 //        int start_Hour = intent.getIntExtra("start_Hour",-1);
 //
@@ -452,6 +448,7 @@ public class TabFragment extends BaseFragment {
         // super.startActivityForResult(intent, ((TabFragment.mIndex + 1) << 16) + (requestCode & 0xffff));
 
     }
+
 
     // Text 에서 데이터 읽어오면될듯, 시간정보
     private void InitializeData() {
@@ -474,7 +471,7 @@ public class TabFragment extends BaseFragment {
 //        PlanListRVArrayAdapter arrayAdapter = new PlanListRVArrayAdapter(mPlanList);
         arrayAdapter = new PlanListRVArrayAdapter(mPlanList);
         recyclerView.setAdapter(arrayAdapter);
-        arrayAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+    /*    arrayAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
@@ -502,7 +499,7 @@ public class TabFragment extends BaseFragment {
                 // TODO itemcount가 1일 경우이므로 1보다 크면 제대로 동작하지 않는다.
             }
         });
-
+*/
 
     }
 
@@ -642,10 +639,20 @@ public class TabFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+
         int position = data.getIntExtra("position", -1);
         int start_Hour = data.getIntExtra("start_Hour", -1);
         int end_Hour = data.getIntExtra("end_Hour", -1);
+
+
+      //  switch (requestCode) {
+            //case REQUEST_PLAN:
+               // Toast.makeText(getActivity(), data.getIntExtra("position", -1), Toast.LENGTH_LONG).show();
+              //  break;
+           // default:
+             //   return;
+       // }
         if (position == -1) {
             //mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
 //                InitializeData();
