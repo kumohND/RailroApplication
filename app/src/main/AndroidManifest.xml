@@ -60,6 +60,7 @@
         <activity android:name=".fragments.tabs.PlanListTabActivity" />
         <activity android:name=".fragments.tabs.SearchPlaceActivity" />
         <activity android:name=".classes.PrintPlaceinfoActivity" />
+        <activity android:name=".AdditionalService.NoticeActivity"/>
         <activity
             android:name=".fragments.tabs.TripInfoActivity"
             android:label="@string/title_activity_trip_info"></activity>

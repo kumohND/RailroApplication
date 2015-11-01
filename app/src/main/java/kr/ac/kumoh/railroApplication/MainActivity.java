@@ -24,6 +24,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -110,23 +111,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SessionCallback mCallback;
 
 
-    private void getHas(){
-        try
-        {
+    private void getHas() {
+        try {
             PackageInfo Info = getPackageManager().getPackageInfo(this.getPackageName(), PackageManager.GET_SIGNATURES);
-            for(Signature signature : Info.signatures)
-            {
+            for (Signature signature : Info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Log.e("MY KEY HASH", Base64.encodeToString(md.digest(),Base64.DEFAULT));
+                Log.e("MY KEY HASH", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
-        }catch(PackageManager.NameNotFoundException e){
+        } catch (PackageManager.NameNotFoundException e) {
 
-        }catch(NoSuchAlgorithmException e)
-        {
+        } catch (NoSuchAlgorithmException e) {
 
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "IMG CLICK", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "서비스 준비 중 입니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -293,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onFailure(ErrorResult errorResult) {
-            String error ="KakaoStoryResponseCallback : failure : " + errorResult;
+            String error = "KakaoStoryResponseCallback : failure : " + errorResult;
             Logger.e(error);
             Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
         }
@@ -465,20 +464,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.share_menu_item:
-                setNewRootFragment(FloatingActionButtonFragment.newInstance());
+                Intent msg = new Intent(Intent.ACTION_SEND);
+
+                msg.addCategory(Intent.CATEGORY_DEFAULT);
+                msg.putExtra(Intent.EXTRA_SUBJECT, "내일이 - 오늘의 여행날씨 맑음\n");
+                msg.putExtra(Intent.EXTRA_TEXT, "내일로를 떠나보아요!\n"+"(앱 링크)");
+                msg.putExtra(Intent.EXTRA_TITLE, "제목");
+                msg.setType("text/plain");
+
+                startActivity(Intent.createChooser(msg, "공유"));
+
                 break;
 
             case R.id.drawer_notice:
-                Intent intent = new Intent(this, NoticeActivity.class);
-                startActivity(intent);
+                Intent notice_intent = new Intent(this, NoticeActivity.class);
+                startActivity(notice_intent);
                 break;
 
             case R.id.drawer_service:
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                         "mailto", "rachel0211s@gmail.com", null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "불만사항 메일입니다.");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "기종 :"+"\n"+ "오류사항(자세히 기재 해주세요) :"+"\n");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "기종 :" + "\n" + "오류사항(자세히 기재 해주세요) :" + "\n");
                 startActivity(Intent.createChooser(emailIntent, "내일이 고객센터 메일"));
+                break;
+
+            case R.id.drawer_partnership:
+                Toast.makeText(this, "서비스 준비 중입니다.",Toast.LENGTH_LONG).show();
                 break;
 
 
