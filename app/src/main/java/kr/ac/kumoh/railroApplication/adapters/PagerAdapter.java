@@ -84,11 +84,15 @@ public class PagerAdapter extends FragmentPagerAdapter {
     private int getOffset(int position) {
         switch (position) {
 
-         /*   case 0: return 0;
-            case 1: return 5;
-            case 2: return 10;
-            case 3: return 15;*/
-
+       /*     case 0:
+                return 0;
+            case 1:
+                return 5;
+            case 2:
+                return 10;
+            case 3:
+                return 15;
+*/
         }
         return 1;
     }

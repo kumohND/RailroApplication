@@ -90,8 +90,7 @@ public class PrintPlaceinfoActivity extends Activity {
                 startActivity(intent);
             }
         });
-
-        img.setImageDrawable(getDrawable(R.drawable.ic_android));
+       // img.setImageDrawable(getDrawable(R.drawable.ic_android));
 
         if(getIntent().getExtras().getString("ImageURL") != "") {
             new DownloadImageTask((ImageView) findViewById(R.id.placeImage))

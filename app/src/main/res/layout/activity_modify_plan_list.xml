@@ -1076,6 +1076,7 @@
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/layout_DoSomthing"
                 android:layout_width="match_parent"
@@ -1090,19 +1091,39 @@
                 android:visibility="gone">
 
                 <TextView
-                    android:id = "@+id/do_Somthing_Text"
+                    android:id="@+id/do_Somthing_Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text = "Nothing" />
+                    android:text="Nothing" />
             </LinearLayout>
-            <Button
-                android:id="@+id/btn_success_plan"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/button_material_light"
-                android:text="완료" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_success_plan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:background="@color/button_material_light"
+                    android:text="완료" />
+
+                <Button
+                    android:id="@+id/btn_cancel_plan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:background="@color/button_material_light"
+                    android:text="취소" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
 

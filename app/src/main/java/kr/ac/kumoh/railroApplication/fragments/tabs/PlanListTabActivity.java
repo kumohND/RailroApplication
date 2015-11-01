@@ -244,7 +244,6 @@ public class PlanListTabActivity  extends ActionBarActivity{
                     mTabWeather.setVisibility(View.VISIBLE);
                     isOpen = true;
                 } else {
-                    //StopLocationService();
                     mTabWeather.setVisibility(View.GONE);
                     isOpen = false;
                 }
@@ -262,7 +261,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
         int tabTextColor = getResources().getColor(R.color.titleTextColor);
         mTabLayout.setTabTextColors(tabTextColor, tabTextColor);
     }
-    //TOdo: asdasd
+
     private void setupViewPager() {
         //You could use the normal supportFragmentManger if you like
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), getApplicationContext(),index);
@@ -278,6 +277,7 @@ public class PlanListTabActivity  extends ActionBarActivity{
             public void onPageSelected(int position) {
                 // 여기서 변경점 저장
                 ChangeViewPagerIdToText(position);
+
             }
 
             @Override

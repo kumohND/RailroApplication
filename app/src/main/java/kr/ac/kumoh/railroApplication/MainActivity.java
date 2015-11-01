@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.IdRes;
@@ -63,6 +64,7 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import kr.ac.kumoh.railroApplication.AdditionalService.NoticeActivity;
 import kr.ac.kumoh.railroApplication.KakaoService.RegisterAppActivity;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
 import kr.ac.kumoh.railroApplication.classes.UseDB;
@@ -465,6 +467,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.share_menu_item:
                 setNewRootFragment(FloatingActionButtonFragment.newInstance());
                 break;
+
+            case R.id.drawer_notice:
+                Intent intent = new Intent(this, NoticeActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.drawer_service:
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", "rachel0211s@gmail.com", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "불만사항 메일입니다.");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "기종 :"+"\n"+ "오류사항(자세히 기재 해주세요) :"+"\n");
+                startActivity(Intent.createChooser(emailIntent, "내일이 고객센터 메일"));
+                break;
+
 
         }
         mCurrentMenuItem = id;
