@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kr.ac.kumoh.railroApplication" >
+    package="kr.ac.kumoh.railroApplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,38 +15,56 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+
     <application
+        android:name="kr.ac.kumoh.railroApplication.util.GlobalApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:largeHeap="true"
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="route"
+                    android:scheme="daummaps" />
                 <data
                     android:host="@string/kakaolink_host"
                     android:scheme="@string/kakao_scheme" />
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
+
+        <activity android:name=".KakaoService.LoginService" />
+        <activity android:name=".SplashActivity" />
+        <activity android:name=".KakaoService.RegisterAppActivity" />
+        <activity android:name=".KakaoService.SignUpService" />
         <activity android:name=".fragments.tabs.SetTripPlanActivity" />
         <activity android:name=".classes.ReadTrainInfoSetActivity" />
         <activity android:name=".classes.WebViewActivity" />
         <activity android:name=".fragments.tabs.PlanListTabActivity" />
         <activity android:name=".fragments.tabs.SearchPlaceActivity" />
+        <activity android:name=".classes.PrintPlaceinfoActivity" />
+        <activity android:name=".AdditionalService.NoticeActivity"/>
         <activity
             android:name=".fragments.tabs.TripInfoActivity"
-            android:label="@string/title_activity_trip_info" >
-        </activity>
+            android:label="@string/title_activity_trip_info"></activity>
+
     </application>
 
 </manifest>

@@ -27,10 +27,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -39,6 +42,7 @@ import butterknife.InjectView;
 import kr.ac.kumoh.railroApplication.R;
 import kr.ac.kumoh.railroApplication.adapters.PlanListRVArrayAdapter;
 import kr.ac.kumoh.railroApplication.classes.AddItem;
+import kr.ac.kumoh.railroApplication.classes.NoAscCompare;
 import kr.ac.kumoh.railroApplication.classes.PlanListItem;
 import kr.ac.kumoh.railroApplication.classes.RealTimeLocationListener;
 import kr.ac.kumoh.railroApplication.classes.UseDB;
@@ -76,6 +80,8 @@ public class TabFragment extends BaseFragment {
     static RealTimeLocationListener mRTLocation;
     Context mContext;
     String viewPagerState;
+    PlanListRVArrayAdapter arrayAdapter;
+    String TOKEN = "%&#";
 /*
     private final
     @DrawableRes
@@ -111,21 +117,23 @@ public class TabFragment extends BaseFragment {
     UseDB mDB;
     String textName;
     int duration;
-    public void test() {
+    int clicked_List = -1;
 
-        Bundle bundle = getArguments();
-        String str = null;
-
-        if (bundle.getString("date") != null) {
-            str = bundle.getString("date!!!!!!!!!!!!!");
-        }
-
-        Log.d("d","TestFunction!");
-        Toast.makeText(getActivity(), "TestFuction!!",Toast.LENGTH_SHORT).show();
-        mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
-        InitializeAdapter();
-
-    }
+    //    public void test() {
+//
+//        Bundle bundle = getArguments();
+//        String str = null;
+//
+//        if (bundle.getString("date") != null) {
+//            str = bundle.getString("date!!!!!!!!!!!!!");
+//        }
+//
+//        Log.d("d","TestFunction!");
+//        Toast.makeText(getActivity(), "TestFuction!!",Toast.LENGTH_SHORT).show();
+//        mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
+//        InitializeAdapter();
+//
+//    }
     public static TabFragment newInstance(int start) {
         TabFragment fragment = new TabFragment();
         Bundle args = new Bundle();
@@ -145,6 +153,7 @@ public class TabFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        //ReadSetRecyclerView();
     }
 
     public TabFragment() {
@@ -157,25 +166,13 @@ public class TabFragment extends BaseFragment {
         if (getArguments() != null) {
             mStart = getArguments().getInt(ARG_START);
         }
-
-
-    }
-    public void GetContentValue()
-    {
-        mDB = new UseDB(mContext);
-        ContentValues mValue = mDB.Read(index);
-        textName = String.valueOf(mValue.get("dbTextName"));
-        duration = Integer.valueOf(String.valueOf(mValue.get("duration")));
-
-
     }
 
 
-    void ReadIndex()
-    {
+    void ReadIndex() {
         String named_buffer;
         String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
-        try{
+        try {
             File file;
             file = new File(path);
             if (!file.exists()) {
@@ -188,94 +185,129 @@ public class TabFragment extends BaseFragment {
             named_buffer = buw.readLine();
             index = Integer.valueOf(named_buffer);
             buw.close();
-        }catch(IOException e)
-        {
+        } catch (IOException e) {
 
         }
     }
-    public void ReadViewPagerIdFromText()
-    {
+
+    public void GetContentValue() {
+        mDB = new UseDB(mContext);
+        ContentValues mValue = mDB.Read(index);
+        String temp1 = String.valueOf(mValue.get("index_id"));
+        String temp2 = String.valueOf(mValue.get("dbTextName"));
+        textName = temp1 + temp2;
+        duration = Integer.valueOf(String.valueOf(mValue.get("duration")));
+        //Collections.sort(mPlanList,new NoAscCompare());
+
+    }
+
+    public void ReadViewPagerIdFromText() {
         String named_buffer;
         String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
-        try{
+        try {
             File file;
             file = new File(path);
             if (!file.exists()) {
                 file.mkdirs();
             }
-            file = new File(path + File.separator + "temp" + ".txt");
+            file = new File(path + File.separator + "view_Pager" + ".txt");
 
 
             BufferedReader buw = new BufferedReader(new FileReader(file));
             named_buffer = buw.readLine();
             viewPagerState = named_buffer;
-            buw.close();
-        }catch(IOException e)
-        {
+        } catch (IOException e) {
 
         }
     }
 
-    public void ReadSetRecyclerView()
-    {
+    public void ReadSetRecyclerView() {
         ReadViewPagerIdFromText();
         String named_buffer;
         String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
         ArrayList<String> mTokens = new ArrayList<String>();
-        try{
-            File file;
-            file = new File(path);
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            file = new File(path + File.separator + textName + ".txt");
+        File file;
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + textName + ".txt");
 
+        //for (int i = USER_SET_START_TIME; i <= USER_SET_END_TIME; i++) {
+//            // mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, i ));
+//        }
+
+        try {
 
             BufferedReader buw = new BufferedReader(new FileReader(file));
+
             int duration = Integer.valueOf(buw.readLine());
-            for(int i = 0 ; i < duration; i++)
-            {
-                if(buw.readLine().equals(viewPagerState)) // 해당 뷰페이저 인덱스 List
+           // Log.d("d", "!!!!!!!!!!!!!!!duragion::" + duration);
+            for (int i = 0; i < duration; i++) {
+                String test_Check = buw.readLine();
+                if (test_Check.equals(viewPagerState)) // 해당 뷰페이저 인덱스 List
                 {
-                    for(int j = 1; j < 25; j++)
-                    {
+                    Log.d("d", "!!!!!!!!!!!!!!!viewPager::" + viewPagerState);
+
+                    for (int j = 1; j < 25; j++) {
                         String check = buw.readLine();
-                        if(check.length() > 10){ // 데이터 존재
-                            StringTokenizer token = new StringTokenizer(check,"%&#");
-                            for( ; !token.hasMoreElements(); )
-                                 mTokens.add(token.nextToken());
+                        if (check.length() > 10) { // 데이터 존재
 
+                            String value[] = check.split("%&#");
 
-                            if(mTokens.get(0).equals(String.valueOf(MOVE_TRAIN)) || mTokens.get(0).equals(String.valueOf(MOVE_BUS))) {
-                                mPlanList.add(new PlanListItem("출발 시간 출발 장소 -> 도착 시간 도착 장소 "
-                                        , "설명", R.color.cardview_shadow_end_color, 7));
-                            }else if(mTokens.get(0).equals(String.valueOf(MOVE_TRAIN))) {
-                                mPlanList.add(new PlanListItem("출발 시간 출발 장소 -> 도착 시간 도착 장소 "
-                                        , "설명", R.color.cardview_shadow_end_color, 7));
-                            }else if(mTokens.get(0).equals(String.valueOf(MOVE_TRAIN))) {
-                                mPlanList.add(new PlanListItem("출발 시간 출발 장소 -> 도착 시간 도착 장소 "
-                                        , "설명", R.color.cardview_shadow_end_color, 7));
+                            Log.d("d", value[0]);
+                            Log.d("d", value[1]);
+                            Log.d("d", value[2]);
+                            Log.d("d", value[3]);
+
+                            if (value[1].equals(String.valueOf(MOVE_TRAIN)) || value[1].equals(String.valueOf(MOVE_BUS))) {
+                                mPlanList.add(new PlanListItem(
+                                        Integer.valueOf(value[1]), // category
+                                        Integer.valueOf(value[2]), // 출발 시간
+                                        Integer.valueOf(value[3]), // 도착 시간
+                                        value[4],                  // 할 일
+                                        value[5],                  // 출발 장소
+                                        value[6],                  // 도착 장소
+                                        ""));                      // 타이틀
+                            } else if (value[1].equals(String.valueOf(EAT)) || value[1].equals(String.valueOf(SLEEP))) {
+                                mPlanList.add(new PlanListItem(
+                                        Integer.valueOf(value[1]), // category
+                                        Integer.valueOf(value[2]), // 출발 시간
+                                        Integer.valueOf(value[3]), // 도착 시간
+                                        value[4],                  // 할 일
+                                        value[5],                  // 출발 장소
+                                        "",                        // 도착 장소
+                                        ""));                      // 타이틀
                             }
+
                         }
                     }
                 }
-
+                for (int j = 1; j < 25; j++)
+                    buw.readLine();
             }
             buw.close();
-        }catch(IOException e)
-        {
-
+        } catch (IOException e) {
+            //e.printStackTrace();
         }
+
     }
 
+    View test;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        test = view;
         mContext = view.getContext();
+        // DB Index를 읽어온다.
         ReadIndex();
+        // DB Content 값을 읽어온다.
         GetContentValue();
+
         setupRecyclerView(view);
+
+        // List초기화
 
 //        mRTLocation = new RealTimeLocationListener(view.getContext());
 //        long minTime = 1000;
@@ -288,26 +320,91 @@ public class TabFragment extends BaseFragment {
 //        //}
 
 
-
         return view;
     }
 
+    public String returnWriteString(int hour_index) {
+        return "time " + hour_index + TOKEN;
+    }
+
+    private boolean DeleteTextLine(int position) {
+
+
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext"; // 저장 할 곳
+        File file;
+        BufferedReader bur;
+        BufferedWriter buw;
+        int sHour = mPlanList.get(index).getTime();
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + textName + ".txt"); // 여기서 텍스트 이름만 수정하면 될듯
+
+        try {
+            String dummy = "";
+            String line;
+            //String add_Line = returnWriteString();
+            bur = new BufferedReader(new FileReader(file));
+
+            int duration = Integer.valueOf(bur.readLine());
+            dummy = String.valueOf(duration) + "\r\n";
+
+            if (sHour != 0) {
+                for (int j = 0; j < duration; j++) {
+                    String state = bur.readLine();
+                    dummy = dummy + state + "\r\n"; // 카테고리
+                    if (state.equals(viewPagerState)) { // 데이터 체인지
+                        for (int i = 1; i < 25; i++) {
+                            //if(i == sHour){
+                            if (i == sHour) {
+                                String add_Line = returnWriteString(i);
+                                dummy = dummy + add_Line + "\r\n";
+                                bur.readLine();
+                            } else {
+                                dummy = dummy + bur.readLine() + "\r\n";
+                            }
+                        }
+                    }
+                    for (int i = 1; i < 25; i++)// 24시간 넘어감
+                        dummy = dummy + bur.readLine() + "\r\n";
+                }
+
+                buw = new BufferedWriter(new FileWriter(file));
+                buw.write(dummy);
+                buw.close();
+            }
+            bur.close();
+        } catch (IOException e) {
+
+        }
+
+        mPlanList.remove(position);
+        return true;
+    }
 
     private void setupRecyclerView(View view) {
 
 
         mPlanList = new ArrayList<>();
         recyclerView = ButterKnife.findById(view, R.id.simpleGrid);
+
         recyclerView.addOnItemTouchListener(new RecyclerClickListener(getActivity(), new RecyclerClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Toast.makeText(getActivity(), "I'm Clicked~~", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
-                startActivityForResult(intent, REQUEST_PLAN);
+                intent.putExtra("index", index);
+                intent.putExtra("pager", viewPagerState);
+                intent.putExtra("position", position);
+                if (mPlanList.size() != 0) {
+                    intent.putExtra("startHour", mPlanList.get(position).getTime());
+                    startActivityForResult(intent, REQUEST_PLAN);
+                }
 
 
                 //getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
-  //              getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
+                //              getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
                 //TODO : 선정 완성된 정보 보여주기 + 수정 버튼 포함
 
             }
@@ -318,19 +415,44 @@ public class TabFragment extends BaseFragment {
 
         InitializeData();
         InitializeAdapter();
+        arrayAdapter.notifyDataSetChanged();
+        //view.notify();
     }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
+
+        intent = getActivity().getIntent();
+
+        switch (requestCode) {
+            case REQUEST_PLAN:
+
+              //  mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
+                break;
+            default:
+                return;
+        }
+//        int position = intent.getIntExtra("position",-1);
+//        int start_Hour = intent.getIntExtra("start_Hour",-1);
+//
+//        if(position == -1) {
+//            //mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
+//            InitializeData();
+//            InitializeAdapter();
+//        }else{
+//            //텍스트는 수정된 상황, 추가말고
+//            FixedList(start_Hour,position);
+//        }
+
         // super.startActivityForResult(intent, ((TabFragment.mIndex + 1) << 16) + (requestCode & 0xffff));
 
     }
 
+
     // Text 에서 데이터 읽어오면될듯, 시간정보
     private void InitializeData() {
         ReadSetRecyclerView();
-
 
 //        for (int i = USER_SET_START_TIME; i <= USER_SET_END_TIME; i++) {
 //            // mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, i ));
@@ -339,11 +461,102 @@ public class TabFragment extends BaseFragment {
         //  mPlanList.add(new PlanListItem("이동(버스)", "범물동 -> 지산동", 0));
     }
 
-    private void InitializeAdapter() {
-        PlanListRVArrayAdapter arrayAdapter = new PlanListRVArrayAdapter(mPlanList);
-        recyclerView.setAdapter(arrayAdapter);
+    public void NotifyAdaptter() {
+
+
+        //test.notifyAll();
     }
 
+    private void InitializeAdapter() {
+//        PlanListRVArrayAdapter arrayAdapter = new PlanListRVArrayAdapter(mPlanList);
+        arrayAdapter = new PlanListRVArrayAdapter(mPlanList);
+        recyclerView.setAdapter(arrayAdapter);
+    /*    arrayAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                //arrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                // arrayAdapter.notifyItemRangeChanged(positionStart,itemCount);
+            }
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                // arrayAdapter.notifyItemRangeRemoved(positionStart,itemCount);
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                // arrayAdapter.notifyItemRangeRemoved(positionStart,itemCount);
+            }
+
+            @Override
+            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                // arrayAdapter.notifyItemMoved(fromPosition,toPosition);
+                // TODO itemcount가 1일 경우이므로 1보다 크면 제대로 동작하지 않는다.
+            }
+        });
+*/
+
+    }
+
+    //Text저장된 곳에서 지움
+    private boolean DeletePositionList(int position) {
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext"; // 저장 할 곳
+        File file;
+        BufferedReader bur;
+        BufferedWriter buw;
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + textName + ".txt"); // 여기서 텍스트 이름만 수정하면 될듯
+        if (mPlanList.size() == 0) return false;
+
+        try {
+
+            String dummy = "";
+            //String add_Line = returnWriteString();
+            bur = new BufferedReader(new FileReader(file));
+
+            int duration = Integer.valueOf(bur.readLine());
+            dummy = String.valueOf(duration) + "\r\n";
+
+
+            for (int j = 0; j < duration; j++) {
+                String state = bur.readLine();
+                dummy = dummy + state + "\r\n"; // 카테고리
+                if (state.equals(viewPagerState)) { // 데이터 체인지
+                    for (int i = 1; i < 25; i++) {
+                        //if(i == sHour){
+                        int deleteHour = mPlanList.get(position).getTime();
+                        if (i == deleteHour) {
+                            String add_Line = "time " + deleteHour + TOKEN;
+                            dummy = dummy + add_Line + "\r\n";
+                            bur.readLine();
+                        } else {
+                            dummy = dummy + bur.readLine() + "\r\n";
+                        }
+                    }
+                }
+                for (int i = 1; i < 25; i++)// 24시간 넘어감
+                    dummy = dummy + bur.readLine() + "\r\n";
+            }
+
+            buw = new BufferedWriter(new FileWriter(file));
+            buw.write(dummy);
+            buw.close();
+
+            bur.close();
+        } catch (IOException e) {
+
+        }
+
+        return true;
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -354,22 +567,105 @@ public class TabFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SetTripPlanActivity.class);
-               // getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
+                // getParentFragment().startActivityForResult(intent, REQUEST_PLAN);
+                //  TestRead();
+                intent.putExtra("index", index);
+                intent.putExtra("pager", viewPagerState);
                 startActivityForResult(intent, REQUEST_PLAN);
             }
-        });
+        }); // 새로만든상황
+
     }
+
+    public void FixedList(int Hour, int endHour, int position) {
+        if (Hour == -1) return;
+
+        ReadViewPagerIdFromText();
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+        File file;
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + textName + ".txt");
+
+
+        try {
+
+            BufferedReader buw = new BufferedReader(new FileReader(file));
+
+            int duration = Integer.valueOf(buw.readLine());
+            for (int i = 0; i < duration; i++) {
+                String test_Check = buw.readLine();
+                if (test_Check.equals(viewPagerState)) // 해당 뷰페이저 인덱스 List
+                {
+                    for (int j = 1; j < 25; j++) {
+                        String check = buw.readLine();
+                        if (j == Hour) { // 데이터 존재
+                            String value[] = check.split("%&#");
+
+                            if (value[1].equals(String.valueOf(MOVE_TRAIN))
+                                    || value[1].equals(String.valueOf(MOVE_BUS))) {
+                                mPlanList.get(position).setCategory(Integer.valueOf(value[1]));
+                                mPlanList.get(position).setTime(Integer.valueOf(value[2]));
+                                mPlanList.get(position).setEndTime(Integer.valueOf(value[3]));
+                                mPlanList.get(position).setPlanDetail(value[4]);
+                                mPlanList.get(position).setStartPlace(value[5]);
+                                mPlanList.get(position).setEndPlace(value[6]);
+
+                            } else if (value[1].equals(String.valueOf(EAT))
+                                    || value[1].equals(String.valueOf(SLEEP))) {
+                                mPlanList.get(position).setCategory(Integer.valueOf(value[1]));
+                                mPlanList.get(position).setTime(Integer.valueOf(value[2]));
+                                mPlanList.get(position).setEndTime(Integer.valueOf(value[3]));
+                                mPlanList.get(position).setPlanDetail(value[4]);
+                                mPlanList.get(position).setStartPlace(value[5]);
+                            }
+                        }
+
+                    }
+                }
+                for (int j = 1; j < 25; j++)
+                    buw.readLine();
+
+            }
+            buw.close();
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+
+        int position = data.getIntExtra("position", -1);
+        int start_Hour = data.getIntExtra("start_Hour", -1);
+        int end_Hour = data.getIntExtra("end_Hour", -1);
 
 
-        if (requestCode == REQUEST_PLAN) {
-            Log.d("d", "!!!!!!!!!!!!!!!!!!!!");
-            mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
-            InitializeAdapter();
+      //  switch (requestCode) {
+            //case REQUEST_PLAN:
+               // Toast.makeText(getActivity(), data.getIntExtra("position", -1), Toast.LENGTH_LONG).show();
+              //  break;
+           // default:
+             //   return;
+       // }
+        if (position == -1) {
+            //mPlanList.add(new PlanListItem("", "", R.color.cardview_shadow_end_color, 9));
+//                InitializeData();
+//                InitializeAdapter();
+//                NotifyAdaptter();
+            setupRecyclerView(test);
+            //NotifyAdaptter();
+        } else {
+            //텍스트는 수정된 상황, 추가말고
+            FixedList(start_Hour, end_Hour, position);
+            //NotifyAdaptter();
         }
+
     }
 
     protected PlanListItem[] getData() {
@@ -386,7 +682,7 @@ public class TabFragment extends BaseFragment {
         for(int i=mStart; i<(mStart+ AMOUNT_OF_TIME_COUNT);++i){
             data[j++] = ROOT_DATA[i];
         }
-        return data;
+        return data;android:hardwareAccelerated="false" android:largeHeap="true"
     }*/
 
 

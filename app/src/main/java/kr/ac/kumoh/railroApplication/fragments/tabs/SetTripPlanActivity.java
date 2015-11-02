@@ -2,7 +2,6 @@ package kr.ac.kumoh.railroApplication.fragments.tabs;
 
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,11 +10,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -29,6 +28,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.StringTokenizer;
@@ -42,9 +42,11 @@ import kr.ac.kumoh.railroApplication.classes.LocationChangeLonLat;
 import kr.ac.kumoh.railroApplication.classes.LocationInform;
 import kr.ac.kumoh.railroApplication.classes.ReadTrainInfoSetActivity;
 import kr.ac.kumoh.railroApplication.classes.StationInfo;
+import kr.ac.kumoh.railroApplication.classes.UseDB;
 import kr.ac.kumoh.railroApplication.classes.WeatherConditionList;
 import kr.ac.kumoh.railroApplication.classes.WeatherInfo;
 import kr.ac.kumoh.railroApplication.classes.WebViewActivity;
+import me.drakeet.materialdialog.MaterialDialog;
 
 /**
  * Created by sj on 2015-07-30.
@@ -74,28 +76,39 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     private ArrayList<String> station;
 
     LocationChangeLonLat mLocationData;
+    EditText mEditText;
     //Context mContext;
     LinearLayout moveTrain;  LinearLayout moveBus;
     LinearLayout toMeal; LinearLayout sleep;
     LinearLayout layout_station_start_Weather;LinearLayout layout_station_end_Weather;
     LinearLayout layout_region_start_Weather; LinearLayout layout_region_end_Weather;
     LinearLayout layout_meal_Weather; LinearLayout layout_sleep_Weather;
+    LinearLayout layout_Do_Something;
 
     Button doSomething; Button sTimeFix; Button eTimeFix;
     Button sLocation; Button eLocation; Button wSleep;
     Button wEat;
-
+    MaterialDialog mMaterialDialog;
     Button movingTime; Button movingTime2; Button sStation;
     Button eStation;
     Button plan_Success;
+    Button plan_Cancel;
     Button start_Train_Weather;
     Button end_Train_Weather;
     Button start_Region_Weather;
     Button end_Region_Weather;
     Button meal_Weather;
     Button sleep_Weather;
+    Button doSomthingCheck;
+
+    private final int MOVE_TRAIN = 0;
+    private final int MOVE_BUS = 1;
+    private final int SLEEP = 2;
+    private final int EAT = 3;
 
     ImageView iv_Region_Start_Weather;
+
+    TextView tv_Do_Something;
     TextView tv_Region_Start_Weather_Name;
     TextView tv_Region_Start_Date;
     TextView tv_Region_Start_Max_Temp;
@@ -163,10 +176,11 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     boolean flag_End_RegionLayout = false;
     boolean flag_MealLayout = false;
     boolean flag_SleepLayout = false;
-
-
-    String default_sTime = "출발 시간:"; String default_eTime = "도착 시간:"; String default_sStation = "출발역 : "; String default_eStation = "도착역 : ";
-    String default_toDo = "할 일:"; String default_moveValue = "이동 시간:";
+    boolean flag_DoSomethingLayout = false;
+    int db_Index;
+    String TOKEN = "%&#";
+    String default_sTime = "출발 시간 : "; String default_eTime = "도착 시간 : "; String default_sStation = "출발역 : "; String default_eStation = "도착역 : ";
+    String default_toDo = "할 일"; String default_moveValue = "이동 시간:";
 
 
     WeatherInfo mStartTrainWeather;
@@ -175,11 +189,30 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     WeatherInfo mEndRegionWeather;
     WeatherInfo mMealWeather;
     WeatherInfo mSleepWeather;
-
+    WeatherConditionList mCondition = new WeatherConditionList();
     ContentValues start_Weather;
     ContentValues end_Weather;
     String year; String month; String day;
     Calendar calendar = Calendar.getInstance();
+    UseDB mDB;
+    ContentValues mContentValue;
+    String textTitle;
+    String viewPagerState;
+    int sHour = -1;
+    int eHour = -1;
+    int selectedPosition = -1;
+    int selectedHour = -1;
+    String str_DoSomeValue = "Nothing";
+    public void GetContentValueFromText()
+    {
+        mDB = new UseDB(this);
+        mContentValue = mDB.Read(db_Index);
+        String temp1 = String.valueOf(mContentValue.get("index_id"));
+        String temp2 = String.valueOf(mContentValue.get("dbTextName"));
+        textTitle = temp1 + temp2;
+
+    }
+
 
     String TokenForLocation(String val)
     {
@@ -274,7 +307,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     void SetLayoutMeal()
     {
         layout_meal_Weather =(LinearLayout)findViewById(R.id.layout_Meal_Weather);
-         toMeal = (LinearLayout)findViewById(R.id.ToMeal);
+        toMeal = (LinearLayout)findViewById(R.id.ToMeal);
         wEat = (Button)findViewById(R.id.btn_toMeal_location);
         meal_Weather = (Button)findViewById(R.id.btn_meal_Weather);
         meal_Weather.setOnClickListener(this);
@@ -304,6 +337,15 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         wSleep.setOnClickListener(this);
         SetSleepWeatherDetail();
     }
+
+    void SetLayoutDoSomthing()
+    {
+        layout_Do_Something = (LinearLayout)findViewById(R.id.layout_DoSomthing);
+        tv_Do_Something = (TextView)findViewById(R.id.do_Somthing_Text);
+        tv_Do_Something.setOnClickListener(this);
+        doSomthingCheck = (Button)findViewById(R.id.btn_DoSomething_Check);
+        doSomthingCheck.setOnClickListener(this);
+    }
     void SetSleepWeatherDetail()
     {
         iv_Sleep_Weather = (ImageView)findViewById(R.id.iv_Sleep_Weather);
@@ -319,34 +361,46 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     {
 
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_plan_list);
         ButterKnife.inject(this);
+        Intent intent = getIntent();
+        db_Index = intent.getIntExtra("index", 9999);
+        viewPagerState = intent.getStringExtra("pager");
+        selectedHour = intent.getIntExtra("startHour", -1);
+        selectedPosition = intent.getIntExtra("position", -1);
+        GetContentValueFromText();
         setupToolbar();
+
         mCondition = new WeatherConditionList();
         SetLayoutTrain();
         SetLayoutRegion();
         SetLayoutMeal();
         SetLayoutSleep();
+        SetLayoutDoSomthing();
 
         calendar = Calendar.getInstance();
         sTimeFix = (Button)findViewById(R.id.fix_start_Time);
         eTimeFix = (Button)findViewById(R.id.fix_end_Time);
-        doSomething = (Button)findViewById(R.id.tv_DoSomething);
+        doSomething = (Button)findViewById(R.id.btn_DoSomething);
 
         plan_Success = (Button)findViewById(R.id.btn_success_plan);
         plan_Success.setOnClickListener(this);
-//        plan_Cancel.setOnClickListener(this);
+
+        plan_Cancel = (Button)findViewById(R.id.btn_cancel_plan);
+        plan_Cancel.setOnClickListener(this);
+
         doSomething.setOnClickListener(this);
         sTimeFix.setOnClickListener(this);
         eTimeFix.setOnClickListener(this);
 
-        ButtonEffect();
+        //ButtonEffect();
         //mContext = getContext();
 
-
+       // TestRead();
         onReadDetail(); // 초기, text data 존재하나 확인
 
         mSpinner = (Spinner) findViewById(R.id.category_spinner);
@@ -369,7 +423,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) return;
-        actionBar.setTitle("여행 설정");
+        actionBar.setTitle("여행 일정");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
     }
@@ -387,7 +441,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
         switch (v.getId()) {
             case R.id.fix_start_Time: // STARTtIME만 설정
-                TimePickerDialog dialog = new TimePickerDialog(this, start_Listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+                TimePickerDialog dialog = new TimePickerDialog(this, start_Listener, calendar.get(Calendar.HOUR_OF_DAY), 00, true);
                 dialog.show();
 //                dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
 //                    @Override
@@ -398,13 +452,15 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 //                });
                 break;
             case R.id.fix_end_Time: // STARTtIME만 설정
-                TimePickerDialog dialog2 = new TimePickerDialog(this, end_Listener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+                TimePickerDialog dialog2 = new TimePickerDialog(this, end_Listener, calendar.get(Calendar.HOUR_OF_DAY), 00, true);
                 dialog2.show();
 //                dialog2.setOnKeyListener(new DialogInterface.OnKeyListener() {
 //                    @Override
 //                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 //                        //Toast.makeText(, "주소 오류", Toast.LENGTH_SHORT);
 //                        return false;
+
+
 //                    }
 //                });
                 break;
@@ -421,22 +477,34 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 break;
 
             case R.id.btn_success_plan: // 저장 버튼 누를시 실행
-                onPlanOkay();
+                boolean isWrite = onPlanOkay();
+                if(isWrite != false) {
+                    Intent intent_Finish = getIntent();
+                    intent_Finish.putExtra("position", selectedPosition);
+                    intent_Finish.putExtra("start_Hour", selectedHour);
+                    intent_Finish.putExtra("end_Hour", eHour);
+                    setResult(RESULT_OK, intent_Finish);
+                    finish();
+                }
+                break;
+            case R.id.btn_cancel_plan:
+                Intent intent_cancel = getIntent();
+                setResult(RESULT_CANCELED, intent_cancel);
                 finish();
                 break;
             case R.id.btn_moving_time:
-                    intent = InputData(1);
-                    if(intent == null){
-                        Toast.makeText(this,"주소 오류",Toast.LENGTH_SHORT);
-                        break;
-                    }
-                    startActivity(intent);
+                intent = InputData(1);
+                if(intent == null){
+                    Toast.makeText(this,"주소 오류",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                startActivity(intent);
 
                 break;
             case R.id.btn_moving_time2:
                 intent = InputData(2);
                 if(intent == null){
-                    Toast.makeText(this,"주소 오류",Toast.LENGTH_SHORT);
+                    Toast.makeText(this,"주소 오류",Toast.LENGTH_SHORT).show();
                     break;
                 }
                 startActivity(intent);
@@ -515,78 +583,131 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                     flag_SleepLayout = false;
                 }
                 break;
+            case R.id.btn_DoSomething_Check:
+                if(flag_DoSomethingLayout == false)
+                {
+                    layout_Do_Something.setVisibility(View.VISIBLE);
+                    doSomthingCheck.setBackgroundResource(R.drawable.button_up);
+                    flag_DoSomethingLayout = true;
+                }else if(flag_DoSomethingLayout == true)
+                {
+                    layout_Do_Something.setVisibility(View.GONE);
+                    doSomthingCheck.setBackgroundResource(R.drawable.button_down);
+                    flag_DoSomethingLayout = false;
+                }
+            case R.id.btn_DoSomething:
+                mEditText = new EditText(this);
+                mMaterialDialog = new MaterialDialog(this)
+                        .setTitle("어떤 여행을 즐길 예정이신가요? :)")
+                        .setContentView(mEditText)
+                        .setPositiveButton("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                tv_Do_Something.setText(mEditText.getText());
+                                str_DoSomeValue = mEditText.getText().toString();
+                                mMaterialDialog.dismiss();
+                                //수정 부분
+
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mMaterialDialog.dismiss();
+                            }
+                        });
+                mMaterialDialog.show();
+                break;
         }
     }
+
+
+
     public void onDetailChangeTrain()
     {
+        String weatherNumber = mStartTrainWeather.getWeather_Number();
+
         iv_Station_Start_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
-        tv_Station_Start_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+//        tv_Station_Start_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Station_Start_Weather_Name.setText(Hangeul_Weather(weatherNumber));
         tv_Station_Start_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
         tv_Station_Start_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Station_Start_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
-        tv_Station_Start_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+        tv_Station_Start_Clouds.setText(CloudsToHangeul(mStartTrainWeather.getClouds_Sort()) +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
-        tv_Station_Start_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+        tv_Station_Start_Winds.setText(WindToHangeul(mStartTrainWeather.getWind_Name()) + " : " +
                 mStartTrainWeather.getWind_Speed() + "mps");
 
         //////////////////////
+
+        String weatherNumber2 = mEndTrainWeather.getWeather_Number();
         iv_Station_End_Weather.setImageResource(mEndTrainWeather.getPicture_ID());
-        tv_Station_End_Weather_Name.setText(mEndTrainWeather.getWeather_Name());
+//        tv_Station_End_Weather_Name.setText(mEndTrainWeather.getWeather_Name());
+        tv_Station_End_Weather_Name.setText(Hangeul_Weather(weatherNumber2));
         tv_Station_End_Max_Temp.setText(mEndTrainWeather.getTemp_Max() + "℃");
         tv_Station_End_Min_Temp.setText(mEndTrainWeather.getTemp_Min() + "℃");
         tv_Station_End_Humi.setText("습도:" + mEndTrainWeather.getHumidity() + "%");
-        tv_Station_End_Clouds.setText(mEndTrainWeather.getClouds_Sort() +
+        tv_Station_End_Clouds.setText(CloudsToHangeul(mEndTrainWeather.getClouds_Sort()) +
                 " : " + mEndTrainWeather.getClouds_Value() + "%");
-        tv_Station_End_Winds.setText(mEndTrainWeather.getWind_Name() + " : " +
+        tv_Station_End_Winds.setText(WindToHangeul(mEndTrainWeather.getWind_Name()) + " : " +
                 mEndTrainWeather.getWind_Speed() + "mps");
     }
     public void onDetailChangeRegion()
     {
+        String weatherNumber = mStartTrainWeather.getWeather_Number();
+        String windName = mStartTrainWeather.getWind_Name();
         iv_Region_Start_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
-        tv_Region_Start_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Region_Start_Weather_Name.setText(Hangeul_Weather(weatherNumber));
         tv_Region_Start_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
         tv_Region_Start_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Region_Start_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
-        tv_Region_Start_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+        tv_Region_Start_Clouds.setText(CloudsToHangeul(mStartTrainWeather.getClouds_Sort()) +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
-        tv_Region_Start_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+        tv_Region_Start_Winds.setText(WindToHangeul(mStartTrainWeather.getWind_Name()) + " : " +
                 mStartTrainWeather.getWind_Speed() + "mps");
 
         //////////////////////
+        String weatherNumber2 = mEndTrainWeather.getWeather_Number();
+        String windName2 = mEndTrainWeather.getWind_Name();
         iv_Region_End_Weather.setImageResource(mEndTrainWeather.getPicture_ID());
-        tv_Region_End_Weather_Name.setText(mEndTrainWeather.getWeather_Name());
+        tv_Region_End_Weather_Name.setText(Hangeul_Weather(weatherNumber2));
         tv_Region_End_Max_Temp.setText(mEndTrainWeather.getTemp_Max() + "℃");
         tv_Region_End_Min_Temp.setText(mEndTrainWeather.getTemp_Min() + "℃");
         tv_Region_End_Humi.setText("습도:" + mEndTrainWeather.getHumidity() + "%");
-        tv_Region_End_Clouds.setText(mEndTrainWeather.getClouds_Sort() +
+        tv_Region_End_Clouds.setText(CloudsToHangeul(mEndTrainWeather.getClouds_Sort()) +
                 " : " + mEndTrainWeather.getClouds_Value() + "%");
-        tv_Region_End_Winds.setText(mEndTrainWeather.getWind_Name() + " : " +
+        tv_Region_End_Winds.setText(WindToHangeul(mEndTrainWeather.getWind_Name()) + " : " +
                 mEndTrainWeather.getWind_Speed() + "mps");
     }
     public void onDetailChangeMeal()
     {
+        String weatherNumber = mStartTrainWeather.getWeather_Number();
+        String windName = mStartTrainWeather.getWind_Name();
         iv_Meal_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
-        tv_Meal_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Meal_Weather_Name.setText(Hangeul_Weather(weatherNumber));
         tv_Meal_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
         tv_Meal_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Meal_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
-        tv_Meal_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+        tv_Meal_Clouds.setText(CloudsToHangeul(mStartTrainWeather.getClouds_Sort()) +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
-        tv_Meal_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+        tv_Meal_Winds.setText(WindToHangeul(mStartTrainWeather.getWind_Name()) + " : " +
                 mStartTrainWeather.getWind_Speed() + "mps");
 
     }
 
     public void onDetailChangeSleep()
     {
+        String weatherNumber = mStartTrainWeather.getWeather_Number();
+        String winName = mStartTrainWeather.getWind_Name();
         iv_Sleep_Weather.setImageResource(mStartTrainWeather.getPicture_ID());
-        tv_Sleep_Weather_Name.setText(mStartTrainWeather.getWeather_Name());
+        tv_Sleep_Weather_Name.setText(Hangeul_Weather(weatherNumber));
         tv_Sleep_Max_Temp.setText(mStartTrainWeather.getTemp_Max() + "℃");
         tv_Sleep_Min_Temp.setText(mStartTrainWeather.getTemp_Min() + "℃");
         tv_Sleep_Humi.setText("습도:" + mStartTrainWeather.getHumidity() + "%");
-        tv_Sleep_Clouds.setText(mStartTrainWeather.getClouds_Sort() +
+        tv_Sleep_Clouds.setText(CloudsToHangeul(mStartTrainWeather.getClouds_Sort()) +
                 " : " + mStartTrainWeather.getClouds_Value() + "%");
-        tv_Sleep_Winds.setText(mStartTrainWeather.getWind_Name() + " : " +
+        tv_Sleep_Winds.setText(WindToHangeul(mStartTrainWeather.getWind_Name()) + " : " +
                 mStartTrainWeather.getWind_Speed() + "mps");
     }
     // 이부분은 Train 에만 해당, 4가지 다 되게 바꿔야함
@@ -603,7 +724,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     public void SleepLocateAndWeather()
     {
         mLocationData.initControl(TokenForLocation(String.valueOf(wSleep.getText())),
-                "",this);
+                "", this);
 
 
         mStartInform = mLocationData.getStartLocationLonLat();
@@ -615,17 +736,16 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             Input_Weather();
         }else {
-            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
+            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT).show();
         }
         mSleepWeather.setPicture_Category(Calculator_Weather(mStartRegionWeather.getWeather_Number()));
         mSleepWeather.setPicture_ID(WeatherToPicture(mStartRegionWeather.getWeather_Number()));
 
         sleep_Weather.setBackgroundResource(mSleepWeather.getPicture_ID());
     }
-    public void  MealLocateAndWeather()
-    {
+    public void  MealLocateAndWeather() {
         mLocationData.initControl(TokenForLocation(String.valueOf(wEat.getText())),
-               "",this );
+                "", this);
 
 
         mStartInform = mLocationData.getStartLocationLonLat();
@@ -637,7 +757,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             Input_Weather();
         }else {
-            Toast.makeText(this, "위치 정보가 잘못되었습니다!",Toast.LENGTH_SHORT);
+            Toast.makeText(this, "위치 정보가 잘못되었습니다!",Toast.LENGTH_SHORT).show();
         }
         mMealWeather.setPicture_Category(Calculator_Weather(mStartRegionWeather.getWeather_Number()));
         mMealWeather.setPicture_ID(WeatherToPicture(mStartRegionWeather.getWeather_Number()));
@@ -661,7 +781,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             Input_Weather();
         }else {
-            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
+            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT).show();
         }
         mStartRegionWeather.setPicture_Category(Calculator_Weather(mStartRegionWeather.getWeather_Number()));
         mEndRegionWeather.setPicture_Category(Calculator_Weather(mEndRegionWeather.getWeather_Number()));
@@ -688,7 +808,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
             Input_Weather();
         }else {
-            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT);
+            Toast.makeText(this, "위치 정보가 잘못되었습니다.",Toast.LENGTH_SHORT).show();
         }
         mStartTrainWeather.setPicture_Category(Calculator_Weather(mStartTrainWeather.getWeather_Number()));
         mEndTrainWeather.setPicture_Category(Calculator_Weather(mEndTrainWeather.getWeather_Number()));
@@ -757,7 +877,59 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
 
     }
-    WeatherConditionList mCondition = new WeatherConditionList();
+    public String CloudsToHangeul(String cloudSort)
+    {
+        String cloud="";
+
+        for(int i = 0;  i < mCondition.mListBroken_Clouds.size(); i++)
+        {
+            if(mCondition.mListBroken_Clouds.get(i).getMeaning().equals(cloudSort.toLowerCase()))
+                return mCondition.mListBroken_CloudsToHangeul.get(i).getMeaning();
+        }
+
+        for(int i = 0; i < mCondition.mListScattered_Clouds.size(); i++)
+        {
+            if(mCondition.mListScattered_Clouds.get(i).getMeaning().equals(cloudSort.toLowerCase()))
+                return mCondition.mListScattered_CloudsToHangeul.get(i).getMeaning();
+        }
+
+        for(int i = 0; i < mCondition.mListFew_Clouds.size(); i++)
+        {
+            if(mCondition.mListFew_Clouds.get(i).getMeaning().equals(cloudSort.toLowerCase()))
+                return mCondition.mListFew_CloudsToHangeul.get(i).getMeaning();
+        }
+
+
+        return "";
+    }
+
+
+
+    public String Hangeul_Weather(String weatherName)
+    {
+        String snow = SnowToHangeul(weatherName);
+        String clear = ClearToHangeul(weatherName);
+        String broken_Cloud = BrokenCloudsToHangeul(weatherName);
+        String few_Cloud = FewCloudsToHangeul(weatherName);
+        String scatter = ScatteredCloudsToHangeul(weatherName);
+        String Rain = RainToHangeul(weatherName);
+        String shower = ShowerRainToHanGeul(weatherName);
+        String thunder = ThunderStromToHangeul(weatherName);
+        String mist = MistToHangeul(weatherName);
+
+        if(!snow.equals("")) return snow;
+        else if(!clear.equals("")) return clear;
+        else if(!broken_Cloud.equals("")) return broken_Cloud;
+        else if(!few_Cloud.equals("")) return few_Cloud;
+        else if(!scatter.equals("")) return scatter;
+        else if(!Rain.equals("")) return Rain;
+        else if(!shower.equals("")) return shower;
+        else if(!thunder.equals("")) return thunder;
+        else if(!mist.equals("")) return mist;
+
+        return "";
+    }
+
 
     public int Calculator_Weather(String weatherNumber)
     {
@@ -788,8 +960,97 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         else
             return 0;
     }
+    public String SnowToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListSnow.size() ; i++)
+        {
+            if(mCondition.mListSnow.get(i).equals(weatherNumber))
+                return mCondition.mListSnowToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ClearToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListClearSky.size() ; i++)
+        {
+            if(mCondition.mListClearSky.get(i).getId().equals(weatherNumber))
+                return mCondition.mListClearSkyToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String BrokenCloudsToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListBroken_Clouds.size() ; i++)
+        {
+            if(mCondition.mListBroken_Clouds.get(i).getId().equals(weatherNumber))
+                return mCondition.mListBroken_CloudsToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String FewCloudsToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListFew_Clouds.size() ; i++)
+        {
+            if(mCondition.mListFew_Clouds.get(i).getId().equals(weatherNumber))
+                return mCondition.mListFew_CloudsToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ScatteredCloudsToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListScattered_Clouds.size() ; i++)
+        {
+            if(mCondition.mListScattered_Clouds.get(i).getId().equals(weatherNumber))
+                return mCondition.mListScattered_CloudsToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String RainToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListRain.size() ; i++)
+        {
+            if(mCondition.mListRain.get(i).getId().equals(weatherNumber))
+                return mCondition.mListRainToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ShowerRainToHanGeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListShower_Rain.size() ; i++)
+        {
+            if(mCondition.mListShower_Rain.get(i).getId().equals(weatherNumber))
+                return mCondition.mListShower_RainToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String ThunderStromToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListThunderStorm.size() ; i++)
+        {
+            if(mCondition.mListThunderStorm.get(i).getId().equals(weatherNumber))
+                return mCondition.mListThunderStormToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+    public String MistToHangeul(String weatherNumber)
+    {
+        for(int i = 0; i < mCondition.mListMist.size() ; i++)
+        {
+            if(mCondition.mListMist.get(i).getId().equals(weatherNumber))
+                return mCondition.mListMistToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
 
-
+    public String WindToHangeul(String windName)
+    {
+        for(int i = 0; i < mCondition.mListWind.size() ; i++) {
+            if(mCondition.mListWind.get(i).getMeaning().equals(windName.toLowerCase()))
+                return mCondition.mListWindToHangeul.get(i).getMeaning();
+        }
+        return "";
+    }
+/////////////////////
     public boolean isSnow(String weatherNumber)
     {
         for(int i = 0; i < mCondition.mListSnow.size() ; i++)
@@ -870,7 +1131,6 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
                 return true;
         }
         return false;
-
     }
 
     public Intent InputData(int index)
@@ -898,6 +1158,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         }
         return null;
     }
+
     public String cutTail(double number, int n){//소수점  n자리 밑으로 자르기
         String cuttedNumber = Double.toString(number);
         int idxPoint = cuttedNumber.indexOf(".");
@@ -929,121 +1190,204 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     }
 
 
+    public String returnWriteString(int hour_index)
+    {
+//        String str = "tiem " + hour_index + TOKEN + selected +
+//                TOKEN + hour_index + TOKEN + eHour + TOKEN
+//                + tv_Do_Something.getText();
+        String str = "tiem " + hour_index + TOKEN + selected +
+                TOKEN + hour_index + TOKEN + eHour + TOKEN
+                + str_DoSomeValue;
+        if(selected == MOVE_BUS ) {
+            str += TOKEN + TokenForLocation(sLocation.getText().toString()) + TOKEN +
+                    TokenForLocation(eLocation.getText().toString());
 
-    BufferedWriter buf;
+        }else if(selected == SLEEP){
+            str += TOKEN + TokenForLocation(wSleep.getText().toString());
+        }else if(selected == EAT)
+        {
+            str += TOKEN + TokenForLocation(wEat.getText().toString());
+        }else if(selected == MOVE_TRAIN)
+        {
+            str += TOKEN + TokenForLocation(sStation.getText().toString())
+                    + TOKEN + TokenForLocation(eStation.getText().toString());
+        }
+        return str;
+    }
 
-    private void onPlanOkay() {
-        String path = "/data/data/kr.ac.kumoh.railrotravel/files/datasheet.ext"; // 저장 할 곳
+
+    private boolean onPlanOkay() {
+
+        if((sHour == -1 || eHour == -1) && selectedPosition == -1) {
+            Toast.makeText(this.getApplication(), "시작 및 도착 시간 설정이 필요합니다!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(sHour > eHour){
+            Toast.makeText(this.getApplication(),"종료 시간이 시작 시간보다 작을 수 없습니다!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext"; // 저장 할 곳
         File file;
+        BufferedReader bur;
+        BufferedWriter buw;
         file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
         }
-        file = new File(path + File.separator + "201508065" + ".txt"); // 여기서 텍스트 이름만 수정하면 될듯
+        file = new File(path + File.separator + textTitle + ".txt"); // 여기서 텍스트 이름만 수정하면 될듯
 
         try{
 
             int check = selected;
+            String dummy = "";
+            String line;
+            //String add_Line = returnWriteString();
+            bur = new BufferedReader(new FileReader(file));
 
-            buf = new BufferedWriter(new FileWriter(file));
+            int duration = Integer.valueOf(bur.readLine());
+            dummy = String.valueOf(duration) + "\r\n";
 
-            buf.write(String.valueOf(check));  buf.newLine();
-            // 구분 번호
-            buf.write((String)sTimeFix.getText()); buf.newLine();
-            buf.write((String)eTimeFix.getText());   buf.newLine();
-            // Time Save //
-            buf.write((String)doSomething.getText()); buf.newLine();
-            // Do Something //
-            // ------------------ 공통 부분은 여기에 저장 ----------------- //
-            if(check == 0) // train
-            {
-                buf.write((String) sStation.getText()); buf.newLine();
-                buf.write(data_startStation.getStationCode()); buf.newLine();
-                buf.write((String) eStation.getText()); buf.newLine();
-                buf.write(data_endStation.getStationCode()); buf.newLine();
-                buf.write((String) movingTime.getText());  buf.newLine();
-            }else if(check ==1) // bus
-            {
-                buf.write((String) sLocation.getText()); buf.newLine();
-                buf.write((String) eLocation.getText()); ; buf.newLine();
-                buf.write((String) movingTime2.getText());
-            }else if(check ==2){ // sleep
-                buf.write((String) wSleep.getText());
-            }else{ //toMeal
-                buf.write((String) wEat.getText());
+            if(sHour != 0) {
+                for(int j = 0; j < duration; j++) {
+                    String state = bur.readLine();
+                    dummy = dummy + state + "\r\n"; // 카테고리
+                    if(state.equals(viewPagerState)) { // 데이터 체인지
+                        for (int i = 1; i < 25; i++) {
+                            //if(i == sHour){
+                            if((i  >= sHour && i < eHour) || i == eHour){
+                                String add_Line = returnWriteString(i);
+                                dummy = dummy + add_Line + "\r\n";
+                                bur.readLine();
+                            }else {
+                               dummy = dummy + bur.readLine() + "\r\n";
+                            }
+                        }
+                    }
+                    for (int i = 1; i < 25; i++)// 24시간 넘어감
+                        dummy = dummy + bur.readLine() + "\r\n";
+                }
+
+                buw = new BufferedWriter(new FileWriter(file));
+                buw.write(dummy);
+                buw.close();
             }
-            buf.close();
-
+            bur.close();
         }catch(IOException e)
         {
 
         }
+
+        return true;
     }
 
-    BufferedReader buw;
+
     int readCheck = -1; // 껏다 켯을때, spin위치 체크
 
-    private void onReadDetail() {
-        String path = "/data/data/kr.ac.kumoh.railrotravel/files/datasheet.ext";
+    public ArrayList<String> MakeRawString()
+    {
+        BufferedReader buw;
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
         File file;
         file = new File(path);
-        ArrayList<String> mData;
+        String rawString = "";
         if (!file.exists()) {
             file.mkdirs();
         }
-        file = new File(path + File.separator + "201508065" + ".txt");
-        try{
+        file = new File(path + File.separator + textTitle + ".txt");
 
+
+        try{
             int check;
 
-            buw = new BufferedReader(new FileReader(file));
-            String rawData = "";
-            String temp;
-            while((temp = buw.readLine()) != null)
-            {
-                rawData += (temp + "\r\n");
+            buw =  new BufferedReader(new FileReader(file));
+            String temp = buw.readLine();
+            int duration = Integer.valueOf(temp);
+            Log.d("READ", rawString);
+
+            if(selectedPosition != -1) {
+                for(int j = 0; j < duration; j++) {
+                    String state = buw.readLine();
+                    if(state.equals(viewPagerState)) { // 데이터 체인지
+                        for (int i = 1; i < 25; i++) {
+                            if(i == selectedHour){
+                                rawString = buw.readLine();
+                            }else {
+                                buw.readLine();
+                            }
+                        }
+                    }
+                    for (int i = 1; i < 25; i++)// 24시간 넘어감
+                        buw.readLine();
+                }
             }
-
-            Log.d("READ",rawData);
-
             buw.close();
-            if(rawData.equals("")) return ;
-
-            mData = InitDataStringTokenizer(rawData); // text 데이터 -> ArrayList로 만들어 반환
-
-            readCheck = Integer.valueOf(mData.get(0));
-            check = Integer.valueOf(mData.get(0));
-            // 구분 번호 //
-            sTimeFix.setText(default_sTime + mData.get(1));
-            eTimeFix.setText(default_eTime + mData.get(2));
-
-            // Time Save //
-            doSomething.setText(default_toDo + mData.get(3));
-
-            // Do Something //
-
-
-            // 보여줄 데이터 셋
-            if(check == 0) // train
-            {
-                data_startStation = new StationInfo(mData.get(4),mData.get(5));
-                sStation.setText(default_sStation + mData.get(4));
-                data_endStation = new StationInfo(mData.get(6),mData.get(7));
-                eStation.setText(default_eStation + mData.get(6));
-                movingTime.setText(mData.get(7) + default_moveValue );
-            }else if(check ==1) // bus
-            {
-                sLocation.setText(mData.get(4));
-                eLocation.setText(mData.get(5));
-                movingTime.setText(mData.get(6) + default_moveValue);
-            }else if(check ==2){ // sleep
-                wSleep.setText(mData.get(4));
-            }else{ //toMeal
-                wEat.setText(mData.get(4));
-            }
         }catch(IOException e)
         {
+        }
+        ArrayList<String> mData;
+        if(rawString == "") return null;
+        else {
+            mData = InitDataStringTokenizer(rawString);
+        }
+        return mData;
+    }
 
+    private void onReadDetail() {
+        int check;
+        ArrayList<String> mData = MakeRawString();
+        if(mData != null) {
+            if(mData.size() != 0) {
+
+                readCheck = Integer.valueOf(mData.get(0));
+                check = Integer.valueOf(mData.get(0));
+                // 구분 번호 //
+                sHour = Integer.valueOf(mData.get(1));
+                eHour = Integer.valueOf(mData.get(2));
+//                String sTime;
+//                String eTime;
+//                if(sHour > 0 && sHour < 10)
+//                    sTime = "0" + mData.get(1).toString();
+//                else
+//                    sTime = mData.get(1);
+//
+//                if(eHour > 0 && eHour < 10)
+//                    eTime = "0" + mData.get(1).toString();
+//                else
+//                    eTime = mData.get(1);
+
+
+                sTimeFix.setText(default_sTime + mData.get(1) + ":" + "00");
+                eTimeFix.setText(default_eTime + mData.get(2) + ":" + "00");
+
+                // Time Save //
+                str_DoSomeValue = mData.get(3);
+                tv_Do_Something.setText(mData.get(3));
+
+                // Do Something //
+
+
+                // 보여줄 데이터 셋
+                if (check == 0) // train
+                {
+                    data_startStation = new StationInfo(mData.get(4), "");
+                    sStation.setText(default_sStation + mData.get(4));
+                    data_endStation = new StationInfo(mData.get(5), "");
+                    eStation.setText(default_eStation + mData.get(5));
+//                movingTime.setText(mData.get(7) + default_moveValue );
+                } else if (check == 1) // bus
+                {
+                    sLocation.setText(mData.get(4));
+                    eLocation.setText(mData.get(5));
+                    //              movingTime.setText(mData.get(6) + default_moveValue);
+                } else if (check == 2) { // sleep
+                    wSleep.setText(mData.get(4));
+                } else { //toMeal
+                    wEat.setText(mData.get(4));
+                }
+            }
         }
 
         CheckWeather();
@@ -1052,10 +1396,18 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
     //토큰 분리
     private ArrayList<String> InitDataStringTokenizer(String rawString) {
 
-        StringTokenizer mToken = new StringTokenizer(rawString, "\r\n");
+        //rawString.split("\r\n");
+        //StringTokenizer mToken = new StringTokenizer(rawString, "$|&|#");
+        String value[] = rawString.split("%&#");
+
         ArrayList<String> mData = new ArrayList<String>();
-        while (mToken.hasMoreTokens())
-            mData.add(mToken.nextToken());
+        for(int i = 1; i < value.length; i++)
+        {
+            mData.add(value[i]);
+        }
+//        mToken.nextToken(); // TIME 7: 걸러내기
+//        while (mToken.hasMoreTokens())
+//            mData.add(mToken.nextToken());
 
 
         return mData;
@@ -1069,32 +1421,33 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         //mCast = new ForeCast();
 
         String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+        File file;
+        file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + "temp" + ".txt");
+
+
         try{
-            File file;
-            file = new File(path);
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            file = new File(path + File.separator + "temp" + ".txt");
-
-
             BufferedReader buw = new BufferedReader(new FileReader(file));
 
             named_buffer = buw.readLine();
             named_buffer += "\r\n" + buw.readLine();
+            if(buw == null) {
+                if (check == 1) {
+                    sStation.setText(default_sStation + "서울역");
+                    return;
+                } else{
+                    eStation.setText(default_eStation + "부산역");
+                    return;
+                }
+            }
         }catch(IOException e)
         {
 
         }
-        if(buw == null) {
-            if (check == 1) {
-                sStation.setText(default_sStation + "서울역");
-                return;
-            } else{
-                eStation.setText(default_eStation + "부산역");
-                return;
-            }
-        }
+
 
         SetTextStation(check);
 
@@ -1128,7 +1481,7 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
 
     StationInfo StringToToken(String rawString) {
         if(rawString.contains("nothing")){
-               return null;
+            return null;
         }
         StringTokenizer mToken = new StringTokenizer(rawString, "\r\n");
         StationInfo temp;
@@ -1143,8 +1496,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             //startTime.setText(hourOfDay + minute);
-            eTimeFix.setText("종료 시간 : "+ hourOfDay + ":" +minute);
-
+            eTimeFix.setText("종료 시간 : "+ hourOfDay + ":" + "00");
+            eHour = hourOfDay;
 
 
         }
@@ -1153,7 +1506,8 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             //startTime.setText(hourOfDay + minute);
-            sTimeFix.setText("시작 시간 : " + hourOfDay + ":" + minute);
+            sTimeFix.setText("시작 시간 : " + hourOfDay + ":" + "00");
+            sHour = hourOfDay;
         }
     };
 
@@ -1254,7 +1608,34 @@ public class SetTripPlanActivity extends ActionBarActivity implements View.OnCli
         }
     }
 
+    void TestRead()
+    {
+        BufferedReader buw;
+        String path = "/data/data/kr.ac.kumoh.railroApplication/files/datasheet.ext";
+        File file;
+        file = new File(path);
+        String rawString = "";
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        file = new File(path + File.separator + textTitle + ".txt");
 
+
+        try{
+            int check;
+
+            String rawData = "";
+            buw =  new BufferedReader(new FileReader(file));
+            int duration = Integer.valueOf(buw.readLine());
+            Log.d("READ", rawData);
+
+
+            buw.close();
+        }catch(IOException e)
+        {
+        }
+
+    }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
