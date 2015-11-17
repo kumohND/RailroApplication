@@ -37,31 +37,52 @@
             <!--android:src="@drawable/home_1" />-->
 
         <LinearLayout
-            android:background="@color/titleTextColor"
+            android:gravity = "center_vertical"
+            android:background="@drawable/tab_weather"
             android:visibility="gone"
             android:id = "@+id/linear_tab_weather"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
+                android:gravity = "center_vertical"
                 android:id ="@+id/iv_tab_wather_picture"
-                android:layout_width = "40dp"
-                android:layout_height= "40dp"
+                android:layout_width = "70dp"
+                android:layout_height= "70dp"
+                android:layout_margin = "10dp"
                  />
 
-            <TextView
-                android:textSize="30sp"
-                android:textColor="@color/divider"
-                android:id = "@+id/tv_tab_temprature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <View
+                android:gravity = "center"
+                android:layout_width="1dip"
+                android:layout_height="35dip"
+                android:background="#000000" />
 
-            <TextView
-                android:text=""
-                android:textColor="@color/divider"
-                android:id = "@+id/tv_weather_Name"
+            <LinearLayout
+                android:layout_margin = "10dp"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="30sp"
+                    android:textColor="@color/mdtp_white"
+                    android:id = "@+id/tv_tab_temprature"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textColor="@color/mdtp_white"
+                    android:id = "@+id/tv_weather_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <android.support.design.widget.TabLayout

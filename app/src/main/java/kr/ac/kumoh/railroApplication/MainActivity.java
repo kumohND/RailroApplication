@@ -173,7 +173,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mLoginButton = (LoginButton) ButterKnife.findById(this, R.id.com_kakao_login);
 
-        mDrawerHeader.setBackgroundColor(R.drawable.ic_cast_dark);
+        //mDrawerHeader.setBackgroundColor(R.drawable.ic_android);
+        //mDrawerHeader.setBackgroundColor(getResources().getColor(R.drawable.ic_cast_dark));
         mUserID = ButterKnife.findById(this, R.id.drawer_user_name);
         mUserImg = ButterKnife.findById(this, R.id.profile_image);
 

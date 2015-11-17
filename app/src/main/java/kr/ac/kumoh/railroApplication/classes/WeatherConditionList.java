@@ -198,17 +198,17 @@ public class WeatherConditionList {
         mListWind.add(new WeatherCondition("962","hurricane"));
 
         mListWindToHangeul.add(new WeatherCondition("951","바람 없음"));
-        mListWindToHangeul.add(new WeatherCondition("952","산들 바람"));
-        mListWindToHangeul.add(new WeatherCondition("953","gentle breeze"));
-        mListWindToHangeul.add(new WeatherCondition("954","moderate breeze"));
-        mListWindToHangeul.add(new WeatherCondition("955","fresh breeze"));
-        mListWindToHangeul.add(new WeatherCondition("956","strong breeze"));
-        mListWindToHangeul.add(new WeatherCondition("957","high wind, near gale"));
-        mListWindToHangeul.add(new WeatherCondition("958","gale"));
-        mListWindToHangeul.add(new WeatherCondition("959","severe gale"));
-        mListWindToHangeul.add(new WeatherCondition("960","storm"));
-        mListWindToHangeul.add(new WeatherCondition("961","violent storm"));
-        mListWindToHangeul.add(new WeatherCondition("962","hurricane"));
+        mListWindToHangeul.add(new WeatherCondition("952","남실 바람"));
+        mListWindToHangeul.add(new WeatherCondition("953","산들 바람"));
+        mListWindToHangeul.add(new WeatherCondition("954","건들 바람"));
+        mListWindToHangeul.add(new WeatherCondition("955","흔들 바람"));
+        mListWindToHangeul.add(new WeatherCondition("956","된바람"));
+        mListWindToHangeul.add(new WeatherCondition("957","센바람"));
+        mListWindToHangeul.add(new WeatherCondition("958","강풍"));
+        mListWindToHangeul.add(new WeatherCondition("959","극심한 강풍"));
+        mListWindToHangeul.add(new WeatherCondition("960","폭풍우"));
+        mListWindToHangeul.add(new WeatherCondition("961","폭풍"));
+        mListWindToHangeul.add(new WeatherCondition("962","허리케인"));
 
 
     }
